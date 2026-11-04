@@ -605,6 +605,7 @@
   let revealObserver = null;
   let lastFocused = null;
   let gateLastFocused = null;
+  let sidebarHovering = false;
 
   const SECTION_LABELS = {
     personal: "Personal Information",
@@ -1985,6 +1986,74 @@
     showToast("Demo data restored. Choose a role to continue.", "success");
   }
 
+  function visibleSideLinks() {
+    const sidebar = $("#sidebar");
+    if (!sidebar) return [];
+    return $$(".side-link", sidebar).filter(function (link) {
+      return !link.hidden && link.offsetParent !== null;
+    });
+  }
+
+  function layoutSidebarArc() {
+    const links = visibleSideLinks();
+    if (!links.length) return;
+    const center = (links.length - 1) / 2;
+    const span = Math.max(center, 1);
+    links.forEach(function (link, index) {
+      const distance = Math.abs(index - center) / span;
+      const offset = 6 * (1 - distance * distance);
+      link.style.setProperty("--arc-x", offset.toFixed(1) + "px");
+    });
+  }
+
+  function moveSidebarNeedle(target) {
+    const nav = $(".sidebar__nav");
+    if (!nav) return;
+    const links = visibleSideLinks();
+    const link = target || links.find(function (item) {
+      return item.classList.contains("is-active");
+    }) || links[0];
+    if (!link) return;
+    const navRect = nav.getBoundingClientRect();
+    const rect = link.getBoundingClientRect();
+    const top = rect.top - navRect.top + rect.height / 2;
+    nav.style.setProperty("--needle-top", top.toFixed(1) + "px");
+  }
+
+  function handleSidebarKeydown(event) {
+    const target = event.target;
+    if (!target || !target.closest) return;
+    if (!target.closest(".side-link, .sidebar__toggle")) return;
+
+    const key = event.key;
+    if (key === "ArrowRight" || key === "ArrowLeft") {
+      const expand = key === "ArrowRight";
+      if (state.sidebarExpanded !== expand) {
+        event.preventDefault();
+        setSidebarExpanded(expand);
+      }
+      return;
+    }
+    if (["ArrowDown", "ArrowUp", "Home", "End"].indexOf(key) === -1) return;
+
+    const links = visibleSideLinks();
+    if (!links.length) return;
+    const currentIndex = links.indexOf(document.activeElement);
+    let nextIndex;
+    if (key === "Home") {
+      nextIndex = 0;
+    } else if (key === "End") {
+      nextIndex = links.length - 1;
+    } else if (key === "ArrowDown") {
+      nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % links.length;
+    } else {
+      nextIndex = currentIndex <= 0 ? links.length - 1 : currentIndex - 1;
+    }
+    event.preventDefault();
+    links[nextIndex].focus({ preventScroll: true });
+    moveSidebarNeedle(links[nextIndex]);
+  }
+
   function setActiveSidebar(key) {
     $$(".side-link").forEach(function (link) {
       const active = link.dataset.nav === key;
@@ -1995,6 +2064,7 @@
         link.removeAttribute("aria-current");
       }
     });
+    if (!sidebarHovering) moveSidebarNeedle();
   }
 
   function updatePageTitle() {
@@ -2144,6 +2214,10 @@
     if (icon) icon.className = state.sidebarExpanded ? "bi bi-chevron-left" : "bi bi-chevron-right";
     if (label) label.textContent = state.sidebarExpanded ? "Collapse" : "Expand";
     updateSidebarBackdrop();
+    window.requestAnimationFrame(function () {
+      layoutSidebarArc();
+      moveSidebarNeedle();
+    });
   }
 
   function updateRoleUI() {
@@ -2179,6 +2253,10 @@
     if (label) label.hidden = !showSections;
     const sidebar = $("#sidebar");
     if (sidebar) sidebar.classList.toggle("has-sections", showSections);
+    window.requestAnimationFrame(function () {
+      layoutSidebarArc();
+      moveSidebarNeedle();
+    });
   }
 
   function showRoleChoices() {
@@ -2405,6 +2483,29 @@
       });
     }
 
+    const sidebarEl = $("#sidebar");
+    if (sidebarEl) {
+      sidebarEl.addEventListener("keydown", handleSidebarKeydown);
+      const nav = $(".sidebar__nav", sidebarEl);
+      if (nav) {
+        nav.addEventListener("pointerenter", function () {
+          sidebarHovering = true;
+        });
+        nav.addEventListener("pointerover", function (event) {
+          const link = event.target.closest ? event.target.closest(".side-link") : null;
+          if (link) moveSidebarNeedle(link);
+        });
+        nav.addEventListener("pointerleave", function () {
+          sidebarHovering = false;
+          moveSidebarNeedle();
+        });
+        nav.addEventListener("focusin", function (event) {
+          const link = event.target.closest ? event.target.closest(".side-link") : null;
+          if (link) moveSidebarNeedle(link);
+        });
+      }
+    }
+
     const brand = $("#sidebar-brand");
     if (brand) {
       brand.addEventListener("click", function (event) {
@@ -2625,6 +2726,8 @@
     window.addEventListener("resize", function () {
       updateSidebarBackdrop();
       updateScrollSpy();
+      layoutSidebarArc();
+      moveSidebarNeedle();
     });
 
     document.addEventListener("keydown", function (event) {
