@@ -1,0 +1,32 @@
+{
+  "name": "profile-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide-react": "^1.66.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.89.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.5"
+  },
+  "description": "A professional, modern, responsive academic faculty profile creation and management portal developed strictly with **HTML5, CSS3, and Vanilla JavaScript** (Zero frameworks, zero dependencies, no React/JSX, no Tailwind CSS, no Bootstrap).",
+  "main": "script.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

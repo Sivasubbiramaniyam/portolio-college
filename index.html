@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Faculty Portal for University College of Engineering Nagercoil, Anna University, Chennai. Create, manage and explore faculty profiles.">
+  <meta name="theme-color" content="#7B5EF0">
+  <title>Faculty Portal | University College of Engineering Nagercoil</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/anna-university-logo.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+  <aside class="sidebar" id="sidebar" aria-label="Profile section navigation">
+    <div class="sidebar__bg" aria-hidden="true">
+      <span class="sidebar__ring sidebar__ring--one"></span>
+      <span class="sidebar__ring sidebar__ring--two"></span>
+      <span class="sidebar__ring sidebar__ring--three"></span>
+    </div>
+
+    <a class="sidebar__brand" href="#" id="sidebar-brand" aria-label="UCEN Faculty Portal home">
+      <span class="sidebar__brand-mark">
+        <img src="assets/anna-university-logo.svg" alt="" width="38" height="38">
+      </span>
+      <span class="sidebar__brand-text">
+        <strong>UCEN</strong>
+        <small>Faculty Portal</small>
+      </span>
+    </a>
+
+    <nav class="sidebar__nav" aria-label="Portal navigation">
+      <button class="side-link is-active" type="button" data-nav="overview" data-nav-role="all" aria-current="page">
+        <span class="side-link__icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span>
+        <span class="side-link__label">Dashboard</span>
+      </button>
+      <button class="side-link" type="button" data-nav="directory" data-nav-role="all">
+        <span class="side-link__icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+        <span class="side-link__label">Faculty Directory</span>
+      </button>
+      <button class="side-link" type="button" data-nav="manage-faculty" data-nav-role="admin" hidden>
+        <span class="side-link__icon"><i class="bi bi-sliders2" aria-hidden="true"></i></span>
+        <span class="side-link__label">Manage Faculty</span>
+      </button>
+      <button class="side-link" type="button" data-nav="my-profile" data-nav-role="faculty" hidden>
+        <span class="side-link__icon"><i class="bi bi-person-circle" aria-hidden="true"></i></span>
+        <span class="side-link__label">My Profile</span>
+      </button>
+      <button class="side-link" type="button" data-nav="add-faculty" data-nav-role="admin" hidden>
+        <span class="side-link__icon"><i class="bi bi-person-plus-fill" aria-hidden="true"></i></span>
+        <span class="side-link__label">Add Faculty</span>
+      </button>
+      <span class="sidebar__nav-label" id="sidebar-section-label" hidden>Profile sections</span>
+      <button class="side-link side-link--section" type="button" data-nav="profile-overview" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-layout-text-window-reverse" aria-hidden="true"></i></span>
+        <span class="side-link__label">Overview</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="personal" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-person-vcard" aria-hidden="true"></i></span>
+        <span class="side-link__label">Personal Information</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="qualification" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
+        <span class="side-link__label">Qualification</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="experience" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-briefcase" aria-hidden="true"></i></span>
+        <span class="side-link__label">Professional Experience</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="projects" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-cash-stack" aria-hidden="true"></i></span>
+        <span class="side-link__label">Funded Projects</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="publications" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-journal-richtext" aria-hidden="true"></i></span>
+        <span class="side-link__label">Publications</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="achievements" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-trophy" aria-hidden="true"></i></span>
+        <span class="side-link__label">Achievements</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="certifications" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-patch-check" aria-hidden="true"></i></span>
+        <span class="side-link__label">Certifications</span>
+      </button>
+    </nav>
+
+    <button class="sidebar__toggle" id="sidebar-toggle" type="button" aria-expanded="false" aria-controls="sidebar" title="Expand sidebar">
+      <i class="bi bi-chevron-right" id="sidebar-toggle-icon" aria-hidden="true"></i>
+      <span class="sidebar__toggle-label">Expand</span>
+    </button>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar__inner">
+        <div class="topbar__titles">
+          <span class="topbar__eyebrow">University College of Engineering Nagercoil</span>
+          <h1 id="page-title">Dashboard</h1>
+        </div>
+
+        <div class="topbar__actions">
+          <div class="role-indicator" id="role-indicator" aria-live="polite">
+            <span class="role-indicator__icon"><i class="bi bi-person-badge-fill" id="role-indicator-icon" aria-hidden="true"></i></span>
+            <span class="role-indicator__copy">
+              <small>Signed in as</small>
+              <strong id="role-indicator-label">Faculty Member</strong>
+              <span id="role-indicator-detail">Dr. K. Ramanathan</span>
+            </span>
+          </div>
+
+          <button class="btn btn-ghost topbar__btn" type="button" id="btn-switch-role">
+            <i class="bi bi-arrow-left-right" aria-hidden="true"></i><span>Switch role</span>
+          </button>
+          <button class="btn btn-ghost topbar__btn" type="button" id="btn-add-faculty" hidden>
+            <i class="bi bi-person-plus" aria-hidden="true"></i><span>Add Faculty</span>
+          </button>
+          <button class="btn btn-ghost topbar__btn" type="button" id="btn-directory">
+            <i class="bi bi-people" aria-hidden="true"></i><span>Directory</span>
+          </button>
+          <button class="btn btn-primary topbar__btn" type="button" id="btn-my-profile">
+            <i class="bi bi-person-circle" aria-hidden="true"></i><span>My Profile</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <section class="view" id="view-dashboard" data-view="dashboard">
+        <div class="view__inner">
+          <section class="hero-panel reveal" aria-labelledby="welcome-title">
+            <div class="hero-panel__content">
+              <span class="eyebrow eyebrow--light"><i class="bi bi-stars" aria-hidden="true"></i> Faculty Workspace</span>
+              <h2 class="hero-panel__title" id="welcome-title">Welcome back, <span id="welcome-name">Faculty Member</span></h2>
+              <p class="hero-panel__sub" id="welcome-sub">Keep your academic profile current and help colleagues discover your work.</p>
+              <div class="hero-panel__meta">
+                <span><i class="bi bi-calendar3" aria-hidden="true"></i> <span id="today-label"></span></span>
+                <span id="hero-mode-note"><i class="bi bi-person-badge" aria-hidden="true"></i> Faculty mode</span>
+              </div>
+              <div class="hero-panel__actions" id="hero-actions"></div>
+            </div>
+
+            <aside class="strength-card" aria-label="Profile completion">
+              <div class="strength-ring">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="strength-ring__track" cx="60" cy="60" r="52"></circle>
+                  <circle class="strength-ring__value" id="strength-ring-value" cx="60" cy="60" r="52"></circle>
+                </svg>
+                <div class="strength-ring__text">
+                  <strong id="strength-value">0%</strong>
+                  <span>complete</span>
+                </div>
+              </div>
+              <h3>Profile strength</h3>
+              <p id="strength-caption">Complete your profile to make it easier for peers to find you.</p>
+              <div class="progress-track progress-track--light"><span id="strength-bar-fill"></span></div>
+              <div class="strength-card__foot">
+                <span id="strength-sections">0 of 7 sections</span>
+                <span class="strength-badge" id="strength-status">Getting started</span>
+              </div>
+            </aside>
+          </section>
+
+          <section class="admin-overview" id="admin-overview" aria-labelledby="admin-overview-title" hidden>
+            <div class="admin-overview__head">
+              <div>
+                <span class="eyebrow"><i class="bi bi-bar-chart-line" aria-hidden="true"></i> Institution snapshot</span>
+                <h2 id="admin-overview-title">Faculty management overview</h2>
+              </div>
+              <span class="admin-overview__note"><i class="bi bi-shield-check" aria-hidden="true"></i> Admin access</span>
+            </div>
+
+            <div class="admin-stat-grid">
+              <article class="card admin-stat">
+                <span class="admin-stat__icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+                <div><strong id="admin-total">0</strong><span>Total faculty</span></div>
+              </article>
+              <article class="card admin-stat admin-stat--green">
+                <span class="admin-stat__icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+                <div><strong id="admin-complete">0</strong><span>Completed profiles</span></div>
+              </article>
+              <article class="card admin-stat admin-stat--amber">
+                <span class="admin-stat__icon"><i class="bi bi-exclamation-circle" aria-hidden="true"></i></span>
+                <div><strong id="admin-incomplete">0</strong><span>Incomplete profiles</span></div>
+              </article>
+              <article class="card admin-stat admin-stat--blue">
+                <span class="admin-stat__icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
+                <div><strong id="admin-rate">0%</strong><span>Completion rate</span></div>
+              </article>
+            </div>
+
+            <article class="card department-card">
+              <header class="department-card__head">
+                <div>
+                  <span class="eyebrow"><i class="bi bi-diagram-3" aria-hidden="true"></i> Department distribution</span>
+                  <h3>Faculty by department</h3>
+                  <p>Profile counts across the university's academic departments.</p>
+                </div>
+              </header>
+              <div class="department-list" id="admin-departments"></div>
+            </article>
+          </section>
+
+          <section class="card profile-strip reveal" id="dashboard-profile-card" aria-label="Faculty profile summary">
+            <div class="profile-strip__identity" id="dashboard-profile"></div>
+            <div class="profile-strip__meta">
+              <div class="profile-strip__tags" id="dashboard-tags"></div>
+              <div class="mini-stats" id="dashboard-stats"></div>
+            </div>
+          </section>
+
+          <section class="directory-section reveal" aria-labelledby="directory-heading">
+            <header class="section-heading">
+              <div>
+                <span class="eyebrow"><i class="bi bi-people" aria-hidden="true"></i> Campus network</span>
+                <h2 id="directory-heading">Faculty Directory</h2>
+                <p>Discover faculty members across departments, specialisations and designations.</p>
+              </div>
+              <div class="section-heading__actions">
+                <button class="btn btn-primary" type="button" id="btn-add-faculty-directory" hidden>
+                  <i class="bi bi-person-plus" aria-hidden="true"></i> Add Faculty
+                </button>
+                <div class="result-badge">
+                  <strong id="directory-count">0</strong>
+                  <span>profiles</span>
+                </div>
+              </div>
+            </header>
+
+            <div class="card directory-toolbar">
+              <label class="search-field" for="directory-search">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="search" id="directory-search" placeholder="Search name, department or specialisation" autocomplete="off">
+              </label>
+              <label class="select-field" for="directory-department">
+                <i class="bi bi-building" aria-hidden="true"></i>
+                <select id="directory-department">
+                  <option value="">All departments</option>
+                </select>
+              </label>
+              <label class="select-field" for="directory-designation">
+                <i class="bi bi-award" aria-hidden="true"></i>
+                <select id="directory-designation">
+                  <option value="">All designations</option>
+                </select>
+              </label>
+              <button class="btn btn-ghost directory-toolbar__reset" type="button" id="directory-reset">
+                <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset
+              </button>
+            </div>
+
+            <div class="directory-grid" id="directory-grid"></div>
+
+            <div class="empty-state" id="directory-empty" hidden>
+              <span class="empty-state__icon"><i class="bi bi-search" aria-hidden="true"></i></span>
+              <h3>No faculty profiles found</h3>
+              <p>Try a different name, department or designation.</p>
+              <button class="btn btn-soft" type="button" id="directory-empty-reset">Clear filters</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-form" data-view="form" hidden>
+        <div class="view__inner">
+          <div class="view-bar">
+            <button class="btn btn-ghost" type="button" id="form-back">
+              <i class="bi bi-arrow-left" aria-hidden="true"></i> Back to dashboard
+            </button>
+            <span class="view-note" id="form-mode-note"><i class="bi bi-pencil-square" aria-hidden="true"></i> Editing your profile</span>
+          </div>
+
+          <div class="card form-intro" id="form-overview" data-sidebar-section="overview">
+            <div>
+              <span class="eyebrow"><i class="bi bi-magic" aria-hidden="true"></i> Profile builder</span>
+              <h2 id="form-title">Create your faculty profile</h2>
+              <p id="form-subtitle">Add your academic details, then preview the profile before saving.</p>
+            </div>
+            <div class="form-progress">
+              <div class="form-progress__top">
+                <span>Completion</span>
+                <strong id="form-completion">0%</strong>
+              </div>
+              <div class="progress-track"><span id="form-progress-fill"></span></div>
+              <small>Add multiple entries to qualifications and other sections.</small>
+            </div>
+          </div>
+
+          <form id="profile-form" novalidate autocomplete="off">
+            <section class="card form-section" id="form-personal" data-sidebar-section="personal">
+              <header class="form-section__head">
+                <span class="step-badge">01</span>
+                <div>
+                  <h2>Personal Information</h2>
+                  <p>Your primary academic identity and contact details.</p>
+                </div>
+                <span class="section-tag">Required</span>
+              </header>
+
+              <div class="photo-row">
+                <div class="photo-preview" id="photo-preview"></div>
+                <div class="photo-copy">
+                  <h3>Profile photograph</h3>
+                  <p>A clear, professional portrait helps colleagues recognise you.</p>
+                  <div class="photo-actions">
+                    <label class="btn btn-soft" for="input-photo">
+                      <i class="bi bi-camera" aria-hidden="true"></i> Choose photo
+                    </label>
+                    <input class="sr-only" type="file" id="input-photo" accept="image/png,image/jpeg,image/webp">
+                    <button class="btn btn-ghost" type="button" id="btn-remove-photo">
+                      <i class="bi bi-trash3" aria-hidden="true"></i> Remove
+                    </button>
+                  </div>
+                  <small class="hint" id="photo-hint">JPG, PNG or WebP &middot; up to 5 MB</small>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="p-name">Full name <span class="req">*</span></label>
+                  <input type="text" id="p-name" name="name" placeholder="Dr. K. Ramanathan" required data-label="Full name">
+                </div>
+                <div class="field">
+                  <label for="p-faculty-id">Faculty ID <span class="req">*</span></label>
+                  <input type="text" id="p-faculty-id" name="facultyId" placeholder="UCEN-CSE-1042" required data-label="Faculty ID">
+                </div>
+                <div class="field">
+                  <label for="p-department">Department <span class="req">*</span></label>
+                  <select id="p-department" name="department" required data-label="Department">
+                    <option value="">Select department</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="p-designation">Designation <span class="req">*</span></label>
+                  <select id="p-designation" name="designation" required data-label="Designation">
+                    <option value="">Select designation</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="p-email">Email <span class="req">*</span></label>
+                  <input type="email" id="p-email" name="email" placeholder="name@ucen.ac.in" required data-label="Email">
+                </div>
+                <div class="field">
+                  <label for="p-contact">Contact number <span class="req">*</span></label>
+                  <input type="tel" id="p-contact" name="contact" placeholder="+91 94432 18765" required data-label="Contact number">
+                </div>
+                <div class="field field--full">
+                  <label for="p-specialization">Specialisation <span class="req">*</span></label>
+                  <input type="text" id="p-specialization" name="specialization" placeholder="Artificial Intelligence, Cloud Computing, Data Mining" required data-label="Specialisation">
+                  <small class="hint">Separate multiple areas with commas.</small>
+                </div>
+                <div class="field field--full">
+                  <label for="p-bio">Short biography</label>
+                  <textarea id="p-bio" name="bio" rows="4" placeholder="Share your teaching philosophy, research focus and academic journey."></textarea>
+                </div>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-qualification" data-sidebar-section="qualification">
+              <header class="form-section__head">
+                <span class="step-badge">02</span>
+                <div>
+                  <h2>Qualification</h2>
+                  <p>Add each degree, diploma or fellowship you hold.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-qualification"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="qualification">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add qualification
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-experience" data-sidebar-section="experience">
+              <header class="form-section__head">
+                <span class="step-badge">03</span>
+                <div>
+                  <h2>Professional Experience</h2>
+                  <p>Teaching, research and industry roles held over your career.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-experience"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="experience">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add experience
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-projects" data-sidebar-section="projects">
+              <header class="form-section__head">
+                <span class="step-badge">04</span>
+                <div>
+                  <h2>Funded Projects</h2>
+                  <p>Research grants and sponsored projects you have secured.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-project"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="project">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add funded project
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-publications" data-sidebar-section="publications">
+              <header class="form-section__head">
+                <span class="step-badge">05</span>
+                <div>
+                  <h2>Publications</h2>
+                  <p>Journal articles, conference papers and book chapters.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-publication"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="publication">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add publication
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-achievements" data-sidebar-section="achievements">
+              <header class="form-section__head">
+                <span class="step-badge">06</span>
+                <div>
+                  <h2>Achievements &amp; Certifications</h2>
+                  <p>Awards, honours and professional certifications that define your expertise.</p>
+                </div>
+              </header>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-trophy" aria-hidden="true"></i> Achievements</h3>
+                  <span>Recognition and awards</span>
+                </div>
+                <div class="entry-list" id="entry-list-achievement"></div>
+                <div class="entry-actions">
+                  <button class="btn btn-soft" type="button" data-add-entry="achievement">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Add achievement
+                  </button>
+                </div>
+              </div>
+
+              <div class="subgroup" id="form-certifications" data-sidebar-section="certifications">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-patch-check" aria-hidden="true"></i> Certifications</h3>
+                  <span>Professional credentials</span>
+                </div>
+                <div class="entry-list" id="entry-list-certification"></div>
+                <div class="entry-actions">
+                  <button class="btn btn-soft" type="button" data-add-entry="certification">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Add certification
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <p><i class="bi bi-shield-check" aria-hidden="true"></i> This frontend demo stores your profile securely in this browser.</p>
+              <div class="form-actions__buttons">
+                <button class="btn btn-ghost" type="button" id="btn-cancel-edit">Cancel</button>
+                <button class="btn btn-soft" type="submit">
+                  <i class="bi bi-eye" aria-hidden="true"></i> Preview profile
+                </button>
+                <button class="btn btn-primary" type="button" id="btn-save-form">
+                  <i class="bi bi-cloud-check" aria-hidden="true"></i> Save profile
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="view" id="view-profile" data-view="profile" hidden>
+        <div class="view__inner">
+          <div class="view-bar">
+            <button class="btn btn-ghost" type="button" id="profile-back">
+              <i class="bi bi-arrow-left" aria-hidden="true"></i> <span id="profile-back-label">Back to directory</span>
+            </button>
+            <span class="view-note" id="profile-mode-note"><i class="bi bi-eye" aria-hidden="true"></i> Read-only view</span>
+          </div>
+          <div id="profile-content"></div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer__brand">
+          <img src="assets/anna-university-logo.svg" alt="" width="30" height="30">
+          <span>University College of Engineering Nagercoil &middot; Anna University, Chennai</span>
+        </div>
+        <div class="footer__side">
+          <span>Faculty Portal &middot; Frontend demonstration</span>
+          <button class="footer__reset" type="button" id="reset-demo">Reset demo data</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal" id="preview-modal" hidden>
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+      <header class="modal__head">
+        <div>
+          <span class="eyebrow"><i class="bi bi-eye" aria-hidden="true"></i> Read-only preview</span>
+          <h2 id="preview-title">Review your profile</h2>
+        </div>
+        <button class="icon-btn" type="button" data-close-modal aria-label="Close preview">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </header>
+      <div class="modal__body" id="preview-body"></div>
+      <footer class="modal__foot">
+        <button class="btn btn-ghost" type="button" data-close-modal>Continue editing</button>
+        <button class="btn btn-primary" type="button" id="btn-save-profile">
+          <i class="bi bi-cloud-check" aria-hidden="true"></i> Save profile
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="role-gate" id="role-gate" hidden>
+    <div class="role-gate__backdrop" data-close-gate></div>
+    <div class="role-gate__panel" role="dialog" aria-modal="true" aria-labelledby="role-gate-title">
+      <header class="role-gate__head">
+        <span class="role-gate__brand">
+          <img src="assets/anna-university-logo.svg" alt="" width="38" height="38">
+          <span><strong>UCEN</strong><small>Faculty Portal</small></span>
+        </span>
+        <button class="icon-btn" type="button" id="role-gate-close" aria-label="Close role selection" hidden>
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="role-gate__intro">
+        <span class="eyebrow"><i class="bi bi-shield-lock" aria-hidden="true"></i> Frontend role demonstration</span>
+        <h2 id="role-gate-title">Choose your portal perspective</h2>
+        <p>Select how you would like to explore the Faculty Portal. Actual authentication and authorisation will be handled by the backend.</p>
+      </div>
+
+      <div class="role-grid" id="role-choices">
+        <button class="role-card role-card--admin" type="button" data-login-role="admin">
+          <span class="role-card__icon"><i class="bi bi-shield-lock-fill" aria-hidden="true"></i></span>
+          <span class="role-card__title">Admin / In-charge</span>
+          <span class="role-card__copy">Create faculty, edit every profile, monitor completion and manage the directory.</span>
+          <span class="role-card__cta">Admin sign in <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+        </button>
+        <button class="role-card role-card--faculty" type="button" data-login-role="faculty">
+          <span class="role-card__icon"><i class="bi bi-person-badge-fill" aria-hidden="true"></i></span>
+          <span class="role-card__title">Faculty Member</span>
+          <span class="role-card__copy">Build and update your own profile, preview it and browse other faculty members.</span>
+          <span class="role-card__cta">Faculty sign in <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+        </button>
+        <button class="role-card role-card--viewer" type="button" data-login-role="viewer">
+          <span class="role-card__icon"><i class="bi bi-eye-fill" aria-hidden="true"></i></span>
+          <span class="role-card__title">Continue as Viewer</span>
+          <span class="role-card__copy">Search and filter the directory, and view any faculty profile in read-only mode.</span>
+          <span class="role-card__cta">Enter directory <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+        </button>
+      </div>
+
+      <form class="login-panel" id="admin-login" hidden novalidate>
+        <span class="eyebrow"><i class="bi bi-shield-check" aria-hidden="true"></i> Admin access</span>
+        <h3>Admin / In-charge sign in</h3>
+        <p>Admin accounts have complete faculty profile management permissions.</p>
+        <div class="login-grid">
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="admin-email" value="admin@ucen.ac.in" autocomplete="username">
+          </label>
+          <div class="field">
+            <span>Password</span>
+            <span class="password-field">
+              <input type="password" id="admin-password" value="admin123" autocomplete="current-password" aria-label="Admin password">
+              <button class="password-toggle" type="button" data-toggle-password="admin-password" aria-label="Show password" aria-pressed="false">
+                <i class="bi bi-eye" aria-hidden="true"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="login-actions">
+          <button class="btn btn-ghost" type="button" data-login-back><i class="bi bi-arrow-left" aria-hidden="true"></i> Back</button>
+          <button class="btn btn-primary" type="submit">Sign in as Admin <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+        </div>
+        <small class="demo-hint">Demo credentials: admin@ucen.ac.in / admin123</small>
+      </form>
+
+      <form class="login-panel" id="faculty-login" hidden novalidate>
+        <span class="eyebrow"><i class="bi bi-person-badge" aria-hidden="true"></i> Faculty access</span>
+        <h3>Faculty sign in</h3>
+        <p>Sign in with your official faculty email. Faculty members can edit only their own profile.</p>
+        <div class="login-grid">
+          <label class="field">
+            <span>Official email</span>
+            <input type="email" id="faculty-email" value="radhakrishnan1974@ucen.ac.in" autocomplete="username">
+          </label>
+          <div class="field">
+            <span>Password</span>
+            <span class="password-field">
+              <input type="password" id="faculty-password" value="faculty123" autocomplete="current-password" aria-label="Faculty password">
+              <button class="password-toggle" type="button" data-toggle-password="faculty-password" aria-label="Show password" aria-pressed="false">
+                <i class="bi bi-eye" aria-hidden="true"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="login-actions">
+          <button class="btn btn-ghost" type="button" data-login-back><i class="bi bi-arrow-left" aria-hidden="true"></i> Back</button>
+          <button class="btn btn-primary" type="submit">Sign in as Faculty <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+        </div>
+        <small class="demo-hint">Demo credentials: any listed faculty email / faculty123</small>
+      </form>
+
+      <p class="role-gate__note"><i class="bi bi-info-circle" aria-hidden="true"></i> This role selection is a frontend demonstration. Authentication and authorisation must be enforced by the backend.</p>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
