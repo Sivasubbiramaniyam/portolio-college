@@ -20,8 +20,8 @@
   --red-soft: #FFF0F3;
   --blue: #2F6FE4;
   --blue-soft: #EBF2FF;
-  --rail: 112px;
-  --rail-expanded: 316px;
+  --rail: 96px;
+  --rail-expanded: 300px;
   --radius: 20px;
   --shadow-sm: 0 2px 10px rgba(46, 26, 120, 0.06);
   --shadow: 0 24px 50px -28px rgba(46, 26, 120, 0.35);
@@ -317,12 +317,15 @@ button {
 
 .side-link__label {
   position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
   max-width: 0;
   overflow: hidden;
   opacity: 0;
   font-size: 0.84rem;
   font-weight: 600;
   letter-spacing: 0.01em;
+  text-overflow: ellipsis;
   white-space: nowrap;
   transition: max-width 0.32s ease, opacity 0.24s ease;
 }
@@ -366,7 +369,7 @@ button {
   left: 60px;
   z-index: 30;
   width: max-content;
-  max-width: 260px;
+  max-width: min(260px, calc(100vw - 88px));
   padding: 9px 14px;
   overflow: visible;
   border-radius: 12px;
@@ -480,6 +483,7 @@ button {
 }
 
 .app-shell {
+  min-width: 0;
   min-height: 100vh;
   padding-left: var(--rail);
   transition: padding-left 0.42s cubic-bezier(0.22, 1, 0.36, 1);
@@ -705,11 +709,13 @@ body.sidebar-expanded .app-shell {
 
 .main {
   max-width: 1440px;
+  min-width: 0;
   margin: 0 auto;
-  padding: clamp(18px, 2.6vw, 34px) clamp(18px, 3vw, 38px) 0;
+  padding: clamp(18px, 2.6vw, 34px) clamp(16px, 3vw, 38px) 0;
 }
 
 .view {
+  min-width: 0;
   animation: viewIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -717,9 +723,11 @@ body.sidebar-expanded .app-shell {
   display: flex;
   flex-direction: column;
   gap: 22px;
+  min-width: 0;
 }
 
 .card {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
@@ -1105,7 +1113,7 @@ body.sidebar-expanded .app-shell {
 
 .mini-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 88px), 1fr));
   gap: 9px;
 }
 
@@ -1332,6 +1340,7 @@ body.sidebar-expanded .app-shell {
   margin: 0 0 3px;
   font-size: 1rem;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .faculty-card__designation {
@@ -2229,6 +2238,7 @@ body.sidebar-expanded .app-shell {
   margin: 0;
   font-size: 0.89rem;
   line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .status-pill {
@@ -2406,6 +2416,7 @@ body.sidebar-expanded .app-shell {
   margin: 0 0 3px;
   font-size: 0.86rem;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .achievement-card__org {
@@ -2724,10 +2735,6 @@ body.modal-open {
 }
 
 @media (max-width: 1279px) {
-  body.sidebar-expanded .app-shell {
-    padding-left: var(--rail);
-  }
-
   .sidebar.is-expanded {
     z-index: 130;
   }
@@ -2966,7 +2973,7 @@ body.modal-open {
 
   .sidebar:not(.is-expanded) .side-link__label {
     left: 56px;
-    max-width: 220px;
+    max-width: min(220px, calc(100vw - 76px));
     font-size: 0.76rem;
   }
 
@@ -3438,6 +3445,10 @@ body.modal-open {
   justify-content: flex-start;
 }
 
+.sidebar.is-expanded .sidebar__nav {
+  justify-content: flex-start;
+}
+
 .sidebar__nav-label {
   display: block;
   width: 100%;
@@ -3520,7 +3531,7 @@ body.modal-open {
 
 .admin-stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 14px;
 }
 
@@ -3605,7 +3616,7 @@ body.modal-open {
 
 .department-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 10px 26px;
 }
 
@@ -3744,7 +3755,7 @@ body.gate-open {
 
 .role-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 14px;
 }
 
@@ -4086,6 +4097,102 @@ body.gate-open {
 
   .topbar__btn i {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --rail: 76px;
+    --rail-expanded: min(264px, 88vw);
+  }
+
+  .sidebar__brand {
+    height: 42px;
+    padding: 0 12px;
+  }
+
+  .sidebar__brand-mark {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .sidebar__brand-mark img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .sidebar__nav {
+    padding: 8px 12px;
+  }
+
+  .side-link__icon {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    font-size: 1.04rem;
+  }
+
+  .sidebar.is-expanded .side-link.is-active::before {
+    left: -12px;
+  }
+
+  .sidebar:not(.is-expanded) .side-link__label {
+    left: 52px;
+    max-width: min(200px, calc(100vw - 64px));
+  }
+
+  .sidebar__toggle {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .sidebar.is-expanded .sidebar__toggle {
+    width: calc(100% - 24px);
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+
+  .topbar__inner {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .main {
+    padding: 14px 12px 0;
+  }
+
+  .view__inner {
+    gap: 14px;
+  }
+
+  .hero-panel {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .strength-card {
+    padding: 16px;
+  }
+
+  .profile-strip {
+    padding: 15px;
+  }
+
+  .form-section,
+  .profile-section {
+    padding: 15px;
+  }
+
+  .directory-toolbar {
+    padding: 10px;
+  }
+
+  .empty-state {
+    padding: 38px 18px;
   }
 }
 
