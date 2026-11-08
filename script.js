@@ -7,8 +7,15 @@
   const $$ = (selector, context = document) => Array.from(context.querySelectorAll(selector));
 
   const STORAGE_KEY = "ucen-faculty-portal-v2";
+  const STATE_ENDPOINT = "/api/state";
   const CURRENT_YEAR = new Date().getFullYear();
   const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const DEAN_ID = "fac-dean";
+  const DEAN_EMAIL = "dean@ucen.ac.in";
+  const ADMIN_ACCOUNTS = {
+    "admin@ucen.ac.in": { password: "admin123", name: "Administrator" },
+    "dean@ucen.ac.in": { password: "dean123", name: "Dr.T Sree Renga Raja" }
+  };
 
   const DEPARTMENTS = [
     "Computer Science and Engineering",
@@ -24,7 +31,10 @@
   const DESIGNATIONS = [
     "Professor & Head",
     "Professor",
+    "Dean & Professor",
     "Associate Professor",
+    "Asst Professor (Sr.Gr)",
+    "Asst Professor (Sr.Gr) & HOD",
     "Assistant Professor & HOD",
     "Assistant Professor",
     "Dean",
@@ -51,7 +61,6 @@
     email: "radhakrishnan1974@ucen.ac.in",
     contact: "+91 94432 18765",
     specialization: "Artificial Intelligence, Cloud Computing, Data Mining",
-    bio: "Professor and Head of the Department of Computer Science and Engineering at UCEN, with more than two decades of teaching and research experience. My work focuses on applied artificial intelligence, secure cloud systems and data-driven solutions for agriculture and education.",
     photo: "",
     qualifications: [
       {
@@ -59,6 +68,7 @@
         institution: "National Institute of Technology, Tiruchirappalli",
         university: "Anna University, Chennai",
         year: "2009",
+        classObtained: "Distinction",
         specialization: "Artificial Intelligence"
       },
       {
@@ -66,6 +76,7 @@
         institution: "College of Engineering, Guindy",
         university: "Anna University, Chennai",
         year: "2003",
+        classObtained: "1st Class",
         specialization: "Software Engineering"
       },
       {
@@ -73,6 +84,7 @@
         institution: "Thiagarajar College of Engineering, Madurai",
         university: "Madurai Kamaraj University",
         year: "2000",
+        classObtained: "1st Class",
         specialization: "Computer Science"
       }
     ],
@@ -81,119 +93,387 @@
         institution: "University College of Engineering Nagercoil",
         designation: "Professor & Head",
         from: "2018-06",
-        to: "",
-        description: "Leading the Department of Computer Science and Engineering, coordinating academic programmes, research initiatives and industry collaborations."
+        to: ""
       },
       {
         institution: "University College of Engineering Nagercoil",
         designation: "Professor",
         from: "2013-07",
-        to: "2018-05",
-        description: "Taught core and elective courses in artificial intelligence, cloud computing and data mining, and supervised doctoral research."
+        to: "2018-05"
       },
       {
         institution: "Sree Sastha Institute of Engineering and Technology, Chennai",
         designation: "Associate Professor",
         from: "2007-06",
-        to: "2013-06",
-        description: "Established the departmental research lab and guided student projects in intelligent systems and web technologies."
+        to: "2013-06"
       }
     ],
     projects: [
       {
         title: "AI-Assisted Early Detection of Crop Disease for Smallholder Farmers",
         agency: "Science and Engineering Research Board (DST)",
+        category: "Government Funded",
+        pi: "Dr. K. Ramanathan",
+        coPi: "Dr. M. Anitha",
         role: "Principal Investigator",
         duration: "2022 – 2025",
+        start: "2022-04",
+        end: "2025-03",
         amount: "4850000",
         status: "Ongoing",
-        description: "A field-deployable computer vision system that helps farmers identify crop disease early using low-cost mobile devices and regional-language alerts."
+        reference: "DST/SERB/2022/1042",
+        description: "A field-deployable computer vision system that helps farmers identify crop disease early using low-cost mobile devices and regional-language alerts.",
+        sanctionLetter: ""
       },
       {
         title: "Secure Cloud Framework for Academic Record Management",
         agency: "AICTE – Research Promotion Scheme",
+        category: "Government Funded",
+        pi: "Dr. S. Meenakshi",
+        coPi: "Dr. K. Ramanathan",
         role: "Co-Investigator",
         duration: "2019 – 2022",
+        start: "2019-07",
+        end: "2022-06",
         amount: "1850000",
         status: "Completed",
-        description: "Designed an encrypted, audit-ready cloud architecture for inter-collegiate academic record exchange."
+        reference: "AICTE/RPS/2019/118",
+        description: "Designed an encrypted, audit-ready cloud architecture for inter-collegiate academic record exchange.",
+        sanctionLetter: ""
       },
       {
         title: "Intelligent Tutoring System for Regional Language Learners",
         agency: "Tamil Nadu State Council for Science and Technology",
+        category: "Research Grant",
+        pi: "Dr. K. Ramanathan",
+        coPi: "",
         role: "Principal Investigator",
         duration: "2024 – 2026",
+        start: "2024-01",
+        end: "2026-12",
         amount: "950000",
-        status: "Approved",
-        description: "Adaptive learning platform that personalises practice material for first-generation learners in Tamil-medium schools."
+        status: "Ongoing",
+        reference: "TNSCST/STP/2024/07",
+        description: "Adaptive learning platform that personalises practice material for first-generation learners in Tamil-medium schools.",
+        sanctionLetter: ""
       }
     ],
     publications: [
       {
         title: "Explainable Deep Learning for Crop Disease Identification in Resource-Constrained Environments",
+        type: "Journal Article",
         venue: "IEEE Transactions on Emerging Topics in Computing",
+        authors: "K. Ramanathan, M. Anitha, R. Suresh",
         year: "2024",
-        link: "https://doi.org/10.1109/TETC.2024.10421873"
+        volume: "12",
+        issue: "3",
+        pages: "101-114",
+        publisher: "IEEE",
+        indexing: "Scopus, Web of Science",
+        doi: "10.1109/TETC.2024.10421873",
+        url: "https://doi.org/10.1109/TETC.2024.10421873"
       },
       {
         title: "A Privacy-Preserving Architecture for Academic Credential Exchange",
+        type: "Journal Article",
         venue: "Journal of Information Security and Applications",
+        authors: "K. Ramanathan, S. Meenakshi",
         year: "2023",
-        link: "https://doi.org/10.1016/j.jisa.2023.103562"
+        volume: "76",
+        issue: "2",
+        pages: "103562",
+        publisher: "Elsevier",
+        indexing: "Scopus, Web of Science",
+        doi: "10.1016/j.jisa.2023.103562",
+        url: "https://doi.org/10.1016/j.jisa.2023.103562"
       },
       {
         title: "Adaptive Learning Paths for Regional Language Classrooms",
+        type: "Conference Paper",
         venue: "International Conference on Advanced Computing (ICoAC)",
+        authors: "M. Anitha, K. Ramanathan",
         year: "2022",
-        link: ""
+        volume: "",
+        issue: "",
+        pages: "1-6",
+        publisher: "IEEE",
+        indexing: "Scopus",
+        doi: "",
+        url: ""
       },
       {
         title: "Energy-Aware Scheduling for Federated Cloud Workloads",
+        type: "Journal Article",
         venue: "Cluster Computing",
+        authors: "K. Ramanathan, R. Suresh",
         year: "2021",
-        link: "https://doi.org/10.1007/s10586-021-03245-8"
+        volume: "24",
+        issue: "4",
+        pages: "3125-3140",
+        publisher: "Springer",
+        indexing: "Scopus, Web of Science",
+        doi: "10.1007/s10586-021-03245-8",
+        url: "https://doi.org/10.1007/s10586-021-03245-8"
+      }
+    ],
+    conferencesAttended: [
+      {
+        name: "IEEE International Conference on Advanced Computing",
+        type: "Technical Conference",
+        category: "International",
+        organizer: "IEEE Madras Section",
+        location: "Chennai, India",
+        start: "2024-12-12",
+        end: "2024-12-14",
+        participation: "Paper Presenter",
+        paperTitle: "Explainable Deep Learning for Crop Disease Identification",
+        certificate: ""
+      },
+      {
+        name: "National Symposium on Responsible Artificial Intelligence",
+        type: "Symposium",
+        category: "National",
+        organizer: "Anna University, Chennai",
+        location: "Chennai, India",
+        start: "2023-09-08",
+        end: "2023-09-09",
+        participation: "Invited Speaker",
+        paperTitle: "",
+        certificate: ""
+      },
+      {
+        name: "Faculty Development Programme on Cloud-Native Systems",
+        type: "Workshop",
+        category: "National",
+        organizer: "NIT Tiruchirappalli",
+        location: "Tiruchirappalli, India",
+        start: "2023-02-06",
+        end: "2023-02-10",
+        participation: "Participant",
+        paperTitle: "",
+        certificate: ""
+      }
+    ],
+    conferencesConducted: [
+      {
+        name: "National Workshop on Applied Artificial Intelligence",
+        type: "Workshop",
+        category: "National",
+        organizer: "University College of Engineering Nagercoil",
+        role: "Convener",
+        location: "Nagercoil, Tamil Nadu",
+        start: "2024-03-14",
+        end: "2024-03-16",
+        participants: "180",
+        website: ""
+      },
+      {
+        name: "International Conference on Data-Driven Engineering",
+        type: "Research Conference",
+        category: "International",
+        organizer: "University College of Engineering Nagercoil",
+        role: "Organizing Secretary",
+        location: "Nagercoil, Tamil Nadu",
+        start: "2022-11-10",
+        end: "2022-11-12",
+        participants: "260",
+        website: ""
+      }
+    ],
+    trainingPrograms: [
+      {
+        title: "Faculty Development Programme on Generative AI",
+        type: "FDP",
+        organizer: "University College of Engineering Nagercoil",
+        level: "National",
+        start: "2025-01-06",
+        end: "2025-01-10",
+        role: "Coordinator",
+        participants: "60",
+        certificate: ""
+      },
+      {
+        title: "Hands-on Training on Cloud-Native Development",
+        type: "Training",
+        organizer: "ICT Academy",
+        level: "State",
+        start: "2023-07-17",
+        end: "2023-07-21",
+        role: "Resource Person",
+        participants: "85",
+        certificate: ""
+      }
+    ],
+    patents: [
+      {
+        title: "Context-Aware Irrigation Advisory System",
+        number: "IN 412356",
+        type: "Utility Patent",
+        inventors: "K. Ramanathan, M. Anitha",
+        authority: "Intellectual Property India",
+        country: "India",
+        grantDate: "2022-08-19",
+        status: "Granted",
+        url: "",
+        certificate: ""
+      },
+      {
+        title: "Privacy-Preserving Academic Credential Verification Method",
+        number: "IN 431902",
+        type: "Utility Patent",
+        inventors: "K. Ramanathan, S. Meenakshi",
+        authority: "Intellectual Property India",
+        country: "India",
+        grantDate: "2023-11-24",
+        status: "Awarded",
+        url: "",
+        certificate: ""
+      }
+    ],
+    researchAreas: [
+      {
+        area: "Artificial Intelligence",
+        subject: "Computer Science and Engineering",
+        specialization: "Explainable AI, Computer Vision",
+        keywords: "deep learning, precision agriculture, model interpretability"
+      },
+      {
+        area: "Cloud Computing",
+        subject: "Computer Science and Engineering",
+        specialization: "Secure cloud architecture, federated systems",
+        keywords: "privacy, distributed scheduling, cloud security"
+      },
+      {
+        area: "Data Mining",
+        subject: "Computer Science and Engineering",
+        specialization: "Educational data mining, regional language analytics",
+        keywords: "learning analytics, Tamil NLP, inclusive education"
       }
     ],
     achievements: [
       {
         title: "Best Faculty Researcher Award",
+        category: "Research Achievement",
         organization: "Anna University, Chennai",
         year: "2023",
-        description: "Recognised for sustained research output and externally funded projects in applied artificial intelligence."
+        certificateNumber: "AU/AWD/2023/17",
+        certificateUrl: "",
+        description: "Recognised for sustained research output and externally funded projects in applied artificial intelligence.",
+        certificate: ""
       },
       {
         title: "Outstanding Contribution to Teaching",
+        category: "Teaching Achievement",
         organization: "University College of Engineering Nagercoil",
         year: "2021",
-        description: "Awarded for curriculum innovation and mentorship of student research teams."
+        certificateNumber: "UCEN/AWD/2021/09",
+        certificateUrl: "",
+        description: "Awarded for curriculum innovation and mentorship of student research teams.",
+        certificate: ""
       },
       {
         title: "Patent Granted – Context-Aware Irrigation Advisory System",
+        category: "Award",
         organization: "Intellectual Property India",
         year: "2022",
-        description: "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage."
+        certificateNumber: "IN 412356",
+        certificateUrl: "",
+        description: "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage.",
+        certificate: ""
       }
     ],
     certifications: [
       {
         title: "AWS Certified Solutions Architect – Associate",
+        category: "Professional Certification",
         organization: "Amazon Web Services",
         year: "2024",
-        description: "Professional certification covering secure, scalable cloud architecture design."
+        certificateNumber: "AWS-2024-8842",
+        certificateUrl: "",
+        description: "Professional certification covering secure, scalable cloud architecture design.",
+        certificate: ""
       },
       {
         title: "NPTEL Certification in Deep Learning",
+        category: "Training",
         organization: "IIT Madras",
         year: "2023",
-        description: "Completed the advanced NPTEL programme with elite distinction."
+        certificateNumber: "NPTEL/2023/DL/1124",
+        certificateUrl: "",
+        description: "Completed the advanced NPTEL programme with elite distinction.",
+        certificate: ""
       },
       {
         title: "Certified Data Science Professional",
+        category: "Professional Certification",
         organization: "IBM",
         year: "2022",
-        description: "Credential focused on the end-to-end data science workflow and model deployment."
+        certificateNumber: "IBM-DS-2022-5567",
+        certificateUrl: "",
+        description: "Credential focused on the end-to-end data science workflow and model deployment.",
+        certificate: ""
       }
-    ]
+    ],
+    responsibilities: [
+      {
+        title: "Head of Department",
+        category: "Department Responsibility",
+        institution: "University College of Engineering Nagercoil",
+        position: "Professor & Head",
+        level: "Department Level",
+        from: "2018-06",
+        to: "",
+        current: "true"
+      },
+      {
+        title: "Member, Board of Studies in Computer Science",
+        category: "Academic Responsibility",
+        institution: "Anna University, Chennai",
+        position: "Board Member",
+        level: "University Level",
+        from: "2020-07",
+        to: "",
+        current: "true"
+      },
+      {
+        title: "Nodal Officer, AICTE Faculty Development Programme",
+        category: "Institutional Responsibility",
+        institution: "University College of Engineering Nagercoil",
+        position: "Nodal Officer",
+        level: "College Level",
+        from: "2021-01",
+        to: "2023-12",
+        current: ""
+      }
+    ],
+    researchGuideNumber: "AU/RC/CS/2012/034",
+    researchGuideUniversity: "Anna University, Chennai",
+    researchGuideDate: "2012-05-18",
+    researchGuideStatus: "Recognised",
+    phdCompleted: "6",
+    mphilCompleted: "4",
+    otherCompleted: "2",
+    phdGuiding: "5",
+    mphilGuiding: "1",
+    otherGuiding: "0",
+    googleScholarId: "AbCdEf123456",
+    googleScholarUrl: "https://scholar.google.com/citations?user=AbCdEf123456",
+    orcidId: "0000-0002-1825-0097",
+    orcidUrl: "https://orcid.org/0000-0002-1825-0097",
+    scopusId: "57210493821",
+    scopusUrl: "https://www.scopus.com/authid/detail.uri?authorId=57210493821"
+  };
+
+  const SAMPLE_DEAN = {
+    id: DEAN_ID,
+    name: "Dr.T Sree Renga Raja",
+    facultyId: "",
+    department: "",
+    designation: "Dean & Professor",
+    email: DEAN_EMAIL,
+    contact: "",
+    specialization: "",
+    photo: ""
   };
 
   const SAMPLE_FACULTY = [
@@ -520,6 +800,7 @@
         { key: "institution", label: "Institution name", placeholder: "National Institute of Technology", required: true },
         { key: "university", label: "University", placeholder: "Anna University, Chennai" },
         { key: "year", label: "Year of completion", type: "number", placeholder: "2018", required: true, min: 1950, max: CURRENT_YEAR + 1 },
+        { key: "classObtained", label: "Class obtained", type: "select", options: ["Distinction", "1st Class", "2nd Class", "3rd Class", "Pass"] },
         { key: "specialization", label: "Specialisation", placeholder: "Artificial Intelligence" }
       ]
     },
@@ -531,8 +812,7 @@
         { key: "designation", label: "Designation", placeholder: "Associate Professor", required: true },
         { key: "from", label: "From date", type: "month", required: true },
         { key: "to", label: "To date", type: "month" },
-        { key: "total", label: "Total experience", placeholder: "6 years 4 months" },
-        { key: "description", label: "Experience description", type: "textarea", placeholder: "Describe your responsibilities and key contributions.", full: true }
+        { key: "total", label: "Total experience", placeholder: "6 years 4 months" }
       ]
     },
     project: {
@@ -541,11 +821,18 @@
       fields: [
         { key: "title", label: "Project title", placeholder: "AI-Assisted Crop Disease Detection", required: true, full: true },
         { key: "agency", label: "Funding agency", placeholder: "Science and Engineering Research Board (DST)", required: true },
-        { key: "role", label: "Role", placeholder: "Principal Investigator" },
-        { key: "duration", label: "Duration", placeholder: "2023 – 2026" },
+        { key: "category", label: "Project category", type: "select", options: ["Government Funded", "University Funded", "Industry Funded", "Research Grant", "Other"] },
+        { key: "pi", label: "Principal Investigator (PI)", placeholder: "Dr. K. Ramanathan" },
+        { key: "coPi", label: "Co-Principal Investigator (Co-PI)", placeholder: "Dr. M. Anitha" },
+        { key: "role", label: "Faculty role", placeholder: "Principal Investigator" },
+        { key: "duration", label: "Project duration", placeholder: "2023 – 2026" },
+        { key: "start", label: "Start date", type: "month" },
+        { key: "end", label: "End date", type: "month" },
         { key: "amount", label: "Sanctioned amount (₹)", type: "number", placeholder: "2500000", min: 0 },
-        { key: "status", label: "Project status", type: "select", options: ["Proposed", "Approved", "Ongoing", "Completed"], required: true },
-        { key: "description", label: "Description", type: "textarea", placeholder: "Briefly describe the project objectives and outcomes.", full: true }
+        { key: "status", label: "Project status", type: "select", options: ["Ongoing", "Completed"], required: true },
+        { key: "reference", label: "Project reference number", placeholder: "DST/SERB/2023/1042" },
+        { key: "description", label: "Project description (optional)", type: "textarea", placeholder: "Briefly describe the project objectives and outcomes.", full: true },
+        { key: "sanctionLetter", label: "Sanction letter / certificate", type: "file", accept: "image/*,application/pdf", full: true }
       ]
     },
     publication: {
@@ -553,10 +840,17 @@
       container: "entry-list-publication",
       fields: [
         { key: "title", label: "Publication title", placeholder: "Paper title", required: true, full: true },
-        { key: "venue", label: "Journal / Conference", placeholder: "IEEE Transactions on ...", required: true },
+        { key: "type", label: "Publication type", type: "select", options: ["Journal Article", "Conference Paper", "Book", "Book Chapter", "Review Article", "Other"], required: true },
+        { key: "venue", label: "Journal / Conference name", placeholder: "IEEE Transactions on ...", required: true },
+        { key: "authors", label: "Author names", placeholder: "K. Ramanathan, M. Anitha", full: true },
         { key: "year", label: "Publication year", type: "number", placeholder: "2024", required: true, min: 1950, max: CURRENT_YEAR + 1 },
-        { key: "type", label: "Publication type", type: "select", options: ["Journal Article", "Conference Paper", "Book Chapter", "Book", "Patent", "Other"], required: true },
-        { key: "link", label: "DOI / Link", type: "url", placeholder: "https://doi.org/...", full: true }
+        { key: "volume", label: "Volume number", placeholder: "12" },
+        { key: "issue", label: "Issue number", placeholder: "3" },
+        { key: "pages", label: "Page number", placeholder: "101-114" },
+        { key: "publisher", label: "Publisher name", placeholder: "IEEE" },
+        { key: "indexing", label: "Indexing type", placeholder: "Scopus, Web of Science, UGC CARE" },
+        { key: "doi", label: "DOI", placeholder: "10.1109/TETC.2024.10421873" },
+        { key: "url", label: "Publication URL", type: "url", placeholder: "https://doi.org/...", full: true }
       ]
     },
     achievement: {
@@ -564,9 +858,13 @@
       container: "entry-list-achievement",
       fields: [
         { key: "title", label: "Achievement title", placeholder: "Best Faculty Researcher Award", required: true, full: true },
+        { key: "category", label: "Achievement category", type: "select", options: ["Academic Achievement", "Teaching Achievement", "Research Achievement", "Award", "Professional Certification", "Training", "Other"] },
         { key: "organization", label: "Issuing organisation", placeholder: "Anna University, Chennai", required: true },
-        { key: "year", label: "Year", type: "number", placeholder: "2023", required: true, min: 1950, max: CURRENT_YEAR + 1 },
-        { key: "description", label: "Description", type: "textarea", placeholder: "Briefly describe the achievement.", full: true }
+        { key: "year", label: "Date / Year", placeholder: "2023" },
+        { key: "certificateNumber", label: "Certificate number (optional)", placeholder: "AU/AWD/2023/17" },
+        { key: "certificateUrl", label: "Certificate URL (optional)", type: "url", placeholder: "https://..." },
+        { key: "description", label: "Description", type: "textarea", placeholder: "Briefly describe the achievement.", full: true },
+        { key: "certificate", label: "Certificate upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
       ]
     },
     certification: {
@@ -574,9 +872,100 @@
       container: "entry-list-certification",
       fields: [
         { key: "title", label: "Certification title", placeholder: "AWS Certified Solutions Architect", required: true, full: true },
+        { key: "category", label: "Certification category", type: "select", options: ["Professional Certification", "Training", "Academic Achievement", "Teaching Achievement", "Research Achievement", "Award", "Other"] },
         { key: "organization", label: "Issuing organisation", placeholder: "Amazon Web Services", required: true },
-        { key: "year", label: "Year", type: "number", placeholder: "2024", required: true, min: 1950, max: CURRENT_YEAR + 1 },
-        { key: "description", label: "Description", type: "textarea", placeholder: "Add credential details or a short description.", full: true }
+        { key: "year", label: "Date / Year", placeholder: "2024" },
+        { key: "certificateNumber", label: "Certificate number (optional)", placeholder: "AWS-2024-8842" },
+        { key: "certificateUrl", label: "Certificate URL (optional)", type: "url", placeholder: "https://..." },
+        { key: "description", label: "Description", type: "textarea", placeholder: "Add credential details or a short description.", full: true },
+        { key: "certificate", label: "Certificate upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
+      ]
+    },
+    conferenceAttended: {
+      label: "Conference attended",
+      container: "entry-list-conference-attended",
+      fields: [
+        { key: "name", label: "Conference name", placeholder: "IEEE International Conference on Advanced Computing", required: true, full: true },
+        { key: "type", label: "Conference type", type: "select", options: ["Technical Conference", "Research Conference", "Workshop", "Symposium", "Seminar"] },
+        { key: "category", label: "Conference category", type: "select", options: ["National", "International"] },
+        { key: "organizer", label: "Organized by", placeholder: "IEEE Madras Section" },
+        { key: "location", label: "Conference location", placeholder: "Chennai, India" },
+        { key: "start", label: "Start date", type: "date" },
+        { key: "end", label: "End date", type: "date" },
+        { key: "participation", label: "Participation type", type: "select", options: ["Participant", "Presenter", "Paper Presenter", "Resource Person", "Invited Speaker"] },
+        { key: "paperTitle", label: "Paper title (optional)", placeholder: "Explainable Deep Learning for Crop Disease Identification", full: true },
+        { key: "certificate", label: "Certificate upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
+      ]
+    },
+    conferenceConducted: {
+      label: "Conference conducted",
+      container: "entry-list-conference-conducted",
+      fields: [
+        { key: "name", label: "Conference name", placeholder: "National Workshop on Applied AI", required: true, full: true },
+        { key: "type", label: "Conference type", type: "select", options: ["Technical Conference", "Research Conference", "Workshop", "Symposium", "Seminar"] },
+        { key: "category", label: "Conference category", type: "select", options: ["National", "International"] },
+        { key: "organizer", label: "Organized by", placeholder: "University College of Engineering Nagercoil" },
+        { key: "role", label: "Faculty role", type: "select", options: ["Convener", "Co-Convener", "Coordinator", "Organizing Secretary", "Organizing Committee Member", "Chairperson"] },
+        { key: "location", label: "Conference location", placeholder: "Nagercoil, Tamil Nadu" },
+        { key: "start", label: "Start date", type: "date" },
+        { key: "end", label: "End date", type: "date" },
+        { key: "participants", label: "Number of participants (optional)", type: "number", placeholder: "120", min: 0 },
+        { key: "website", label: "Conference website (optional)", type: "url", placeholder: "https://...", full: true }
+      ]
+    },
+    trainingProgram: {
+      label: "Training program",
+      container: "entry-list-training-program",
+      fields: [
+        { key: "title", label: "Program / training title", placeholder: "Faculty Development Programme on Generative AI", required: true, full: true },
+        { key: "type", label: "Type of program", type: "select", options: ["FDP", "Workshop", "Seminar", "Training", "STTP", "Refresher Course", "Orientation Programme", "Other"] },
+        { key: "organizer", label: "Organized by", placeholder: "University College of Engineering Nagercoil" },
+        { key: "level", label: "Level", type: "select", options: ["National", "International", "State", "Institutional"] },
+        { key: "start", label: "Start date", type: "date" },
+        { key: "end", label: "End date", type: "date" },
+        { key: "role", label: "Role", type: "select", options: ["Coordinator", "Resource Person", "Trainer", "Organizer"] },
+        { key: "participants", label: "Number of participants (optional)", type: "number", placeholder: "60", min: 0 },
+        { key: "certificate", label: "Certificate / proof upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
+      ]
+    },
+    patent: {
+      label: "Patent",
+      container: "entry-list-patent",
+      fields: [
+        { key: "title", label: "Patent title", placeholder: "Context-Aware Irrigation Advisory System", required: true, full: true },
+        { key: "number", label: "Patent number", placeholder: "IN 412356", required: true },
+        { key: "type", label: "Patent type", placeholder: "Utility Patent" },
+        { key: "inventors", label: "Inventor names", placeholder: "K. Ramanathan, M. Anitha", full: true },
+        { key: "authority", label: "Patent authority", placeholder: "Intellectual Property India" },
+        { key: "country", label: "Country", placeholder: "India" },
+        { key: "grantDate", label: "Grant / award date", type: "date", required: true },
+        { key: "status", label: "Patent status", type: "select", options: ["Granted", "Awarded"], required: true },
+        { key: "url", label: "Patent URL (optional)", type: "url", placeholder: "https://...", full: true },
+        { key: "certificate", label: "Patent certificate upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
+      ]
+    },
+    responsibility: {
+      label: "Responsibility",
+      container: "entry-list-responsibility",
+      fields: [
+        { key: "title", label: "Responsibility title", placeholder: "Head of Department", required: true, full: true },
+        { key: "category", label: "Responsibility category", type: "select", options: ["Academic Responsibility", "Administrative Responsibility", "Department Responsibility", "Institutional Responsibility", "Professional Responsibility", "Other"] },
+        { key: "institution", label: "Institution / organisation", placeholder: "University College of Engineering Nagercoil" },
+        { key: "position", label: "Position / role", placeholder: "Head of Department" },
+        { key: "level", label: "Responsibility level", type: "select", options: ["Department Level", "College Level", "University Level", "National Level", "International Level"] },
+        { key: "from", label: "From date", type: "month" },
+        { key: "to", label: "To date", type: "month" },
+        { key: "current", label: "Currently holding", type: "checkbox" }
+      ]
+    },
+    researchArea: {
+      label: "Research area",
+      container: "entry-list-research-area",
+      fields: [
+        { key: "area", label: "Research area", placeholder: "Artificial Intelligence", required: true },
+        { key: "subject", label: "Research subject", placeholder: "Computer Science and Engineering" },
+        { key: "specialization", label: "Research specialization", placeholder: "Explainable AI, Computer Vision" },
+        { key: "keywords", label: "Research keywords (optional)", placeholder: "deep learning, precision agriculture", full: true }
       ]
     }
   };
@@ -604,17 +993,45 @@
   let entryUid = 0;
   let revealObserver = null;
   let lastFocused = null;
+  let photoLightboxFocus = null;
   let gateLastFocused = null;
   let sidebarHovering = false;
 
   const SECTION_LABELS = {
     personal: "Personal Information",
+    specializations: "Areas of Specialization",
     qualification: "Qualification",
     experience: "Professional Experience",
-    projects: "Funded Projects",
     publications: "Publications",
+    conferencesAttended: "Conferences Attended",
+    conferencesConducted: "Conferences Conducted",
+    trainingPrograms: "Training Programs Conducted",
+    patents: "Patents",
+    projects: "Funded Projects",
+    researchAreas: "Research",
     achievements: "Achievements",
-    certifications: "Certifications"
+    certifications: "Certifications",
+    responsibilities: "Additional Responsibilities",
+    researchIds: "Research Profile IDs"
+  };
+
+  const STATIC_FIELDS = {
+    researchGuideNumber: "r-guide-number",
+    researchGuideUniversity: "r-guide-university",
+    researchGuideDate: "r-guide-date",
+    researchGuideStatus: "r-guide-status",
+    phdCompleted: "r-phd-completed",
+    mphilCompleted: "r-mphil-completed",
+    otherCompleted: "r-other-completed",
+    phdGuiding: "r-phd-guiding",
+    mphilGuiding: "r-mphil-guiding",
+    otherGuiding: "r-other-guiding",
+    googleScholarId: "r-gs-id",
+    googleScholarUrl: "r-gs-url",
+    orcidId: "r-orcid-id",
+    orcidUrl: "r-orcid-url",
+    scopusId: "r-scopus-id",
+    scopusUrl: "r-scopus-url"
   };
 
   const SHORT_DEPARTMENTS = {
@@ -665,7 +1082,7 @@
     const photo = profile && profile.photo ? profile.photo : "";
     const className = "avatar" + (extraClass ? " " + extraClass : "");
     if (photo) {
-      return `<div class="${className}"><img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" loading="lazy"></div>`;
+      return `<div class="${className} avatar--zoomable" role="button" tabindex="0" data-photo-zoom="${escapeHTML(photo)}" data-photo-alt="${escapeHTML(name)}" aria-label="View full-size photo of ${escapeHTML(name)}"><img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" loading="lazy"></div>`;
     }
     const gradient = gradientFor(name);
     return `<div class="${className} avatar--initials" style="--av-a:${gradient[0]};--av-b:${gradient[1]}"><span aria-hidden="true">${escapeHTML(initialsOf(name))}</span><span class="sr-only">${escapeHTML(name)}</span></div>`;
@@ -699,6 +1116,41 @@
     return formatMonth(from) + " – " + formatMonth(to);
   }
 
+  function formatDate(value) {
+    if (!value) return "";
+    const parts = String(value).split("-");
+    if (parts.length !== 3) return String(value);
+    const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    if (Number.isNaN(date.getTime())) return String(value);
+    return new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" }).format(date);
+  }
+
+  function friendlyDate(value) {
+    if (!value) return "";
+    return String(value).split("-").length === 3 ? formatDate(value) : formatMonth(value);
+  }
+
+  function dateSpan(from, to) {
+    if (!from && !to) return "";
+    const start = friendlyDate(from) || formatMonth(from);
+    const end = to ? friendlyDate(to) : "Present";
+    return start + " – " + end;
+  }
+
+  function animateDateInput(input) {
+    if (!input) return;
+    input.classList.remove("date-pop");
+    void input.offsetWidth;
+    input.classList.add("date-pop");
+    window.setTimeout(function () {
+      input.classList.remove("date-pop");
+    }, 500);
+  }
+
+  function isTruthy(value) {
+    return /^(true|yes|on|1|checked)$/i.test(String(value || "").trim());
+  }
+
   function externalUrl(value) {
     const url = String(value || "").trim();
     if (/^https?:\/\//i.test(url)) return url;
@@ -718,7 +1170,10 @@
 
   function normalizeFacultyEmail(value) {
     const email = safeText(value);
-    return email.toLowerCase() === "k.ramanathan@ucen.ac.in" ? "radhakrishnan1974@ucen.ac.in" : email;
+    const lower = email.toLowerCase();
+    if (lower === "k.ramanathan@ucen.ac.in") return "radhakrishnan1974@ucen.ac.in";
+    if (lower === "deanucen@gmail.com") return DEAN_EMAIL;
+    return email;
   }
 
   function countItems(list) {
@@ -732,7 +1187,7 @@
 
   function personalComplete(profile) {
     if (!profile) return false;
-    return ["name", "facultyId", "department", "designation", "email", "contact", "specialization"].every(function (key) {
+    return ["name", "facultyId", "department", "designation", "email", "contact"].every(function (key) {
       return String(profile[key] || "").trim() !== "";
     });
   }
@@ -740,11 +1195,30 @@
   function sectionComplete(profile, key) {
     if (!profile) return false;
     if (key === "personal") return personalComplete(profile);
+    if (key === "specializations") return String(profile.specialization || "").trim() !== "";
+    if (key === "researchIds") {
+      return ["googleScholarId", "googleScholarUrl", "orcidId", "orcidUrl", "scopusId", "scopusUrl"].some(function (field) {
+        return String(profile[field] || "").trim() !== "";
+      });
+    }
+    if (key === "researchAreas") {
+      const hasGuide = ["researchGuideNumber", "researchGuideUniversity", "researchGuideDate", "researchGuideStatus"].some(function (field) {
+        return String(profile[field] || "").trim() !== "";
+      });
+      const hasCounts = ["phdCompleted", "mphilCompleted", "otherCompleted", "phdGuiding", "mphilGuiding", "otherGuiding"].some(function (field) {
+        return String(profile[field] || "").trim() !== "";
+      });
+      return countItems(profile[key]) > 0 || hasGuide || hasCounts;
+    }
     return countItems(profile[key]) > 0;
   }
 
   function computeCompletion(profile) {
-    const keys = ["personal", "qualification", "experience", "projects", "publications", "achievements", "certifications"];
+    const keys = [
+      "personal", "specializations", "qualification", "experience", "publications", "conferencesAttended",
+      "conferencesConducted", "trainingPrograms", "patents", "projects", "researchAreas", "achievements",
+      "certifications", "responsibilities", "researchIds"
+    ];
     const sections = keys.map(function (key) {
       return { key: key, label: SECTION_LABELS[key], complete: sectionComplete(profile, key) };
     });
@@ -770,9 +1244,23 @@
     config.fields.forEach(function (field) {
       clean[field.key] = entry && entry[field.key] != null ? String(entry[field.key]) : "";
     });
-    if (type === "publication" && !clean.type) {
-      const venue = [clean.venue, clean.title].filter(Boolean).join(" ");
-      clean.type = /conference|proceedings|workshop|symposium/i.test(venue) ? "Conference Paper" : "Journal Article";
+    if (type === "publication") {
+      if (!clean.type) {
+        const venue = [clean.venue, clean.title].filter(Boolean).join(" ");
+        clean.type = /conference|proceedings|workshop|symposium/i.test(venue) ? "Conference Paper" : "Journal Article";
+      }
+      if (clean.type === "Patent") clean.type = "Other";
+      const legacyLink = entry && entry.link ? String(entry.link).trim() : "";
+      if (legacyLink && !clean.doi && !clean.url) {
+        if (/^10\.\d{4,9}\//.test(legacyLink)) clean.doi = legacyLink;
+        else clean.url = legacyLink;
+      }
+    }
+    if (type === "project") {
+      if (/^approved$/i.test(clean.status) || /^proposed$/i.test(clean.status)) clean.status = "Ongoing";
+    }
+    if (type === "responsibility" && clean.current && !isTruthy(clean.current)) {
+      clean.current = "";
     }
     return clean;
   }
@@ -783,28 +1271,38 @@
       id: safeText(source.id, "fac-owner"),
       name: safeText(source.name, fallbackName || "Faculty Member"),
       facultyId: safeText(source.facultyId),
-        department: normalizeDepartment(source.department),
-        designation: safeText(source.designation),
-        email: normalizeFacultyEmail(source.email),
+      department: normalizeDepartment(source.department),
+      designation: safeText(source.designation),
+      email: normalizeFacultyEmail(source.email),
       contact: safeText(source.contact),
       specialization: safeText(source.specialization),
-      bio: safeText(source.bio),
       photo: safeText(source.photo)
     };
+    if (profile.id === DEAN_ID || profile.email.toLowerCase() === DEAN_EMAIL) {
+      if (!profile.designation || profile.designation === "Dean") profile.designation = "Dean & Professor";
+    }
+    Object.keys(STATIC_FIELDS).forEach(function (field) {
+      profile[field] = safeText(source[field]);
+    });
     const aliases = {
       qualification: "qualifications",
       experience: "experience",
       project: "projects",
       publication: "publications",
       achievement: "achievements",
-      certification: "certifications"
+      certification: "certifications",
+      conferenceAttended: "conferencesAttended",
+      conferenceConducted: "conferencesConducted",
+      trainingProgram: "trainingPrograms",
+      patent: "patents",
+      responsibility: "responsibilities",
+      researchArea: "researchAreas"
     };
     Object.keys(ENTRY_CONFIG).forEach(function (type) {
       const rawList = Array.isArray(source[type])
         ? source[type]
         : Array.isArray(source[aliases[type]]) ? source[aliases[type]] : [];
-      const list = rawList;
-      profile[type] = list
+      profile[type] = rawList
         .map(function (entry) { return normalizeEntry(entry, type); })
         .filter(function (entry) {
           return Object.keys(entry).some(function (key) { return entry[key] !== ""; });
@@ -818,7 +1316,13 @@
     project: "projects",
     publication: "publications",
     achievement: "achievements",
-    certification: "certifications"
+    certification: "certifications",
+    conferenceAttended: "conferencesAttended",
+    conferenceConducted: "conferencesConducted",
+    trainingProgram: "trainingPrograms",
+    patent: "patents",
+    responsibility: "responsibilities",
+    researchArea: "researchAreas"
   };
 
   function applySectionAliases(profile) {
@@ -829,7 +1333,7 @@
   }
 
   function seedRoster() {
-    return [SAMPLE_OWNER].concat(SAMPLE_FACULTY).map(function (profile) {
+    return [SAMPLE_OWNER].concat(SAMPLE_FACULTY).concat([SAMPLE_DEAN]).map(function (profile) {
       return normalizeProfile(profile);
     });
   }
@@ -851,16 +1355,13 @@
       seen[id] = true;
       roster.push(profile);
     });
+    if (!roster.some(function (profile) { return profile.id === DEAN_ID; })) {
+      roster.push(normalizeProfile(SAMPLE_DEAN));
+    }
     return roster;
   }
 
-  function loadState() {
-    let stored = null;
-    try {
-      stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "null");
-    } catch {
-      stored = null;
-    }
+  function normalizeStoredState(stored) {
     const role = stored && ROLES[stored.role] ? stored.role : "faculty";
     const storedRoster = stored && Array.isArray(stored.roster) && stored.roster.length ? stored.roster : seedRoster();
     const roster = normalizeRoster(storedRoster);
@@ -871,12 +1372,53 @@
     return {
       role: role,
       roster: list,
+      activeFacultyId: activeFacultyId
+    };
+  }
+
+  function readLocalState() {
+    try {
+      return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "null");
+    } catch {
+      return null;
+    }
+  }
+
+  async function fetchServerState() {
+    if (!/^https?:$/.test(window.location.protocol)) return null;
+    try {
+      const response = await window.fetch(STATE_ENDPOINT, { cache: "no-store" });
+      if (!response.ok) return null;
+      const data = await response.json();
+      return data && Array.isArray(data.roster) && data.roster.length ? data : null;
+    } catch {
+      return null;
+    }
+  }
+
+  let serverStateAvailable = false;
+
+  async function loadState() {
+    const stored = readLocalState();
+    const remote = await fetchServerState();
+    serverStateAvailable = !!remote;
+    const normalized = normalizeStoredState(remote || stored);
+    const role = stored && ROLES[stored.role] ? stored.role : normalized.role;
+    const activeFacultyId = stored && normalized.roster.some(function (profile) { return profile.id === stored.activeFacultyId; })
+      ? stored.activeFacultyId
+      : normalized.activeFacultyId;
+    return {
+      role: role,
+      roster: normalized.roster,
       activeFacultyId: activeFacultyId,
       session: !!(stored && stored.session)
     };
   }
 
   function persistState() {
+    const snapshot = {
+      roster: state.roster
+    };
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
         role: state.role,
@@ -885,12 +1427,32 @@
         session: state.session
       }));
     } catch (error) {
-      console.warn("Faculty Portal: unable to persist demo data.", error);
+      console.warn("Faculty Portal: unable to persist demo data on this device.", error);
     }
+    if (!/^https?:$/.test(window.location.protocol)) return;
+    window.fetch(STATE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(snapshot)
+    }).then(function (response) {
+      if (response.ok) serverStateAvailable = true;
+    }).catch(function () {
+      // Offline: the local copy still keeps the latest changes on this device.
+    });
   }
 
   function allFaculty() {
     return state.roster;
+  }
+
+  function isDeanProfile(profile) {
+    return !!profile && profile.id === DEAN_ID;
+  }
+
+  function regularFaculty() {
+    return state.roster.filter(function (profile) {
+      return !isDeanProfile(profile);
+    });
   }
 
   function findFaculty(id) {
@@ -929,9 +1491,12 @@
 
   function profileStarted(profile) {
     if (!profile) return false;
-    return personalComplete(profile) || ["qualification", "experience", "projects", "publications", "achievements", "certifications"].some(function (key) {
+    return personalComplete(profile) || [
+      "qualification", "experience", "publications", "conferencesAttended", "conferencesConducted",
+      "patents", "projects", "researchAreas", "achievements", "certifications", "responsibilities"
+    ].some(function (key) {
       return countItems(profile[key]) > 0;
-    });
+    }) || sectionComplete(profile, "researchIds");
   }
 
   function todayLabel() {
@@ -944,6 +1509,19 @@
       .map(function (item) { return item.trim(); })
       .filter(Boolean)
       .slice(0, limit || 3);
+  }
+
+  function renderSpecializationPreview(value) {
+    const container = $("#specialization-preview");
+    if (!container) return;
+    const areas = String(value || "").split(",").map(function (item) {
+      return item.trim();
+    }).filter(Boolean);
+    container.innerHTML = areas.length
+      ? areas.map(function (area) {
+        return `<span class="tag tag--area"><i class="bi bi-stars" aria-hidden="true"></i> ${escapeHTML(area)}</span>`;
+      }).join("")
+      : '<span class="specialization-preview__empty">Add one or more areas to preview them here.</span>';
   }
 
   function contactRow(profile, compact) {
@@ -961,7 +1539,7 @@
   }
 
   function directoryStats() {
-    const profiles = allFaculty();
+    const profiles = regularFaculty();
     const complete = profiles.filter(function (profile) {
       return computeCompletion(profile).percent >= 100;
     }).length;
@@ -976,7 +1554,7 @@
 
   function departmentBreakdown() {
     const counts = {};
-    allFaculty().forEach(function (profile) {
+    regularFaculty().forEach(function (profile) {
       const department = profile.department || "Not assigned";
       counts[department] = (counts[department] || 0) + 1;
     });
@@ -1033,6 +1611,36 @@
     $("#strength-caption").textContent = opts.caption || "";
   }
 
+  function renderDeanSpotlight() {
+    const spotlight = $("#dean-spotlight");
+    if (!spotlight) return;
+    const dean = findFaculty(DEAN_ID);
+    if (!dean) {
+      spotlight.hidden = true;
+      spotlight.innerHTML = "";
+      return;
+    }
+    const department = dean.department || "Institution / department not added";
+    spotlight.hidden = false;
+    spotlight.innerHTML = `
+      <article class="dean-card" aria-labelledby="dean-card-title">
+        <div class="dean-card__avatar">${avatarHTML(dean, "avatar--lg")}</div>
+        <div class="dean-card__copy">
+          <span class="dean-card__eyebrow"><i class="bi bi-shield-check" aria-hidden="true"></i> Office of the Dean</span>
+          <h2 id="dean-card-title">${escapeHTML(dean.name || "Dr.T Sree Renga Raja")}</h2>
+          <p class="dean-card__designation">${escapeHTML(dean.designation || "Dean & Professor")}</p>
+          <p class="dean-card__department"><i class="bi bi-building" aria-hidden="true"></i> ${escapeHTML(department)}</p>
+        </div>
+        <div class="dean-card__actions">
+          <span class="dean-card__tag"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Dean</span>
+          <button class="btn btn-white btn-sm" type="button" data-view-profile="${escapeHTML(dean.id)}">
+            View Profile <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </article>
+    `;
+  }
+
   function renderDashboard() {
     const profile = currentFaculty();
     const role = state.role;
@@ -1040,6 +1648,7 @@
     const isViewerView = role === "viewer";
     const completion = computeCompletion(profile);
 
+    renderDeanSpotlight();
     $("#today-label").textContent = todayLabel();
 
     const strengthCard = $(".strength-card");
@@ -1182,7 +1791,7 @@
     const department = ($("#directory-department") && $("#directory-department").value) || "";
     const designation = ($("#directory-designation") && $("#directory-designation").value) || "";
 
-    return allFaculty().filter(function (profile) {
+    return regularFaculty().filter(function (profile) {
       if (department && profile.department !== department) return false;
       if (designation && profile.designation !== designation) return false;
       if (!query) return true;
@@ -1277,6 +1886,18 @@
     `;
   }
 
+  function specializationBody(profile) {
+    const areas = specializationTags(profile, 100);
+    if (!areas.length) return sectionEmpty("No areas of specialization have been added yet.", "bi-stars");
+    return `
+      <div class="tag-cloud">
+        ${areas.map(function (area) {
+          return `<span class="tag tag--area"><i class="bi bi-stars" aria-hidden="true"></i> ${escapeHTML(area)}</span>`;
+        }).join("")}
+      </div>
+    `;
+  }
+
   function qualificationBody(profile) {
     if (!profile.qualification.length) return sectionEmpty("No qualifications have been added yet.", "bi-mortarboard");
     return `
@@ -1291,6 +1912,7 @@
               </div>
               ${item.institution ? `<p class="timeline__sub">${escapeHTML(item.institution)}</p>` : ""}
               <p class="timeline__meta">${[item.university, item.specialization].filter(Boolean).map(escapeHTML).join(" · ") || "—"}</p>
+              ${item.classObtained ? `<p class="timeline__meta"><i class="bi bi-award" aria-hidden="true"></i> Class obtained: ${escapeHTML(item.classObtained)}</p>` : ""}
             </div>
           `;
         }).join("")}
@@ -1312,7 +1934,6 @@
               </div>
               ${item.institution ? `<p class="timeline__sub">${escapeHTML(item.institution)}</p>` : ""}
               ${item.total ? `<p class="timeline__meta">Total experience: ${escapeHTML(item.total)}</p>` : ""}
-              ${item.description ? `<p class="timeline__desc">${escapeHTML(item.description)}</p>` : ""}
             </div>
           `;
         }).join("")}
@@ -1320,26 +1941,46 @@
     `;
   }
 
+  function statusPill(status) {
+    const value = String(status || "").trim();
+    if (!value) return "";
+    const key = value.toLowerCase().replace(/\s+/g, "-");
+    const allowed = ["ongoing", "completed", "granted", "awarded", "published", "filed"];
+    const cls = allowed.indexOf(key) !== -1 ? " status-pill--" + key : "";
+    return `<span class="status-pill${cls}">${escapeHTML(value)}</span>`;
+  }
+
+  function metaChip(text, icon) {
+    if (!text) return "";
+    return `<span class="meta-chip">${icon ? `<i class="bi ${icon}" aria-hidden="true"></i> ` : ""}${escapeHTML(text)}</span>`;
+  }
+
   function projectBody(profile) {
     if (!profile.projects.length) return sectionEmpty("No funded projects have been added yet.", "bi-cash-stack");
     return `
       <div class="project-grid">
         ${profile.projects.map(function (item) {
-          const status = String(item.status || "").toLowerCase();
-          const statusClass = ["ongoing", "completed", "approved", "proposed"].indexOf(status) !== -1 ? " status-pill--" + status : "";
+          const span = dateSpan(item.start, item.end) || item.duration;
+          const people = [];
+          if (item.pi) people.push(`<span><i class="bi bi-person-check" aria-hidden="true"></i> PI: ${escapeHTML(item.pi)}</span>`);
+          if (item.coPi) people.push(`<span><i class="bi bi-people" aria-hidden="true"></i> Co-PI: ${escapeHTML(item.coPi)}</span>`);
           return `
             <article class="project-card">
               <div class="project-card__top">
                 <h3>${escapeHTML(item.title || "Funded project")}</h3>
-                ${item.status ? `<span class="status-pill${statusClass}">${escapeHTML(item.status)}</span>` : ""}
+                ${statusPill(item.status)}
               </div>
-              ${item.agency ? `<p class="project-agency">${escapeHTML(item.agency)}</p>` : ""}
-              <div class="project-meta">
-                ${item.role ? `<span><i class="bi bi-person-badge" aria-hidden="true"></i> ${escapeHTML(item.role)}</span>` : ""}
-                ${item.duration ? `<span><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHTML(item.duration)}</span>` : ""}
+              <div class="meta-row">
+                ${metaChip(item.category, "bi-tag")}
+                ${metaChip(item.role, "bi-person-badge")}
+                ${metaChip(item.agency, "bi-building")}
               </div>
+              ${people.length ? `<div class="project-meta">${people.join("")}</div>` : ""}
+              ${span ? `<div class="project-meta"><span><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHTML(span)}</span></div>` : ""}
               ${formatAmount(item.amount) ? `<p class="project-amount">${escapeHTML(formatAmount(item.amount))}</p>` : ""}
+              ${item.reference ? `<p class="project-ref">Reference: ${escapeHTML(item.reference)}</p>` : ""}
               ${item.description ? `<p class="project-desc">${escapeHTML(item.description)}</p>` : ""}
+              ${attachmentHTML(item.sanctionLetter, "Sanction letter")}
             </article>
           `;
         }).join("")}
@@ -1350,16 +1991,32 @@
   function publicationBody(profile) {
     if (!profile.publications.length) return sectionEmpty("No publications have been added yet.", "bi-journal-richtext");
     return `
-      <div class="publication-list">
+      <div class="publication-grid">
         ${profile.publications.map(function (item) {
-          const link = externalUrl(item.link);
+          const doiLink = externalUrl(item.doi);
+          const urlLink = externalUrl(item.url);
+          const meta = [
+            item.volume ? "Vol. " + item.volume : "",
+            item.issue ? "Issue " + item.issue : "",
+            item.pages ? "pp. " + item.pages : ""
+          ].filter(Boolean);
           return `
-            <article class="publication-item">
-              <span class="pub-year">${escapeHTML(item.year || "—")}</span>
-              <div class="pub-body">
-                <h3>${escapeHTML(item.title || "Publication")}</h3>
-                ${item.venue ? `<p class="pub-venue">${escapeHTML(item.venue)}${item.type ? " &middot; " + escapeHTML(item.type) : ""}</p>` : ""}
-                ${link ? `<a class="pub-link" href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-link-45deg" aria-hidden="true"></i> ${escapeHTML(item.link)}</a>` : ""}
+            <article class="publication-card">
+              <div class="publication-card__top">
+                <span class="pub-year">${escapeHTML(item.year || "—")}</span>
+                ${metaChip(item.type, "bi-bookmark")}
+              </div>
+              <h3>${escapeHTML(item.title || "Publication")}</h3>
+              ${item.authors ? `<p class="pub-authors">${escapeHTML(item.authors)}</p>` : ""}
+              ${item.venue ? `<p class="pub-venue">${escapeHTML(item.venue)}</p>` : ""}
+              ${meta.length ? `<div class="meta-row">${meta.map(function (text) { return metaChip(text); }).join("")}</div>` : ""}
+              <div class="meta-row">
+                ${metaChip(item.publisher, "bi-building")}
+                ${metaChip(item.indexing, "bi-patch-check")}
+              </div>
+              <div class="pub-links">
+                ${doiLink ? `<a class="pub-link" href="${escapeHTML(doiLink)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-link-45deg" aria-hidden="true"></i> DOI</a>` : ""}
+                ${urlLink ? `<a class="pub-link" href="${escapeHTML(urlLink)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> View publication</a>` : ""}
               </div>
             </article>
           `;
@@ -1368,18 +2025,26 @@
     `;
   }
 
-  function achievementBody(profile) {
-    if (!profile.achievements.length) return sectionEmpty("No achievements have been added yet.", "bi-trophy");
+  function conferenceAttendedBody(profile) {
+    if (!profile.conferencesAttended.length) return sectionEmpty("No conferences attended have been added yet.", "bi-people");
     return `
-      <div class="card-grid">
-        ${profile.achievements.map(function (item) {
+      <div class="project-grid">
+        ${profile.conferencesAttended.map(function (item) {
           return `
-            <article class="achievement-card">
-              <span class="achievement-card__icon"><i class="bi bi-trophy" aria-hidden="true"></i></span>
-              <h3>${escapeHTML(item.title || "Achievement")}</h3>
-              ${item.organization ? `<p class="achievement-card__org">${escapeHTML(item.organization)}</p>` : ""}
-              ${item.year ? `<span class="achievement-card__year">${escapeHTML(item.year)}</span>` : ""}
-              ${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}
+            <article class="project-card conference-card">
+              <div class="project-card__top">
+                <h3>${escapeHTML(item.name || "Conference")}</h3>
+                ${statusPill(item.category)}
+              </div>
+              <div class="meta-row">
+                ${metaChip(item.type, "bi-collection")}
+                ${metaChip(item.organizer, "bi-building")}
+                ${metaChip(item.location, "bi-geo-alt")}
+              </div>
+              ${dateSpan(item.start, item.end) ? `<div class="project-meta"><span><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHTML(dateSpan(item.start, item.end))}</span></div>` : ""}
+              ${item.participation ? `<p class="role-highlight"><i class="bi bi-mic" aria-hidden="true"></i> ${escapeHTML(item.participation)}</p>` : ""}
+              ${item.paperTitle ? `<p class="project-desc"><strong>Paper:</strong> ${escapeHTML(item.paperTitle)}</p>` : ""}
+              ${attachmentHTML(item.certificate, "Certificate")}
             </article>
           `;
         }).join("")}
@@ -1387,18 +2052,233 @@
     `;
   }
 
-  function certificationBody(profile) {
-    if (!profile.certifications.length) return sectionEmpty("No certifications have been added yet.", "bi-patch-check");
+  function conferenceConductedBody(profile) {
+    if (!profile.conferencesConducted.length) return sectionEmpty("No conferences conducted have been added yet.", "bi-easel");
+    return `
+      <div class="project-grid">
+        ${profile.conferencesConducted.map(function (item) {
+          const website = externalUrl(item.website);
+          return `
+            <article class="project-card conference-card">
+              <div class="project-card__top">
+                <h3>${escapeHTML(item.name || "Conference")}</h3>
+                ${statusPill(item.category)}
+              </div>
+              <div class="meta-row">
+                ${metaChip(item.type, "bi-collection")}
+                ${metaChip(item.organizer, "bi-building")}
+                ${metaChip(item.location, "bi-geo-alt")}
+              </div>
+              ${dateSpan(item.start, item.end) ? `<div class="project-meta"><span><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHTML(dateSpan(item.start, item.end))}</span></div>` : ""}
+              ${item.role ? `<p class="role-highlight"><i class="bi bi-person-badge" aria-hidden="true"></i> ${escapeHTML(item.role)}</p>` : ""}
+              ${item.participants ? `<div class="project-meta"><span><i class="bi bi-people" aria-hidden="true"></i> ${escapeHTML(item.participants)} participants</span></div>` : ""}
+              ${website ? `<a class="pub-link" href="${escapeHTML(website)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Conference website</a>` : ""}
+            </article>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function trainingProgramBody(profile) {
+    const programs = profile.trainingPrograms || [];
+    if (!programs.length) return sectionEmpty("No training programs conducted have been added yet.", "bi-clipboard2-check");
+    return `
+      <div class="project-grid">
+        ${programs.map(function (item) {
+          return `
+            <article class="project-card training-card">
+              <div class="project-card__top">
+                <h3>${escapeHTML(item.title || "Training program")}</h3>
+                ${statusPill(item.level)}
+              </div>
+              <div class="meta-row">
+                ${metaChip(item.type, "bi-collection")}
+                ${metaChip(item.organizer, "bi-building")}
+              </div>
+              ${dateSpan(item.start, item.end) ? `<div class="project-meta"><span><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHTML(dateSpan(item.start, item.end))}</span></div>` : ""}
+              ${item.role ? `<p class="role-highlight"><i class="bi bi-person-badge" aria-hidden="true"></i> ${escapeHTML(item.role)}</p>` : ""}
+              ${item.participants ? `<div class="project-meta"><span><i class="bi bi-people" aria-hidden="true"></i> ${escapeHTML(item.participants)} participants</span></div>` : ""}
+              ${attachmentHTML(item.certificate, "Certificate / proof")}
+            </article>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function patentBody(profile) {
+    const granted = profile.patents.filter(function (item) {
+      return /^(granted|awarded)$/i.test(String(item.status || "").trim());
+    });
+    if (!granted.length) return sectionEmpty("No granted or awarded patents have been added yet.", "bi-award");
+    return `
+      <div class="project-grid">
+        ${granted.map(function (item) {
+          const url = externalUrl(item.url);
+          return `
+            <article class="project-card patent-card">
+              <div class="project-card__top">
+                <h3>${escapeHTML(item.title || "Patent")}</h3>
+                ${statusPill(item.status)}
+              </div>
+              <div class="meta-row">
+                ${metaChip(item.number, "bi-hash")}
+                ${metaChip(item.type, "bi-tag")}
+                ${metaChip(item.country, "bi-globe")}
+              </div>
+              ${item.inventors ? `<p class="pub-authors">${escapeHTML(item.inventors)}</p>` : ""}
+              ${item.authority ? `<div class="project-meta"><span><i class="bi bi-building" aria-hidden="true"></i> ${escapeHTML(item.authority)}</span></div>` : ""}
+              ${item.grantDate ? `<div class="project-meta"><span><i class="bi bi-calendar-check" aria-hidden="true"></i> Granted ${escapeHTML(friendlyDate(item.grantDate))}</span></div>` : ""}
+              ${url ? `<a class="pub-link" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> View patent</a>` : ""}
+              ${attachmentHTML(item.certificate, "Patent certificate")}
+            </article>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function researchBody(profile) {
+    const areas = profile.researchAreas || [];
+    const guide = [
+      profile.researchGuideNumber ? { label: "Research guide number", value: profile.researchGuideNumber } : null,
+      profile.researchGuideUniversity ? { label: "Recognised university", value: profile.researchGuideUniversity } : null,
+      profile.researchGuideDate ? { label: "Recognition date", value: friendlyDate(profile.researchGuideDate) } : null,
+      profile.researchGuideStatus ? { label: "Recognition status", value: profile.researchGuideStatus } : null
+    ].filter(Boolean);
+    const completed = [
+      { label: "PhD completed", value: profile.phdCompleted },
+      { label: "M.Phil completed", value: profile.mphilCompleted },
+      { label: "Other completed", value: profile.otherCompleted }
+    ];
+    const guiding = [
+      { label: "PhD guiding", value: profile.phdGuiding },
+      { label: "M.Phil guiding", value: profile.mphilGuiding },
+      { label: "Other guiding", value: profile.otherGuiding }
+    ];
+    const hasCounts = completed.concat(guiding).some(function (stat) {
+      return String(stat.value || "").trim() !== "";
+    });
+    if (!areas.length && !guide.length && !hasCounts) {
+      return sectionEmpty("No research information has been added yet.", "bi-lightbulb");
+    }
+    const areaTags = [];
+    areas.forEach(function (item) {
+      if (item.area) areaTags.push(`<span class="tag tag--area"><i class="bi bi-lightbulb" aria-hidden="true"></i> ${escapeHTML(item.area)}</span>`);
+      if (item.subject) areaTags.push(`<span class="tag"><i class="bi bi-book" aria-hidden="true"></i> ${escapeHTML(item.subject)}</span>`);
+      if (item.specialization) areaTags.push(`<span class="tag"><i class="bi bi-stars" aria-hidden="true"></i> ${escapeHTML(item.specialization)}</span>`);
+      String(item.keywords || "").split(",").map(function (keyword) { return keyword.trim(); }).filter(Boolean).forEach(function (keyword) {
+        areaTags.push(`<span class="tag tag--keyword">${escapeHTML(keyword)}</span>`);
+      });
+    });
+    return `
+      <div class="subgroup">
+        <h3 class="subgroup__title"><i class="bi bi-lightbulb" aria-hidden="true"></i> Research areas</h3>
+        ${areaTags.length ? `<div class="tag-cloud">${areaTags.join("")}</div>` : sectionEmpty("No research areas have been added yet.", "bi-lightbulb")}
+      </div>
+      <div class="subgroup">
+        <h3 class="subgroup__title"><i class="bi bi-person-workspace" aria-hidden="true"></i> Research guide recognition</h3>
+        ${guide.length ? `<div class="info-grid">${guide.map(function (item) {
+          return `<div class="info-item"><span class="info-item__label">${escapeHTML(item.label)}</span><p class="info-item__value">${escapeHTML(item.value)}</p></div>`;
+        }).join("")}</div>` : sectionEmpty("Research guide details have not been added yet.", "bi-person-workspace")}
+      </div>
+      <div class="subgroup">
+        <h3 class="subgroup__title"><i class="bi bi-mortarboard" aria-hidden="true"></i> Research guidance completed</h3>
+        <div class="stat-grid">
+          ${completed.map(function (stat) {
+            return `<div class="stat-card"><span class="stat-card__value">${escapeHTML(stat.value || "0")}</span><span class="stat-card__label">${escapeHTML(stat.label)}</span></div>`;
+          }).join("")}
+        </div>
+      </div>
+      <div class="subgroup">
+        <h3 class="subgroup__title"><i class="bi bi-people" aria-hidden="true"></i> Currently guiding</h3>
+        <div class="stat-grid">
+          ${guiding.map(function (stat) {
+            return `<div class="stat-card"><span class="stat-card__value">${escapeHTML(stat.value || "0")}</span><span class="stat-card__label">${escapeHTML(stat.label)}</span></div>`;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  function credentialBody(items, emptyMessage, icon, iconClass) {
+    if (!items.length) return sectionEmpty(emptyMessage, icon);
     return `
       <div class="card-grid">
-        ${profile.certifications.map(function (item) {
+        ${items.map(function (item) {
+          const link = externalUrl(item.certificateUrl);
           return `
             <article class="achievement-card">
-              <span class="achievement-card__icon achievement-card__icon--cert"><i class="bi bi-patch-check" aria-hidden="true"></i></span>
-              <h3>${escapeHTML(item.title || "Certification")}</h3>
+              <span class="achievement-card__icon${iconClass ? " " + iconClass : ""}"><i class="bi ${icon}" aria-hidden="true"></i></span>
+              <h3>${escapeHTML(item.title || "Entry")}</h3>
               ${item.organization ? `<p class="achievement-card__org">${escapeHTML(item.organization)}</p>` : ""}
-              ${item.year ? `<span class="achievement-card__year">${escapeHTML(item.year)}</span>` : ""}
+              <div class="meta-row">
+                ${metaChip(item.category, "bi-tag")}
+                ${item.year ? `<span class="achievement-card__year">${escapeHTML(item.year)}</span>` : ""}
+              </div>
+              ${item.certificateNumber ? `<p class="credential-number">Certificate no. ${escapeHTML(item.certificateNumber)}</p>` : ""}
               ${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}
+              ${link ? `<a class="pub-link" href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> View certificate</a>` : ""}
+              ${attachmentHTML(item.certificate, "Certificate")}
+            </article>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function achievementBody(profile) {
+    return credentialBody(profile.achievements, "No achievements have been added yet.", "bi-trophy", "");
+  }
+
+  function certificationBody(profile) {
+    return credentialBody(profile.certifications, "No certifications have been added yet.", "bi-patch-check", "achievement-card__icon--cert");
+  }
+
+  function responsibilityBody(profile) {
+    if (!profile.responsibilities.length) return sectionEmpty("No additional responsibilities have been added yet.", "bi-person-check");
+    return `
+      <div class="timeline">
+        ${profile.responsibilities.map(function (item) {
+          const current = isTruthy(item.current);
+          const span = current ? dateSpan(item.from, "") : dateSpan(item.from, item.to);
+          return `
+            <div class="timeline__item">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <div class="timeline__top">
+                <h3>${escapeHTML(item.title || "Responsibility")}</h3>
+                ${span ? `<span class="timeline__when">${escapeHTML(span)}</span>` : ""}
+              </div>
+              ${item.position || item.institution ? `<p class="timeline__sub">${[item.position, item.institution].filter(Boolean).map(escapeHTML).join(" · ")}</p>` : ""}
+              <div class="meta-row">
+                ${metaChip(item.category, "bi-tag")}
+                ${metaChip(item.level, "bi-layers")}
+                ${current ? '<span class="status-pill status-pill--ongoing">Currently holding</span>' : ""}
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function researchIdsBody(profile) {
+    const ids = [
+      { label: "Google Scholar", icon: "bi-google", id: profile.googleScholarId, url: profile.googleScholarUrl },
+      { label: "ORCID", icon: "bi-person-badge", id: profile.orcidId, url: profile.orcidUrl },
+      { label: "Scopus", icon: "bi-journal-bookmark", id: profile.scopusId, url: profile.scopusUrl }
+    ];
+    return `
+      <div class="research-id-grid">
+        ${ids.map(function (item) {
+          const url = externalUrl(item.url);
+          return `
+            <article class="research-id-card">
+              <span class="icon-badge"><i class="bi ${item.icon}" aria-hidden="true"></i></span>
+              <h3>${escapeHTML(item.label)}</h3>
+              <p class="research-id-card__value">${escapeHTML(item.id || "Not added")}</p>
+              ${url ? `<a class="pub-link" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> View profile</a>` : ""}
             </article>
           `;
         }).join("")}
@@ -1432,10 +2312,6 @@
         <div class="info-item"><span class="info-item__label">Email</span><p class="info-item__value">${profile.email ? `<a href="mailto:${escapeHTML(profile.email)}">${escapeHTML(profile.email)}</a>` : "Not added"}</p></div>
         <div class="info-item"><span class="info-item__label">Contact</span><p class="info-item__value">${escapeHTML(profile.contact || "Not added")}</p></div>
         <div class="info-item"><span class="info-item__label">Specialisation</span><p class="info-item__value">${escapeHTML(profile.specialization || "Not added")}</p></div>
-        <div class="info-item info-item--full">
-          <span class="info-item__label">Biography</span>
-          <p class="info-item__value info-bio">${profile.bio ? escapeHTML(profile.bio) : "No biography has been added yet."}</p>
-        </div>
       </div>
     `;
 
@@ -1446,11 +2322,11 @@
         <div class="profile-hero__body">
           <div class="profile-hero__avatar">${avatarHTML(profile)}</div>
           <div class="profile-hero__main">
-            <div class="badge-row">
-              <span class="badge">${escapeHTML(departmentShort(profile.department))}</span>
-              <span class="badge badge--green"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Faculty</span>
+            <div class="profile-hero__name-row">
+              <h1>${escapeHTML(profile.name || "Faculty Member")}</h1>
+              <span class="badge profile-hero__dept">${escapeHTML(departmentShort(profile.department))}</span>
+              <span class="badge badge--green profile-hero__faculty"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> ${isDeanProfile(profile) ? "Dean" : "Faculty"}</span>
             </div>
-            <h1>${escapeHTML(profile.name || "Faculty Member")}</h1>
             <p class="profile-hero__sub">${escapeHTML(profile.designation || "Designation not added")} <span>&middot; ${escapeHTML(profile.department || "Department not added")}</span></p>
             ${contacts.length ? `<div class="profile-hero__contacts">${contacts.join("")}</div>` : ""}
             <div class="profile-hero__tags">${tagsHTML}</div>
@@ -1461,12 +2337,20 @@
       </div>
 
       ${profileSection(prefix + "personal", 'data-sidebar-section="personal"', sectionHead("bi-person-vcard", "Personal Information", "Academic identity and contact details"), personalBody)}
+      ${profileSection(prefix + "specializations", 'data-sidebar-section="specializations"', sectionHead("bi-stars", "Areas of Specialization", "Primary domains, subjects and expertise areas", specializationTags(profile, 100).length), specializationBody(profile))}
       ${profileSection(prefix + "qualification", 'data-sidebar-section="qualification"', sectionHead("bi-mortarboard", "Qualification", "Degrees, fellowships and academic credentials", profile.qualification.length), qualificationBody(profile))}
       ${profileSection(prefix + "experience", 'data-sidebar-section="experience"', sectionHead("bi-briefcase", "Professional Experience", "Teaching, research and industry roles", profile.experience.length), experienceBody(profile))}
+      ${profileSection(prefix + "publications", 'data-sidebar-section="publications"', sectionHead("bi-journal-richtext", "Publications", "Journal articles, conference papers and book chapters", profile.publications.length), publicationBody(profile))}
+      ${profileSection(prefix + "conferences-attended", 'data-sidebar-section="conferences-attended"', sectionHead("bi-people", "Conferences Attended", "Conferences, workshops and seminars attended", profile.conferencesAttended.length), conferenceAttendedBody(profile))}
+      ${profileSection(prefix + "conferences-conducted", 'data-sidebar-section="conferences-conducted"', sectionHead("bi-easel", "Conferences Conducted", "Conferences, workshops and seminars organised", profile.conferencesConducted.length), conferenceConductedBody(profile))}
+      ${profileSection(prefix + "training-programs-conducted", 'data-sidebar-section="training-programs-conducted"', sectionHead("bi-clipboard2-check", "Training Programs Conducted", "FDPs, workshops, seminars and training programmes organised or delivered", (profile.trainingPrograms || []).length), trainingProgramBody(profile))}
+      ${profileSection(prefix + "patents", 'data-sidebar-section="patents"', sectionHead("bi-award", "Patents", "Granted and awarded patents", profile.patents.length), patentBody(profile))}
       ${profileSection(prefix + "projects", 'data-sidebar-section="projects"', sectionHead("bi-cash-stack", "Funded Projects", "Sponsored research and consultancy projects", profile.projects.length), projectBody(profile))}
-      ${profileSection(prefix + "publications", 'data-sidebar-section="publications"', sectionHead("bi-journal-richtext", "Publications", "Journal articles, conference papers and chapters", profile.publications.length), publicationBody(profile))}
+      ${profileSection(prefix + "research", 'data-sidebar-section="research"', sectionHead("bi-lightbulb", "Research", "Areas, guide recognition and research guidance", profile.researchAreas.length), researchBody(profile))}
       ${profileSection(prefix + "achievements", 'data-sidebar-section="achievements"', sectionHead("bi-trophy", "Achievements", "Awards, honours and recognition", profile.achievements.length), achievementBody(profile))}
       ${profileSection(prefix + "certifications", 'data-sidebar-section="certifications"', sectionHead("bi-patch-check", "Certifications", "Professional and technical credentials", profile.certifications.length), certificationBody(profile))}
+      ${profileSection(prefix + "responsibilities", 'data-sidebar-section="responsibilities"', sectionHead("bi-person-check", "Additional Responsibilities", "Administrative and institutional roles", profile.responsibilities.length), responsibilityBody(profile))}
+      ${profileSection(prefix + "research-ids", 'data-sidebar-section="research-ids"', sectionHead("bi-link-45deg", "Research Profile IDs", "Google Scholar, ORCID and Scopus profiles"), researchIdsBody(profile))}
     `;
   }
 
@@ -1500,10 +2384,32 @@
     body.innerHTML = buildProfile(profile, { canEdit: false, prefix: "preview-" });
   }
 
+  function fileChipHTML(value, label) {
+    const src = String(value || "").trim();
+    if (!src) return "";
+    const text = escapeHTML(label || "View uploaded file");
+    if (/^data:image\//i.test(src)) {
+      return `<a class="file-chip" href="${escapeHTML(src)}" target="_blank" rel="noopener noreferrer"><img src="${escapeHTML(src)}" alt="${text}"><span>${text}</span></a>`;
+    }
+    if (/^data:application\/pdf/i.test(src) || /\.pdf($|\?)/i.test(src)) {
+      return `<a class="file-chip file-chip--doc" href="${escapeHTML(src)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-file-earmark-pdf" aria-hidden="true"></i><span>${text}</span></a>`;
+    }
+    if (/^https?:\/\//i.test(src)) {
+      return `<a class="file-chip file-chip--doc" href="${escapeHTML(src)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i><span>${text}</span></a>`;
+    }
+    return "";
+  }
+
+  function attachmentHTML(value, label) {
+    const chip = fileChipHTML(value, label || "View certificate");
+    return chip ? `<div class="attachment-row">${chip}</div>` : "";
+  }
+
   function entryFieldHTML(type, field, entry) {
     const value = entry && entry[field.key] != null ? String(entry[field.key]) : "";
     const id = type + "-" + field.key + "-" + entryUid;
-    const label = `<label for="${id}">${escapeHTML(field.label)}${field.required ? ' <span class="req">*</span>' : ""}</label>`;
+    const fieldLabel = `${escapeHTML(field.label)}${field.required ? ' <span class="req">*</span>' : ""}`;
+    const label = `<label for="${id}">${fieldLabel}</label>`;
     const attrs = [
       `id="${id}"`,
       `data-field="${escapeHTML(field.key)}"`,
@@ -1512,6 +2418,40 @@
       field.min != null ? `min="${field.min}"` : "",
       field.max != null ? `max="${field.max}"` : ""
     ].filter(Boolean).join(" ");
+    const fullClass = field.full ? " field--full" : "";
+
+    if (field.type === "checkbox") {
+      const checked = isTruthy(value) ? " checked" : "";
+      return `
+        <div class="field field--checkbox${fullClass}">
+          <label class="check-field" for="${id}">
+            <input type="checkbox" ${attrs}${checked}>
+            <span>${fieldLabel}</span>
+          </label>
+        </div>
+      `;
+    }
+
+    if (field.type === "file") {
+      const fileId = id + "-file";
+      const preview = fileChipHTML(value, "View uploaded file");
+      return `
+        <div class="field${fullClass}">
+          <span class="field-label">${fieldLabel}</span>
+          <div class="file-field" data-file-field="${escapeHTML(field.key)}">
+            <input type="hidden" ${attrs} value="${escapeHTML(value)}">
+            <label class="file-drop" for="${fileId}">
+              <i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>
+              <span>${value ? "Replace file" : "Upload file"}</span>
+              <small>Image or PDF &middot; up to 3 MB</small>
+            </label>
+            <input class="sr-only" type="file" id="${fileId}" data-file-input="${escapeHTML(field.key)}" accept="${escapeHTML(field.accept || "image/*,application/pdf")}">
+            <div class="file-preview" data-file-preview="${escapeHTML(field.key)}">${preview}</div>
+            ${value ? `<button class="file-remove" type="button" data-remove-file="${escapeHTML(field.key)}"><i class="bi bi-x-lg" aria-hidden="true"></i> Remove file</button>` : ""}
+          </div>
+        </div>
+      `;
+    }
 
     let control = "";
     if (field.type === "textarea") {
@@ -1523,10 +2463,12 @@
       }).join("");
       control = `<select ${attrs}><option value="">Select ${escapeHTML(field.label.toLowerCase())}</option>${options}</select>`;
     } else {
-      control = `<input type="${field.type || "text"}" ${attrs} value="${escapeHTML(value)}" placeholder="${escapeHTML(field.placeholder || "")}">`;
+      const disabled = field.key === "to" && entry && isTruthy(entry.current) ? " disabled" : "";
+      const nonnegative = field.min === 0 ? " data-nonnegative" : "";
+      control = `<input type="${field.type || "text"}" ${attrs}${nonnegative}${disabled} value="${escapeHTML(value)}" placeholder="${escapeHTML(field.placeholder || "")}">`;
     }
 
-    return `<div class="field${field.full ? " field--full" : ""}">${label}${control}</div>`;
+    return `<div class="field${fullClass}">${label}${control}</div>`;
   }
 
   function entryCardHTML(type, entry) {
@@ -1626,13 +2568,28 @@
       "p-designation": profile.designation,
       "p-email": profile.email,
       "p-contact": profile.contact,
-      "p-specialization": profile.specialization,
-      "p-bio": profile.bio
+      "p-specialization": profile.specialization
     };
     Object.keys(map).forEach(function (id) {
       const field = $("#" + id);
       if (field) field.value = map[id] || "";
     });
+    renderSpecializationPreview(profile.specialization);
+  }
+
+  function fillStaticFields(profile) {
+    Object.keys(STATIC_FIELDS).forEach(function (key) {
+      const field = $("#" + STATIC_FIELDS[key]);
+      if (field) field.value = profile[key] || "";
+    });
+  }
+
+  function collectStaticFields() {
+    const fields = {};
+    Object.keys(STATIC_FIELDS).forEach(function (key) {
+      fields[key] = fieldValue(STATIC_FIELDS[key]);
+    });
+    return fields;
   }
 
   function fillForm(profile, options) {
@@ -1642,6 +2599,7 @@
     state.formId = profile && profile.id ? profile.id : "";
     state.draftPhoto = source.photo || "";
     fillPersonal(source);
+    fillStaticFields(source);
     Object.keys(ENTRY_CONFIG).forEach(function (type) {
       renderEntryList(type, source[type]);
     });
@@ -1689,6 +2647,84 @@
     reader.readAsDataURL(file);
   }
 
+  function updateFileFieldUI(card, fieldKey) {
+    const wrapper = card.querySelector('[data-file-field="' + fieldKey + '"]');
+    if (!wrapper) return;
+    const hidden = wrapper.querySelector('[data-field="' + fieldKey + '"]');
+    const value = hidden ? hidden.value : "";
+    const preview = wrapper.querySelector('[data-file-preview="' + fieldKey + '"]');
+    if (preview) preview.innerHTML = fileChipHTML(value, "View uploaded file");
+    const dropLabel = wrapper.querySelector(".file-drop span");
+    if (dropLabel) dropLabel.textContent = value ? "Replace file" : "Upload file";
+    let removeButton = wrapper.querySelector("[data-remove-file]");
+    if (value && !removeButton) {
+      removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "file-remove";
+      removeButton.dataset.removeFile = fieldKey;
+      removeButton.innerHTML = '<i class="bi bi-x-lg" aria-hidden="true"></i> Remove file';
+      wrapper.appendChild(removeButton);
+    } else if (!value && removeButton) {
+      removeButton.remove();
+    }
+  }
+
+  function handleEntryFile(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const fieldKey = input.dataset.fileInput;
+    const card = input.closest(".entry-card");
+    if (!card || !fieldKey) return;
+    if (!/^(image\/(jpeg|png|webp|gif)|application\/pdf)$/i.test(file.type)) {
+      showToast("Please choose an image or PDF file.", "error");
+      input.value = "";
+      return;
+    }
+    if (file.size > 3 * 1024 * 1024) {
+      showToast("That file is larger than 3 MB. Please choose a smaller file.", "error");
+      input.value = "";
+      return;
+    }
+    const hidden = card.querySelector('[data-field="' + fieldKey + '"]');
+    if (!hidden) return;
+    const reader = new FileReader();
+    reader.onload = function () {
+      hidden.value = String(reader.result || "");
+      updateFileFieldUI(card, fieldKey);
+      updateFormCompletion();
+      showToast("File ready. Remember to save your profile.", "success");
+    };
+    reader.onerror = function () {
+      showToast("We could not read that file. Please try again.", "error");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearEntryFile(button) {
+    const fieldKey = button.dataset.removeFile;
+    const card = button.closest(".entry-card");
+    if (!card || !fieldKey) return;
+    const hidden = card.querySelector('[data-field="' + fieldKey + '"]');
+    const input = card.querySelector('[data-file-input="' + fieldKey + '"]');
+    if (hidden) hidden.value = "";
+    if (input) input.value = "";
+    updateFileFieldUI(card, fieldKey);
+    updateFormCompletion();
+  }
+
+  function syncCurrentHolding(checkbox) {
+    const card = checkbox.closest(".entry-card");
+    if (!card) return;
+    const toField = card.querySelector('[data-field="to"]');
+    if (!toField) return;
+    if (checkbox.checked) {
+      toField.value = "";
+      toField.disabled = true;
+    } else {
+      toField.disabled = false;
+    }
+  }
+
   function fieldValue(id) {
     const field = $("#" + id);
     return field ? String(field.value || "").trim() : "";
@@ -1704,9 +2740,9 @@
       email: fieldValue("p-email"),
       contact: fieldValue("p-contact"),
       specialization: fieldValue("p-specialization"),
-      bio: fieldValue("p-bio"),
       photo: state.draftPhoto || ""
     };
+    Object.assign(profile, collectStaticFields());
 
     Object.keys(ENTRY_CONFIG).forEach(function (type) {
       const container = $("#" + ENTRY_CONFIG[type].container);
@@ -1716,7 +2752,9 @@
           const entry = {};
           let hasValue = false;
           $$("[data-field]", card).forEach(function (input) {
-            const value = String(input.value || "").trim();
+            const value = input.type === "checkbox"
+              ? (input.checked ? "true" : "")
+              : String(input.value || "").trim();
             entry[input.dataset.field] = value;
             if (value) hasValue = true;
           });
@@ -1796,7 +2834,9 @@
       if (!container) return;
       $$(".entry-card", container).forEach(function (card) {
         const inputs = $$("[data-field]", card);
-        const hasValue = inputs.some(function (input) { return String(input.value || "").trim() !== ""; });
+        const hasValue = inputs.some(function (input) {
+          return input.type === "checkbox" ? input.checked : String(input.value || "").trim() !== "";
+        });
         if (!hasValue) return;
         inputs.forEach(function (input) {
           if (input.dataset.required !== "true") return;
@@ -1805,6 +2845,15 @@
           invalid.push(input);
         });
       });
+    });
+
+    $$("#profile-form [data-nonnegative]").forEach(function (input) {
+      const value = String(input.value || "").trim();
+      if (value === "") return;
+      if (Number(value) < 0) {
+        setFieldError(input, "Enter a value of 0 or greater.");
+        invalid.push(input);
+      }
     });
 
     if (invalid.length) {
@@ -1873,6 +2922,37 @@
     if (lastFocused && typeof lastFocused.focus === "function") {
       lastFocused.focus({ preventScroll: true });
     }
+  }
+
+  function openPhotoLightbox(src, alt) {
+    const lightbox = $("#photo-lightbox");
+    const image = $("#photo-lightbox-img");
+    const caption = $("#photo-lightbox-caption");
+    if (!lightbox || !image || !src) return;
+    image.src = src;
+    image.alt = alt || "Profile photograph";
+    if (caption) caption.textContent = alt || "";
+    photoLightboxFocus = document.activeElement;
+    lightbox.hidden = false;
+    document.body.classList.add("modal-open");
+    const closeButton = $(".photo-lightbox__close", lightbox);
+    if (closeButton) closeButton.focus({ preventScroll: true });
+  }
+
+  function closePhotoLightbox() {
+    const lightbox = $("#photo-lightbox");
+    if (!lightbox || lightbox.hidden) return;
+    lightbox.hidden = true;
+    const image = $("#photo-lightbox-img");
+    if (image) {
+      image.removeAttribute("src");
+      image.alt = "";
+    }
+    document.body.classList.remove("modal-open");
+    if (photoLightboxFocus && typeof photoLightboxFocus.focus === "function") {
+      photoLightboxFocus.focus({ preventScroll: true });
+    }
+    photoLightboxFocus = null;
   }
 
   function updateFormChrome(source) {
@@ -1948,7 +3028,7 @@
     renderProfileView(profile);
     updateSidebarItems();
     showView("profile");
-    showToast(isAdmin() ? "Faculty profile saved to the directory." : "Profile saved to this browser.", "success");
+    showToast(isAdmin() ? "Faculty profile saved to the directory." : "Profile saved.", "success");
   }
 
   function startFreshProfile() {
@@ -1976,6 +3056,7 @@
     state.formId = "";
     state.formIsNew = false;
     state.draftPhoto = "";
+    persistState();
     updateRoleUI();
     updateSidebarItems();
     fillForm(currentFaculty());
@@ -2393,6 +3474,18 @@
 
   function setupEvents() {
     document.addEventListener("click", function (event) {
+      if (event.target.closest("[data-close-photo]")) {
+        closePhotoLightbox();
+        return;
+      }
+
+      const photoTrigger = event.target.closest("[data-photo-zoom]");
+      if (photoTrigger) {
+        event.preventDefault();
+        openPhotoLightbox(photoTrigger.dataset.photoZoom, photoTrigger.dataset.photoAlt);
+        return;
+      }
+
       const navButton = event.target.closest("[data-nav]");
       if (navButton) {
         navigateToSection(navButton.dataset.nav);
@@ -2424,6 +3517,12 @@
       const removeButton = event.target.closest("[data-remove-entry]");
       if (removeButton) {
         removeEntry(removeButton);
+        return;
+      }
+
+      const removeFileButton = event.target.closest("[data-remove-file]");
+      if (removeFileButton) {
+        clearEntryFile(removeFileButton);
         return;
       }
 
@@ -2586,7 +3685,8 @@
           email.select();
           return;
         }
-        if (value !== "admin@ucen.ac.in") {
+        const account = ADMIN_ACCOUNTS[value];
+        if (!account) {
           if (findFacultyByEmail(value)) {
             showToast("This email belongs to a faculty account. Please use Faculty sign in.", "error");
           } else {
@@ -2596,7 +3696,7 @@
           email.select();
           return;
         }
-        if (password.value !== "admin123") {
+        if (password.value !== account.password) {
           showToast("Incorrect password for the admin account. Please try again.", "error");
           password.focus();
           password.select();
@@ -2624,7 +3724,7 @@
           email.select();
           return;
         }
-        if (value === "admin@ucen.ac.in") {
+        if (ADMIN_ACCOUNTS[value]) {
           showToast("This is an administrator account. Please use Admin / In-charge sign in.", "error");
           email.focus();
           email.select();
@@ -2701,12 +3801,26 @@
       form.addEventListener("input", function (event) {
         if (event.target.matches("input, select, textarea")) {
           clearFieldError(event.target);
+          if (event.target.matches("[data-nonnegative]") && Number(event.target.value) < 0) {
+            event.target.value = "0";
+          }
           updateFormCompletion();
           if (event.target.id === "p-name") renderPhotoPreview();
+          if (event.target.id === "p-specialization") renderSpecializationPreview(event.target.value);
         }
       });
 
       form.addEventListener("change", function (event) {
+        if (event.target.matches("[data-file-input]")) {
+          handleEntryFile(event.target);
+          return;
+        }
+        if (event.target.matches('[data-field="current"]')) {
+          syncCurrentHolding(event.target);
+        }
+        if (event.target.matches('input[type="date"], input[type="month"]')) {
+          animateDateInput(event.target);
+        }
         if (event.target.matches("input, select, textarea")) {
           updateFormCompletion();
         }
@@ -2731,6 +3845,24 @@
     });
 
     document.addEventListener("keydown", function (event) {
+      const lightbox = $("#photo-lightbox");
+      if (lightbox && !lightbox.hidden) {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closePhotoLightbox();
+        }
+        return;
+      }
+
+      const zoomTrigger = document.activeElement && document.activeElement.closest
+        ? document.activeElement.closest("[data-photo-zoom]")
+        : null;
+      if (zoomTrigger && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        openPhotoLightbox(zoomTrigger.dataset.photoZoom, zoomTrigger.dataset.photoAlt);
+        return;
+      }
+
       const modal = $("#preview-modal");
       if (modal && !modal.hidden) {
         if (event.key === "Escape") {
@@ -2771,8 +3903,8 @@
     });
   }
 
-  function init() {
-    const stored = loadState();
+  async function init() {
+    const stored = await loadState();
     state.role = stored.role;
     state.roster = stored.roster;
     state.activeFacultyId = stored.activeFacultyId;
@@ -2780,6 +3912,7 @@
     const own = currentFaculty();
     state.formId = own ? own.id : "";
     state.draftPhoto = own ? own.photo : "";
+    if (!serverStateAvailable) persistState();
 
     populateFilters();
     updateRoleUI();

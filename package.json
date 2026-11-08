@@ -28,5 +28,13 @@
   "main": "script.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sivasubbiramaniyam/portolio-college.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sivasubbiramaniyam/portolio-college/issues"
+  },
+  "homepage": "https://github.com/Sivasubbiramaniyam/portolio-college#readme"
 }

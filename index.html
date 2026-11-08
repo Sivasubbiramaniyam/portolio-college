@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Faculty Portal for University College of Engineering Nagercoil, Anna University, Chennai. Create, manage and explore faculty profiles.">
   <meta name="theme-color" content="#7B5EF0">
-  <title>Faculty Portal | University College of Engineering Nagercoil</title>
+  <title>Faculty Portal | UCEN</title>
 
   <link rel="icon" type="image/svg+xml" href="assets/anna-university-logo.svg">
 
@@ -65,6 +65,10 @@
         <span class="side-link__icon"><i class="bi bi-person-vcard" aria-hidden="true"></i></span>
         <span class="side-link__label">Personal Information</span>
       </button>
+      <button class="side-link side-link--section" type="button" data-nav="specializations" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-stars" aria-hidden="true"></i></span>
+        <span class="side-link__label">Areas of Specialization</span>
+      </button>
       <button class="side-link side-link--section" type="button" data-nav="qualification" data-nav-section hidden>
         <span class="side-link__icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
         <span class="side-link__label">Qualification</span>
@@ -73,13 +77,33 @@
         <span class="side-link__icon"><i class="bi bi-briefcase" aria-hidden="true"></i></span>
         <span class="side-link__label">Professional Experience</span>
       </button>
+      <button class="side-link side-link--section" type="button" data-nav="publications" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-journal-richtext" aria-hidden="true"></i></span>
+        <span class="side-link__label">Publications</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="conferences-attended" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-easel2" aria-hidden="true"></i></span>
+        <span class="side-link__label">Conferences Attended</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="conferences-conducted" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-mic" aria-hidden="true"></i></span>
+        <span class="side-link__label">Conferences Conducted</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="training-programs-conducted" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-clipboard2-check" aria-hidden="true"></i></span>
+        <span class="side-link__label">Training Programs Conducted</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="patents" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-award" aria-hidden="true"></i></span>
+        <span class="side-link__label">Patents</span>
+      </button>
       <button class="side-link side-link--section" type="button" data-nav="projects" data-nav-section hidden>
         <span class="side-link__icon"><i class="bi bi-cash-stack" aria-hidden="true"></i></span>
         <span class="side-link__label">Funded Projects</span>
       </button>
-      <button class="side-link side-link--section" type="button" data-nav="publications" data-nav-section hidden>
-        <span class="side-link__icon"><i class="bi bi-journal-richtext" aria-hidden="true"></i></span>
-        <span class="side-link__label">Publications</span>
+      <button class="side-link side-link--section" type="button" data-nav="research" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-lightbulb" aria-hidden="true"></i></span>
+        <span class="side-link__label">Research</span>
       </button>
       <button class="side-link side-link--section" type="button" data-nav="achievements" data-nav-section hidden>
         <span class="side-link__icon"><i class="bi bi-trophy" aria-hidden="true"></i></span>
@@ -88,6 +112,14 @@
       <button class="side-link side-link--section" type="button" data-nav="certifications" data-nav-section hidden>
         <span class="side-link__icon"><i class="bi bi-patch-check" aria-hidden="true"></i></span>
         <span class="side-link__label">Certifications</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="responsibilities" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+        <span class="side-link__label">Additional Responsibilities</span>
+      </button>
+      <button class="side-link side-link--section" type="button" data-nav="research-ids" data-nav-section hidden>
+        <span class="side-link__icon"><i class="bi bi-person-lines-fill" aria-hidden="true"></i></span>
+        <span class="side-link__label">Research Profile IDs</span>
       </button>
     </nav>
 
@@ -255,6 +287,8 @@
               </button>
             </div>
 
+            <section class="dean-spotlight" id="dean-spotlight" aria-label="Dean profile" hidden></section>
+
             <div class="directory-grid" id="directory-grid"></div>
 
             <div class="empty-state" id="directory-empty" hidden>
@@ -350,21 +384,34 @@
                   <label for="p-contact">Contact number <span class="req">*</span></label>
                   <input type="tel" id="p-contact" name="contact" placeholder="+91 94432 18765" required data-label="Contact number">
                 </div>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-specializations" data-sidebar-section="specializations">
+              <header class="form-section__head">
+                <span class="step-badge">02</span>
+                <div>
+                  <h2>Areas of Specialization</h2>
+                  <p>Primary domains, subjects and expertise areas shown on your profile.</p>
+                </div>
+              </header>
+
+              <div class="form-grid">
                 <div class="field field--full">
-                  <label for="p-specialization">Specialisation <span class="req">*</span></label>
-                  <input type="text" id="p-specialization" name="specialization" placeholder="Artificial Intelligence, Cloud Computing, Data Mining" required data-label="Specialisation">
-                  <small class="hint">Separate multiple areas with commas.</small>
+                  <label for="p-specialization">Areas of specialization <span class="req">*</span></label>
+                  <input type="text" id="p-specialization" name="specialization" placeholder="Artificial Intelligence, Cloud Computing, Data Mining" required data-label="Areas of specialization">
+                  <small class="hint">Separate multiple areas with commas. Each area appears as a tag on your profile.</small>
                 </div>
                 <div class="field field--full">
-                  <label for="p-bio">Short biography</label>
-                  <textarea id="p-bio" name="bio" rows="4" placeholder="Share your teaching philosophy, research focus and academic journey."></textarea>
+                  <span class="field-label">Preview</span>
+                  <div class="tag-cloud specialization-preview" id="specialization-preview" aria-live="polite"></div>
                 </div>
               </div>
             </section>
 
             <section class="card form-section" id="form-qualification" data-sidebar-section="qualification">
               <header class="form-section__head">
-                <span class="step-badge">02</span>
+                <span class="step-badge">03</span>
                 <div>
                   <h2>Qualification</h2>
                   <p>Add each degree, diploma or fellowship you hold.</p>
@@ -381,7 +428,7 @@
 
             <section class="card form-section" id="form-experience" data-sidebar-section="experience">
               <header class="form-section__head">
-                <span class="step-badge">03</span>
+                <span class="step-badge">04</span>
                 <div>
                   <h2>Professional Experience</h2>
                   <p>Teaching, research and industry roles held over your career.</p>
@@ -396,9 +443,94 @@
               </div>
             </section>
 
+            <section class="card form-section" id="form-publications" data-sidebar-section="publications">
+              <header class="form-section__head">
+                <span class="step-badge">05</span>
+                <div>
+                  <h2>Publications</h2>
+                  <p>Journal articles, conference papers, books and chapters.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-publication"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="publication">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add publication
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-conferences-attended" data-sidebar-section="conferences-attended">
+              <header class="form-section__head">
+                <span class="step-badge">06</span>
+                <div>
+                  <h2>National / International Conferences Attended</h2>
+                  <p>Conferences, workshops, symposia and seminars you participated in.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-conference-attended"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="conferenceAttended">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add conference attended
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-conferences-conducted" data-sidebar-section="conferences-conducted">
+              <header class="form-section__head">
+                <span class="step-badge">07</span>
+                <div>
+                  <h2>National / International Conferences Conducted</h2>
+                  <p>Conferences and events you organised or conducted.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-conference-conducted"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="conferenceConducted">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add conference conducted
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-training-programs-conducted" data-sidebar-section="training-programs-conducted">
+              <header class="form-section__head">
+                <span class="step-badge">08</span>
+                <div>
+                  <h2>Training Programs Conducted</h2>
+                  <p>FDPs, workshops, seminars and training programmes you organised or delivered.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-training-program"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="trainingProgram">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add training program
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-patents" data-sidebar-section="patents">
+              <header class="form-section__head">
+                <span class="step-badge">09</span>
+                <div>
+                  <h2>Patents</h2>
+                  <p>Only granted or awarded patents are published in the faculty profile.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-patent"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="patent">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add patent
+                </button>
+              </div>
+            </section>
+
             <section class="card form-section" id="form-projects" data-sidebar-section="projects">
               <header class="form-section__head">
-                <span class="step-badge">04</span>
+                <span class="step-badge">10</span>
                 <div>
                   <h2>Funded Projects</h2>
                   <p>Research grants and sponsored projects you have secured.</p>
@@ -413,26 +545,105 @@
               </div>
             </section>
 
-            <section class="card form-section" id="form-publications" data-sidebar-section="publications">
+            <section class="card form-section" id="form-research" data-sidebar-section="research">
               <header class="form-section__head">
-                <span class="step-badge">05</span>
+                <span class="step-badge">11</span>
                 <div>
-                  <h2>Publications</h2>
-                  <p>Journal articles, conference papers and book chapters.</p>
+                  <h2>Research</h2>
+                  <p>Research areas, guide recognition and scholar supervision.</p>
                 </div>
               </header>
 
-              <div class="entry-list" id="entry-list-publication"></div>
-              <div class="entry-actions">
-                <button class="btn btn-soft" type="button" data-add-entry="publication">
-                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add publication
-                </button>
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-lightbulb" aria-hidden="true"></i> Research Areas / Subjects</h3>
+                  <span>Multiple areas allowed</span>
+                </div>
+                <div class="entry-list" id="entry-list-research-area"></div>
+                <div class="entry-actions">
+                  <button class="btn btn-soft" type="button" data-add-entry="researchArea">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Add research area
+                  </button>
+                </div>
+              </div>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-patch-check" aria-hidden="true"></i> Research Guide Number</h3>
+                  <span>Recognition details</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="r-guide-number">Research guide recognition number</label>
+                    <input type="text" id="r-guide-number" placeholder="AU/PhD/Guide/1042">
+                  </div>
+                  <div class="field">
+                    <label for="r-guide-university">Recognised university</label>
+                    <input type="text" id="r-guide-university" placeholder="Anna University, Chennai">
+                  </div>
+                  <div class="field">
+                    <label for="r-guide-date">Recognition date</label>
+                    <input type="date" id="r-guide-date">
+                  </div>
+                  <div class="field">
+                    <label for="r-guide-status">Recognition status</label>
+                    <select id="r-guide-status">
+                      <option value="">Select status</option>
+                      <option value="Recognized">Recognized</option>
+                      <option value="Provisional">Provisional</option>
+                      <option value="Expired">Expired</option>
+                      <option value="Not Applicable">Not Applicable</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-mortarboard" aria-hidden="true"></i> Number of Scholars Completed</h3>
+                  <span>Supervision completed</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="r-phd-completed">Ph.D. scholars completed</label>
+                    <input type="number" id="r-phd-completed" min="0" step="1" placeholder="0" data-nonnegative>
+                  </div>
+                  <div class="field">
+                    <label for="r-mphil-completed">M.Phil. scholars completed</label>
+                    <input type="number" id="r-mphil-completed" min="0" step="1" placeholder="0" data-nonnegative>
+                  </div>
+                  <div class="field">
+                    <label for="r-other-completed">Other research scholars completed</label>
+                    <input type="number" id="r-other-completed" min="0" step="1" placeholder="0" data-nonnegative>
+                  </div>
+                </div>
+              </div>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-people" aria-hidden="true"></i> Number of Scholars Currently Guiding</h3>
+                  <span>Active supervision</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="r-phd-guiding">Ph.D. scholars currently guiding</label>
+                    <input type="number" id="r-phd-guiding" min="0" step="1" placeholder="0" data-nonnegative>
+                  </div>
+                  <div class="field">
+                    <label for="r-mphil-guiding">M.Phil. scholars currently guiding</label>
+                    <input type="number" id="r-mphil-guiding" min="0" step="1" placeholder="0" data-nonnegative>
+                  </div>
+                  <div class="field">
+                    <label for="r-other-guiding">Other research scholars currently guiding</label>
+                    <input type="number" id="r-other-guiding" min="0" step="1" placeholder="0" data-nonnegative>
+                  </div>
+                </div>
               </div>
             </section>
 
             <section class="card form-section" id="form-achievements" data-sidebar-section="achievements">
               <header class="form-section__head">
-                <span class="step-badge">06</span>
+                <span class="step-badge">12</span>
                 <div>
                   <h2>Achievements &amp; Certifications</h2>
                   <p>Awards, honours and professional certifications that define your expertise.</p>
@@ -462,6 +673,84 @@
                   <button class="btn btn-soft" type="button" data-add-entry="certification">
                     <i class="bi bi-plus-lg" aria-hidden="true"></i> Add certification
                   </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-responsibilities" data-sidebar-section="responsibilities">
+              <header class="form-section__head">
+                <span class="step-badge">13</span>
+                <div>
+                  <h2>Additional Responsibilities</h2>
+                  <p>Academic, administrative and professional roles you have held.</p>
+                </div>
+              </header>
+
+              <div class="entry-list" id="entry-list-responsibility"></div>
+              <div class="entry-actions">
+                <button class="btn btn-soft" type="button" data-add-entry="responsibility">
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i> Add responsibility
+                </button>
+              </div>
+            </section>
+
+            <section class="card form-section" id="form-research-ids" data-sidebar-section="research-ids">
+              <header class="form-section__head">
+                <span class="step-badge">14</span>
+                <div>
+                  <h2>Research Profile IDs</h2>
+                  <p>Link your Google Scholar, ORCID and Scopus research profiles.</p>
+                </div>
+              </header>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-google" aria-hidden="true"></i> Google Scholar</h3>
+                  <span>Optional</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="r-gs-id">Google Scholar ID</label>
+                    <input type="text" id="r-gs-id" placeholder="e.g. AbC123XyZ">
+                  </div>
+                  <div class="field">
+                    <label for="r-gs-url">Google Scholar profile URL</label>
+                    <input type="url" id="r-gs-url" placeholder="https://scholar.google.com/citations?user=...">
+                  </div>
+                </div>
+              </div>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-person-vcard" aria-hidden="true"></i> ORCID</h3>
+                  <span>Optional</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="r-orcid-id">ORCID ID</label>
+                    <input type="text" id="r-orcid-id" placeholder="0000-0000-0000-0000">
+                  </div>
+                  <div class="field">
+                    <label for="r-orcid-url">ORCID profile URL</label>
+                    <input type="url" id="r-orcid-url" placeholder="https://orcid.org/0000-0000-0000-0000">
+                  </div>
+                </div>
+              </div>
+
+              <div class="subgroup">
+                <div class="subgroup__head">
+                  <h3><i class="bi bi-journal-richtext" aria-hidden="true"></i> Scopus</h3>
+                  <span>Optional</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="r-scopus-id">Scopus Author ID</label>
+                    <input type="text" id="r-scopus-id" placeholder="e.g. 57200000000">
+                  </div>
+                  <div class="field">
+                    <label for="r-scopus-url">Scopus profile URL</label>
+                    <input type="url" id="r-scopus-url" placeholder="https://www.scopus.com/authid/detail.uri?authorId=...">
+                  </div>
                 </div>
               </div>
             </section>
@@ -505,6 +794,17 @@
         </div>
       </footer>
     </main>
+  </div>
+
+  <div class="photo-lightbox" id="photo-lightbox" hidden>
+    <div class="photo-lightbox__backdrop" data-close-photo></div>
+    <figure class="photo-lightbox__figure" role="dialog" aria-modal="true" aria-label="Profile photograph">
+      <button class="photo-lightbox__close" type="button" data-close-photo aria-label="Close photograph">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+      <img id="photo-lightbox-img" src="" alt="">
+      <figcaption id="photo-lightbox-caption"></figcaption>
+    </figure>
   </div>
 
   <div class="modal" id="preview-modal" hidden>
@@ -592,7 +892,7 @@
           <button class="btn btn-ghost" type="button" data-login-back><i class="bi bi-arrow-left" aria-hidden="true"></i> Back</button>
           <button class="btn btn-primary" type="submit">Sign in as Admin <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
         </div>
-        <small class="demo-hint">Demo credentials: admin@ucen.ac.in / admin123</small>
+        <small class="demo-hint">Demo credentials: admin@ucen.ac.in / admin123 or dean@ucen.ac.in / dean123</small>
       </form>
 
       <form class="login-panel" id="faculty-login" hidden novalidate>
