@@ -3067,6 +3067,24 @@ body.modal-open {
 }
 
 @media (max-width: 900px) {
+  .topbar {
+    width: calc(100% + var(--rail));
+    margin-left: calc(-1 * var(--rail));
+  }
+
+  /* Let the full-width topbar sit above the collapsed rail without
+     the empty parts of the sidebar intercepting taps. */
+  .sidebar:not(.is-expanded),
+  .sidebar:not(.is-expanded) .sidebar__brand,
+  .sidebar:not(.is-expanded) .sidebar__nav {
+    pointer-events: none;
+  }
+
+  .sidebar:not(.is-expanded) .side-link,
+  .sidebar:not(.is-expanded) .sidebar__toggle {
+    pointer-events: auto;
+  }
+
   .topbar__inner {
     flex-wrap: wrap;
     gap: 10px;
@@ -3075,6 +3093,7 @@ body.modal-open {
   }
 
   .topbar__brand {
+    align-items: flex-start;
     width: 100%;
   }
 
@@ -3451,8 +3470,18 @@ body.modal-open {
   }
 
   .topbar__meta {
+    display: block;
     font-size: 0.62rem;
     line-height: 1.35;
+  }
+
+  .topbar__meta-affiliation,
+  .topbar__meta-place {
+    display: block;
+  }
+
+  .topbar__meta-sep {
+    display: none;
   }
 
   .main {
