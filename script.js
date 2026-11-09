@@ -984,6 +984,7 @@
     view: "dashboard",
     viewed: null,
     draftPhoto: "",
+    draftBanner: "",
     formId: "",
     formIsNew: false,
     preview: null,
@@ -1276,7 +1277,8 @@
       email: normalizeFacultyEmail(source.email),
       contact: safeText(source.contact),
       specialization: safeText(source.specialization),
-      photo: safeText(source.photo)
+      photo: safeText(source.photo),
+      banner: safeText(source.banner)
     };
     if (profile.id === DEAN_ID || profile.email.toLowerCase() === DEAN_EMAIL) {
       if (!profile.designation || profile.designation === "Dean") profile.designation = "Dean & Professor";
@@ -2304,6 +2306,10 @@
       ? `<div class="profile-hero__actions"><button class="btn btn-primary" type="button" data-action="edit-profile"><i class="bi bi-pencil-square" aria-hidden="true"></i> Edit profile</button></div>`
       : "";
 
+    const bannerHTML = profile.banner
+      ? `<div class="profile-hero__banner profile-hero__banner--custom profile-hero__banner--zoomable" role="button" tabindex="0" data-banner-zoom="${escapeHTML(profile.banner)}" data-banner-alt="${escapeHTML((profile.name || "Faculty Member") + " banner")}" aria-label="View full-size banner" style="background-image:url('${escapeHTML(profile.banner)}')"></div>`
+      : '<div class="profile-hero__banner"></div>';
+
     const personalBody = `
       <div class="info-grid">
         <div class="info-item"><span class="info-item__label">Faculty ID</span><p class="info-item__value">${escapeHTML(profile.facultyId || "Not added")}</p></div>
@@ -2318,7 +2324,7 @@
     return `
       <div id="${prefix}overview" data-sidebar-section="overview">
       <div class="profile-hero">
-        <div class="profile-hero__banner"></div>
+        ${bannerHTML}
         <div class="profile-hero__body">
           <div class="profile-hero__avatar">${avatarHTML(profile)}</div>
           <div class="profile-hero__main">
@@ -2560,6 +2566,16 @@
     }
   }
 
+  function renderBannerPreview() {
+    const preview = $("#banner-preview");
+    if (!preview) return;
+    if (state.draftBanner) {
+      preview.innerHTML = `<img src="${escapeHTML(state.draftBanner)}" alt="Profile banner preview"><button class="banner-preview__remove" type="button" data-action="remove-banner" aria-label="Remove banner"><i class="bi bi-x-lg" aria-hidden="true"></i></button>`;
+    } else {
+      preview.innerHTML = '<span class="banner-preview__empty"><i class="bi bi-image" aria-hidden="true"></i> No banner added yet</span>';
+    }
+  }
+
   function fillPersonal(profile) {
     const map = {
       "p-name": profile.name,
@@ -2598,12 +2614,14 @@
     if (opts.blankName) source.name = "";
     state.formId = profile && profile.id ? profile.id : "";
     state.draftPhoto = source.photo || "";
+    state.draftBanner = source.banner || "";
     fillPersonal(source);
     fillStaticFields(source);
     Object.keys(ENTRY_CONFIG).forEach(function (type) {
       renderEntryList(type, source[type]);
     });
     renderPhotoPreview();
+    renderBannerPreview();
     updateFormCompletion();
     clearFormErrors();
   }
@@ -2635,6 +2653,52 @@
         state.draftPhoto = canvas.toDataURL("image/jpeg", 0.86);
         renderPhotoPreview();
         showToast("Photo ready. Remember to save your profile.", "success");
+      };
+      image.onerror = function () {
+        showToast("We could not read that image. Please try another file.", "error");
+      };
+      image.src = String(reader.result);
+    };
+    reader.onerror = function () {
+      showToast("We could not read that file. Please try again.", "error");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleBannerFile(file) {
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+      showToast("Please choose a JPG, PNG or WebP image.", "error");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("That image is larger than 5 MB. Please choose a smaller file.", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      const image = new Image();
+      image.onload = function () {
+        const targetWidth = 1200;
+        const targetHeight = 320;
+        const canvas = document.createElement("canvas");
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const context = canvas.getContext("2d");
+        const scale = Math.max(targetWidth / image.width, targetHeight / image.height);
+        const drawWidth = image.width * scale;
+        const drawHeight = image.height * scale;
+        context.drawImage(
+          image,
+          (targetWidth - drawWidth) / 2,
+          (targetHeight - drawHeight) / 2,
+          drawWidth,
+          drawHeight
+        );
+        state.draftBanner = canvas.toDataURL("image/jpeg", 0.82);
+        renderBannerPreview();
+        showToast("Banner ready. Remember to save your profile.", "success");
       };
       image.onerror = function () {
         showToast("We could not read that image. Please try another file.", "error");
@@ -2740,7 +2804,8 @@
       email: fieldValue("p-email"),
       contact: fieldValue("p-contact"),
       specialization: fieldValue("p-specialization"),
-      photo: state.draftPhoto || ""
+      photo: state.draftPhoto || "",
+      banner: state.draftBanner || ""
     };
     Object.assign(profile, collectStaticFields());
 
@@ -2924,11 +2989,13 @@
     }
   }
 
-  function openPhotoLightbox(src, alt) {
+  function openPhotoLightbox(src, alt, options) {
     const lightbox = $("#photo-lightbox");
     const image = $("#photo-lightbox-img");
     const caption = $("#photo-lightbox-caption");
     if (!lightbox || !image || !src) return;
+    const opts = options || {};
+    lightbox.classList.toggle("photo-lightbox--wide", !!opts.wide);
     image.src = src;
     image.alt = alt || "Profile photograph";
     if (caption) caption.textContent = alt || "";
@@ -2943,6 +3010,7 @@
     const lightbox = $("#photo-lightbox");
     if (!lightbox || lightbox.hidden) return;
     lightbox.hidden = true;
+    lightbox.classList.remove("photo-lightbox--wide");
     const image = $("#photo-lightbox-img");
     if (image) {
       image.removeAttribute("src");
@@ -3056,6 +3124,7 @@
     state.formId = "";
     state.formIsNew = false;
     state.draftPhoto = "";
+    state.draftBanner = "";
     persistState();
     updateRoleUI();
     updateSidebarItems();
@@ -3486,6 +3555,13 @@
         return;
       }
 
+      const bannerTrigger = event.target.closest("[data-banner-zoom]");
+      if (bannerTrigger) {
+        event.preventDefault();
+        openPhotoLightbox(bannerTrigger.dataset.bannerZoom, bannerTrigger.dataset.bannerAlt, { wide: true });
+        return;
+      }
+
       const navButton = event.target.closest("[data-nav]");
       if (navButton) {
         navigateToSection(navButton.dataset.nav);
@@ -3564,6 +3640,11 @@
           const input = $("#input-photo");
           if (input) input.value = "";
           renderPhotoPreview();
+        } else if (action === "remove-banner") {
+          state.draftBanner = "";
+          const input = $("#input-banner");
+          if (input) input.value = "";
+          renderBannerPreview();
         }
       }
     });
@@ -3788,6 +3869,25 @@
       });
     }
 
+    const removeBanner = $("#btn-remove-banner");
+    if (removeBanner) {
+      removeBanner.addEventListener("click", function () {
+        state.draftBanner = "";
+        const input = $("#input-banner");
+        if (input) input.value = "";
+        renderBannerPreview();
+      });
+    }
+
+    const bannerInput = $("#input-banner");
+    if (bannerInput) {
+      bannerInput.addEventListener("change", function () {
+        if (bannerInput.files && bannerInput.files[0]) {
+          handleBannerFile(bannerInput.files[0]);
+        }
+      });
+    }
+
     const form = $("#profile-form");
     if (form) {
       form.addEventListener("submit", function (event) {
@@ -3855,11 +3955,15 @@
       }
 
       const zoomTrigger = document.activeElement && document.activeElement.closest
-        ? document.activeElement.closest("[data-photo-zoom]")
+        ? document.activeElement.closest("[data-photo-zoom], [data-banner-zoom]")
         : null;
       if (zoomTrigger && (event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        openPhotoLightbox(zoomTrigger.dataset.photoZoom, zoomTrigger.dataset.photoAlt);
+        openPhotoLightbox(
+          zoomTrigger.dataset.photoZoom || zoomTrigger.dataset.bannerZoom,
+          zoomTrigger.dataset.photoAlt || zoomTrigger.dataset.bannerAlt,
+          { wide: !!zoomTrigger.dataset.bannerZoom }
+        );
         return;
       }
 
@@ -3912,6 +4016,7 @@
     const own = currentFaculty();
     state.formId = own ? own.id : "";
     state.draftPhoto = own ? own.photo : "";
+    state.draftBanner = own ? own.banner : "";
     if (!serverStateAvailable) persistState();
 
     populateFilters();

@@ -22,9 +22,6 @@
 
   <aside class="sidebar" id="sidebar" aria-label="Profile section navigation">
     <a class="sidebar__brand" href="#" id="sidebar-brand" aria-label="UCEN Faculty Portal home">
-      <span class="sidebar__brand-mark">
-        <img src="assets/anna-university-logo.svg" alt="" width="38" height="38">
-      </span>
       <span class="sidebar__brand-text">
         <strong>UCEN</strong>
         <small>Faculty Portal</small>
@@ -132,9 +129,16 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="topbar__inner">
-        <div class="topbar__titles">
-          <span class="topbar__eyebrow">University College of Engineering Nagercoil</span>
-          <h1 id="page-title">Dashboard</h1>
+        <div class="topbar__brand">
+          <span class="topbar__logo">
+            <img src="assets/anna-university-logo.svg" alt="Anna University logo" width="56" height="56">
+          </span>
+          <div class="topbar__identity">
+            <h1 id="page-title" class="topbar__page-title">Dashboard</h1>
+            <span class="topbar__college">University College of Engineering Nagercoil</span>
+            <span class="topbar__tamil" lang="ta">பல்கலைக்கழக பொறியியல் கல்லூரி நாகர்கோவில்</span>
+            <span class="topbar__meta">(A Constituent College of Anna University, Chennai) &middot; Nagercoil - 629 004</span>
+          </div>
         </div>
 
         <div class="topbar__actions">
@@ -352,6 +356,24 @@
                     </button>
                   </div>
                   <small class="hint" id="photo-hint">JPG, PNG or WebP &middot; up to 5 MB</small>
+                </div>
+              </div>
+
+              <div class="banner-field">
+                <div class="banner-preview" id="banner-preview"></div>
+                <div class="banner-copy">
+                  <h3>Profile banner</h3>
+                  <p>Add a cover image that appears behind your profile header, like a LinkedIn banner.</p>
+                  <div class="photo-actions">
+                    <label class="btn btn-soft" for="input-banner">
+                      <i class="bi bi-image" aria-hidden="true"></i> Choose banner
+                    </label>
+                    <input class="sr-only" type="file" id="input-banner" accept="image/png,image/jpeg,image/webp">
+                    <button class="btn btn-ghost" type="button" id="btn-remove-banner">
+                      <i class="bi bi-trash3" aria-hidden="true"></i> Remove
+                    </button>
+                  </div>
+                  <small class="hint" id="banner-hint">JPG, PNG or WebP &middot; up to 5 MB &middot; landscape works best</small>
                 </div>
               </div>
 
@@ -833,10 +855,17 @@
     <div class="role-gate__backdrop" data-close-gate></div>
     <div class="role-gate__panel" role="dialog" aria-modal="true" aria-labelledby="role-gate-title">
       <header class="role-gate__head">
-        <span class="role-gate__brand">
-          <img src="assets/anna-university-logo.svg" alt="" width="38" height="38">
-          <span><strong>UCEN</strong><small>Faculty Portal</small></span>
-        </span>
+        <div class="role-gate__letterhead">
+          <span class="role-gate__logo">
+            <img src="assets/anna-university-logo.svg" alt="Anna University logo" width="72" height="72">
+          </span>
+          <div class="role-gate__identity">
+            <strong class="role-gate__college">University College of Engineering Nagercoil</strong>
+            <span class="role-gate__tamil" lang="ta">பல்கலைக்கழக பொறியியல் கல்லூரி நாகர்கோவில்</span>
+            <span class="role-gate__affiliation">(A Constituent College of Anna University, Chennai)</span>
+            <span class="role-gate__place">Nagercoil - 629 004</span>
+          </div>
+        </div>
         <button class="icon-btn" type="button" id="role-gate-close" aria-label="Close role selection" hidden>
           <i class="bi bi-x-lg" aria-hidden="true"></i>
         </button>

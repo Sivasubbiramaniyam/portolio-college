@@ -154,11 +154,12 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   const url = `http://localhost:${PORT}`;
   console.log(`\n======================================================`);
   console.log(` UCEN Faculty Profile Management Portal is running!`);
   console.log(` Local URL: ${url}`);
+  console.log(` Network URL: http://<your-ip>:${PORT}`);
   console.log(`======================================================\n`);
 
   // Open default browser on Windows
