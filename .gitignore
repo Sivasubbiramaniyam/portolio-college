@@ -23,3 +23,20 @@ data
 *.njsproj
 *.sln
 *.sw?
+
+# PHP application runtime data (temporary JSON provider)
+# The seed file is committed; runtime copies are not.
+/backend/storage/faculty.json
+/backend/storage/users.json
+/backend/storage/assets.json
+/backend/storage/uploads/
+/backend/storage/*.tmp
+/backend/storage/*.lock
+/backend/logs/
+/backend/.env
+.env
+.env.*
+!/.env.example
+
+# PHP dependencies (not used yet, but reserved for the MySQL phase)
+/vendor/

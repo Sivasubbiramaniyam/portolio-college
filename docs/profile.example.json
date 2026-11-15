@@ -1,0 +1,418 @@
+{
+  "id": "fac-ramanathan",
+  "name": "Dr. K. Ramanathan",
+  "facultyId": "UCEN-CSE-1042",
+  "department": "Computer Science and Engineering",
+  "designation": "Professor & Head",
+  "email": "radhakrishnan1974@ucen.ac.in",
+  "contact": "+91 94432 18765",
+  "specialization": "Artificial Intelligence, Cloud Computing, Data Mining",
+  "photo": "",
+  "banner": "",
+  "researchGuideNumber": "AU/RC/CS/2012/034",
+  "researchGuideUniversity": "Anna University, Chennai",
+  "researchGuideDate": "2012-05-18",
+  "researchGuideStatus": "Recognized",
+  "phdCompleted": "6",
+  "mphilCompleted": "4",
+  "otherCompleted": "2",
+  "phdGuiding": "5",
+  "mphilGuiding": "1",
+  "otherGuiding": "0",
+  "googleScholarId": "AbCdEf123456",
+  "googleScholarUrl": "https://scholar.google.com/citations?user=AbCdEf123456",
+  "orcidId": "0000-0002-1825-0097",
+  "orcidUrl": "https://orcid.org/0000-0002-1825-0097",
+  "scopusId": "57210493821",
+  "scopusUrl": "https://www.scopus.com/authid/detail.uri?authorId=57210493821",
+  "isDean": false,
+  "createdAt": "2024-01-15T09:30:00.000Z",
+  "updatedAt": "2026-11-13T10:00:00.000Z",
+  "qualifications": [
+    {
+      "degree": "Ph.D. in Computer Science and Engineering",
+      "institution": "National Institute of Technology, Tiruchirappalli",
+      "university": "Anna University, Chennai",
+      "year": "2009",
+      "classObtained": "Distinction",
+      "specialization": "Artificial Intelligence"
+    },
+    {
+      "degree": "M.E. in Computer Science and Engineering",
+      "institution": "College of Engineering, Guindy",
+      "university": "Anna University, Chennai",
+      "year": "2003",
+      "classObtained": "1st Class",
+      "specialization": "Software Engineering"
+    },
+    {
+      "degree": "B.E. in Computer Science and Engineering",
+      "institution": "Thiagarajar College of Engineering, Madurai",
+      "university": "Madurai Kamaraj University",
+      "year": "2000",
+      "classObtained": "1st Class",
+      "specialization": "Computer Science"
+    }
+  ],
+  "experience": [
+    {
+      "institution": "University College of Engineering Nagercoil",
+      "designation": "Professor & Head",
+      "from": "2018-06",
+      "to": "",
+      "total": "8 years"
+    },
+    {
+      "institution": "University College of Engineering Nagercoil",
+      "designation": "Professor",
+      "from": "2013-07",
+      "to": "2018-05",
+      "total": "4 years 11 months"
+    },
+    {
+      "institution": "Sree Sastha Institute of Engineering and Technology, Chennai",
+      "designation": "Associate Professor",
+      "from": "2007-06",
+      "to": "2013-06",
+      "total": "6 years"
+    }
+  ],
+  "publications": [
+    {
+      "title": "Explainable Deep Learning for Crop Disease Identification in Resource-Constrained Environments",
+      "type": "Journal Article",
+      "venue": "IEEE Transactions on Emerging Topics in Computing",
+      "authors": "K. Ramanathan, M. Anitha, R. Suresh",
+      "year": "2024",
+      "volume": "12",
+      "issue": "3",
+      "pages": "101-114",
+      "publisher": "IEEE",
+      "indexing": "Scopus, Web of Science",
+      "doi": "10.1109/TETC.2024.10421873",
+      "url": "https://doi.org/10.1109/TETC.2024.10421873"
+    },
+    {
+      "title": "A Privacy-Preserving Architecture for Academic Credential Exchange",
+      "type": "Journal Article",
+      "venue": "Journal of Information Security and Applications",
+      "authors": "K. Ramanathan, S. Meenakshi",
+      "year": "2023",
+      "volume": "76",
+      "issue": "2",
+      "pages": "103562",
+      "publisher": "Elsevier",
+      "indexing": "Scopus, Web of Science",
+      "doi": "10.1016/j.jisa.2023.103562",
+      "url": "https://doi.org/10.1016/j.jisa.2023.103562"
+    },
+    {
+      "title": "Adaptive Learning Paths for Regional Language Classrooms",
+      "type": "Conference Paper",
+      "venue": "International Conference on Advanced Computing (ICoAC)",
+      "authors": "M. Anitha, K. Ramanathan",
+      "year": "2022",
+      "volume": "",
+      "issue": "",
+      "pages": "1-6",
+      "publisher": "IEEE",
+      "indexing": "Scopus",
+      "doi": "",
+      "url": ""
+    },
+    {
+      "title": "Energy-Aware Scheduling for Federated Cloud Workloads",
+      "type": "Journal Article",
+      "venue": "Cluster Computing",
+      "authors": "K. Ramanathan, R. Suresh",
+      "year": "2021",
+      "volume": "24",
+      "issue": "4",
+      "pages": "3125-3140",
+      "publisher": "Springer",
+      "indexing": "Scopus, Web of Science",
+      "doi": "10.1007/s10586-021-03245-8",
+      "url": "https://doi.org/10.1007/s10586-021-03245-8"
+    }
+  ],
+  "conferencesAttended": [
+    {
+      "name": "IEEE International Conference on Advanced Computing",
+      "type": "Technical Conference",
+      "category": "International",
+      "organizer": "IEEE Madras Section",
+      "location": "Chennai, India",
+      "start": "2024-12-12",
+      "end": "2024-12-14",
+      "participation": "Paper Presenter",
+      "paperTitle": "Explainable Deep Learning for Crop Disease Identification",
+      "certificate": ""
+    },
+    {
+      "name": "National Symposium on Responsible Artificial Intelligence",
+      "type": "Symposium",
+      "category": "National",
+      "organizer": "Anna University, Chennai",
+      "location": "Chennai, India",
+      "start": "2023-09-08",
+      "end": "2023-09-09",
+      "participation": "Invited Speaker",
+      "paperTitle": "",
+      "certificate": ""
+    },
+    {
+      "name": "Faculty Development Programme on Cloud-Native Systems",
+      "type": "Workshop",
+      "category": "National",
+      "organizer": "NIT Tiruchirappalli",
+      "location": "Tiruchirappalli, India",
+      "start": "2023-02-06",
+      "end": "2023-02-10",
+      "participation": "Participant",
+      "paperTitle": "",
+      "certificate": ""
+    }
+  ],
+  "conferencesConducted": [
+    {
+      "name": "National Workshop on Applied Artificial Intelligence",
+      "type": "Workshop",
+      "category": "National",
+      "organizer": "University College of Engineering Nagercoil",
+      "role": "Convener",
+      "location": "Nagercoil, Tamil Nadu",
+      "start": "2024-03-14",
+      "end": "2024-03-16",
+      "participants": "180",
+      "website": ""
+    },
+    {
+      "name": "International Conference on Data-Driven Engineering",
+      "type": "Research Conference",
+      "category": "International",
+      "organizer": "University College of Engineering Nagercoil",
+      "role": "Organizing Secretary",
+      "location": "Nagercoil, Tamil Nadu",
+      "start": "2022-11-10",
+      "end": "2022-11-12",
+      "participants": "260",
+      "website": ""
+    }
+  ],
+  "trainingPrograms": [
+    {
+      "title": "Faculty Development Programme on Generative AI",
+      "type": "FDP",
+      "organizer": "University College of Engineering Nagercoil",
+      "level": "National",
+      "start": "2025-01-06",
+      "end": "2025-01-10",
+      "role": "Coordinator",
+      "participants": "60",
+      "certificate": ""
+    },
+    {
+      "title": "Hands-on Training on Cloud-Native Development",
+      "type": "Training",
+      "organizer": "ICT Academy",
+      "level": "State",
+      "start": "2023-07-17",
+      "end": "2023-07-21",
+      "role": "Resource Person",
+      "participants": "85",
+      "certificate": ""
+    }
+  ],
+  "patents": [
+    {
+      "title": "Context-Aware Irrigation Advisory System",
+      "number": "IN 412356",
+      "type": "Utility Patent",
+      "inventors": "K. Ramanathan, M. Anitha",
+      "authority": "Intellectual Property India",
+      "country": "India",
+      "grantDate": "2022-08-19",
+      "status": "Granted",
+      "url": "",
+      "certificate": ""
+    },
+    {
+      "title": "Privacy-Preserving Academic Credential Verification Method",
+      "number": "IN 431902",
+      "type": "Utility Patent",
+      "inventors": "K. Ramanathan, S. Meenakshi",
+      "authority": "Intellectual Property India",
+      "country": "India",
+      "grantDate": "2023-11-24",
+      "status": "Awarded",
+      "url": "",
+      "certificate": ""
+    }
+  ],
+  "projects": [
+    {
+      "title": "AI-Assisted Early Detection of Crop Disease for Smallholder Farmers",
+      "agency": "Science and Engineering Research Board (DST)",
+      "category": "Government Funded",
+      "pi": "Dr. K. Ramanathan",
+      "coPi": "Dr. M. Anitha",
+      "role": "Principal Investigator",
+      "duration": "2022 – 2025",
+      "start": "2022-04",
+      "end": "2025-03",
+      "amount": "4850000",
+      "status": "Ongoing",
+      "reference": "DST/SERB/2022/1042",
+      "description": "A field-deployable computer vision system that helps farmers identify crop disease early using low-cost mobile devices and regional-language alerts.",
+      "sanctionLetter": ""
+    },
+    {
+      "title": "Secure Cloud Framework for Academic Record Management",
+      "agency": "AICTE – Research Promotion Scheme",
+      "category": "Government Funded",
+      "pi": "Dr. S. Meenakshi",
+      "coPi": "Dr. K. Ramanathan",
+      "role": "Co-Investigator",
+      "duration": "2019 – 2022",
+      "start": "2019-07",
+      "end": "2022-06",
+      "amount": "1850000",
+      "status": "Completed",
+      "reference": "AICTE/RPS/2019/118",
+      "description": "Designed an encrypted, audit-ready cloud architecture for inter-collegiate academic record exchange.",
+      "sanctionLetter": ""
+    },
+    {
+      "title": "Intelligent Tutoring System for Regional Language Learners",
+      "agency": "Tamil Nadu State Council for Science and Technology",
+      "category": "Research Grant",
+      "pi": "Dr. K. Ramanathan",
+      "coPi": "",
+      "role": "Principal Investigator",
+      "duration": "2024 – 2026",
+      "start": "2024-01",
+      "end": "2026-12",
+      "amount": "950000",
+      "status": "Ongoing",
+      "reference": "TNSCST/STP/2024/07",
+      "description": "Adaptive learning platform that personalises practice material for first-generation learners in Tamil-medium schools.",
+      "sanctionLetter": ""
+    }
+  ],
+  "researchAreas": [
+    {
+      "area": "Artificial Intelligence",
+      "subject": "Computer Science and Engineering",
+      "specialization": "Explainable AI, Computer Vision",
+      "keywords": "deep learning, precision agriculture, model interpretability"
+    },
+    {
+      "area": "Cloud Computing",
+      "subject": "Computer Science and Engineering",
+      "specialization": "Secure cloud architecture, federated systems",
+      "keywords": "privacy, distributed scheduling, cloud security"
+    },
+    {
+      "area": "Data Mining",
+      "subject": "Computer Science and Engineering",
+      "specialization": "Educational data mining, regional language analytics",
+      "keywords": "learning analytics, Tamil NLP, inclusive education"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Best Faculty Researcher Award",
+      "category": "Research Achievement",
+      "organization": "Anna University, Chennai",
+      "year": "2023",
+      "certificateNumber": "AU/AWD/2023/17",
+      "certificateUrl": "",
+      "description": "Recognised for sustained research output and externally funded projects in applied artificial intelligence.",
+      "certificate": ""
+    },
+    {
+      "title": "Outstanding Contribution to Teaching",
+      "category": "Teaching Achievement",
+      "organization": "University College of Engineering Nagercoil",
+      "year": "2021",
+      "certificateNumber": "UCEN/AWD/2021/09",
+      "certificateUrl": "",
+      "description": "Awarded for curriculum innovation and mentorship of student research teams.",
+      "certificate": ""
+    },
+    {
+      "title": "Patent Granted – Context-Aware Irrigation Advisory System",
+      "category": "Award",
+      "organization": "Intellectual Property India",
+      "year": "2022",
+      "certificateNumber": "IN 412356",
+      "certificateUrl": "",
+      "description": "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage.",
+      "certificate": ""
+    }
+  ],
+  "certifications": [
+    {
+      "title": "AWS Certified Solutions Architect – Associate",
+      "category": "Professional Certification",
+      "organization": "Amazon Web Services",
+      "year": "2024",
+      "certificateNumber": "AWS-2024-8842",
+      "certificateUrl": "",
+      "description": "Professional certification covering secure, scalable cloud architecture design.",
+      "certificate": ""
+    },
+    {
+      "title": "NPTEL Certification in Deep Learning",
+      "category": "Training",
+      "organization": "IIT Madras",
+      "year": "2023",
+      "certificateNumber": "NPTEL/2023/DL/1124",
+      "certificateUrl": "",
+      "description": "Completed the advanced NPTEL programme with elite distinction.",
+      "certificate": ""
+    },
+    {
+      "title": "Certified Data Science Professional",
+      "category": "Professional Certification",
+      "organization": "IBM",
+      "year": "2022",
+      "certificateNumber": "IBM-DS-2022-5567",
+      "certificateUrl": "",
+      "description": "Credential focused on the end-to-end data science workflow and model deployment.",
+      "certificate": ""
+    }
+  ],
+  "responsibilities": [
+    {
+      "title": "Head of Department",
+      "category": "Department Responsibility",
+      "institution": "University College of Engineering Nagercoil",
+      "position": "Professor & Head",
+      "level": "Department Level",
+      "from": "2018-06",
+      "to": "",
+      "current": "true"
+    },
+    {
+      "title": "Member, Board of Studies in Computer Science",
+      "category": "Academic Responsibility",
+      "institution": "Anna University, Chennai",
+      "position": "Board Member",
+      "level": "University Level",
+      "from": "2020-07",
+      "to": "",
+      "current": "true"
+    },
+    {
+      "title": "Nodal Officer, AICTE Faculty Development Programme",
+      "category": "Institutional Responsibility",
+      "institution": "University College of Engineering Nagercoil",
+      "position": "Nodal Officer",
+      "level": "College Level",
+      "from": "2021-01",
+      "to": "2023-12",
+      "current": ""
+    }
+  ]
+}

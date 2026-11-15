@@ -8,7 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, 'data');
+const FRONTEND_DIR = __dirname;
+const DATA_DIR = path.join(__dirname, '..', 'data');
 const STATE_FILE = path.join(DATA_DIR, 'state.json');
 const MAX_BODY_BYTES = 25 * 1024 * 1024;
 
@@ -132,7 +133,12 @@ const server = http.createServer((req, res) => {
   }
 
   const safePath = path.normalize(reqUrl).replace(/^(\.\.[/\\])+/, '');
-  const filePath = path.join(__dirname, safePath);
+  const filePath = path.join(FRONTEND_DIR, safePath);
+  if (!filePath.startsWith(FRONTEND_DIR + path.sep) && filePath !== FRONTEND_DIR) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=UTF-8' });
+    res.end('403 Forbidden');
+    return;
+  }
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
@@ -158,10 +164,13 @@ server.listen(PORT, "0.0.0.0", () => {
   const url = `http://localhost:${PORT}`;
   console.log(`\n======================================================`);
   console.log(` UCEN Faculty Profile Management Portal is running!`);
+  console.log(` Serving frontend from: ${FRONTEND_DIR}`);
   console.log(` Local URL: ${url}`);
   console.log(` Network URL: http://<your-ip>:${PORT}`);
   console.log(`======================================================\n`);
 
-  // Open default browser on Windows
-  exec(`start ${url}`);
+  // Open the default browser on Windows for local development.
+  if (process.platform === 'win32' && process.env.NO_OPEN !== '1') {
+    exec(`start ${url}`);
+  }
 });

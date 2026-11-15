@@ -1,0 +1,74 @@
+# UCEN Faculty Portal — Apache configuration
+#
+# Point the document root at this directory. PHP 8.1+ with the standard
+# fileinfo extension is required. The application works equally well with
+# PHP's built-in server (see backend/router.php) for local development.
+
+Options -Indexes
+
+# Served from the XAMPP web root, so the app lives under /web instead of "/".
+# app_url() and the page dispatcher both read this prefix.
+SetEnv APP_BASE_PATH /web
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # JSON API front controller. Process this first and stop rewriting so the
+    # result is not re-checked against the private path rules below.
+    RewriteRule ^api/v1(/.*)?$ backend/public/index.php [END,QSA]
+
+    # Never expose application code, documentation, runtime storage or VCS data.
+    RewriteRule ^backend(/|$) - [F,L]
+    RewriteRule ^docs(/|$) - [F,L]
+    RewriteRule ^storage(/|$) - [F,L]
+    RewriteRule ^node_modules(/|$) - [F,L]
+    RewriteRule (^|/)\. - [F,L]
+
+    # Public root -> server-rendered directory page.
+    RewriteRule ^$ backend/public/index.php [END,QSA]
+
+    # Every other page URL (/, /login.php, /admin/dashboard.php, ...) goes to
+    # the front controller. Real static files under frontend/ and public/ are
+    # served directly by Apache.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ backend/public/index.php [END,QSA]
+</IfModule>
+
+# Deny dotfiles, package manifests, logs and documentation even if the rewrite
+# module is unavailable. Use a broad FilesMatch so accidental artefacts cannot
+# be downloaded.
+<FilesMatch "(^\.|\.(json|log|lock|md|ini|sql|ya?ml|sh)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "^(router\.php|server\.js)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Basic hardening. Keep this modest because the application also sends
+# headers from PHP; duplicated values are harmless but avoid CSP here so the
+# Pages controller stays authoritative.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Restrict upload sizes at the web-server layer too.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 6M
+    php_value post_max_size 10M
+</IfModule>
