@@ -32,25 +32,23 @@ $csrfToken = Csrf::token();
 $errors = [];
 $message = '';
 $notice = '';
-$email = '';
+$identifier = '';
 $authConfigured = $app->authService()->isConfigured();
 $signedOut = isset($_GET['signedout']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim((string) ($_POST['email'] ?? ''));
+    $identifier = trim((string) ($_POST['identifier'] ?? ''));
     $password = (string) ($_POST['password'] ?? '');
 
     if (!Csrf::check(is_string($_POST['_csrf'] ?? null) ? (string) $_POST['_csrf'] : null)) {
         $message = 'The sign-in form expired. Refresh the page and try again.';
-    } elseif ($email === '') {
-        $errors['email'] = 'Email address is required.';
-    } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-        $errors['email'] = 'Enter a valid email address.';
+    } elseif ($identifier === '') {
+        $errors['identifier'] = 'Staff ID is required.';
     } elseif ($password === '') {
         $errors['password'] = 'Password is required.';
     } else {
         try {
-            $app->authService()->login($email, $password, $expectedRole);
+            $app->authService()->login($identifier, $password, $expectedRole);
             Session::flash('flash', [
                 'type' => 'success',
                 'message' => 'Welcome back. You are signed in.',
@@ -58,14 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_to('/staff/workspace.php');
         } catch (ApiException $exception) {
             if ($exception->errorCode() === 'AUTH_NOT_CONFIGURED') {
-                $notice = 'No staff accounts exist yet. An administrator must create one with <code>php backend/bin/make-user.php</code>.';
+                $notice = 'No staff accounts exist yet. Register with your Staff ID, or an administrator can create one with <code>php backend/bin/make-user.php</code>.';
             } elseif ($exception->errorCode() === 'RATE_LIMITED') {
                 $message = $exception->getMessage();
             } elseif ($exception->errorCode() === 'VALIDATION_ERROR') {
                 $errors = $exception->fields();
                 $message = $exception->getMessage();
             } else {
-                $message = 'Email or password is incorrect.';
+                $message = 'Staff ID or password is incorrect.';
             }
         }
     }
@@ -84,8 +82,10 @@ $content = render_login_panel([
     'csrfToken' => $csrfToken,
     'eyebrow' => 'Staff access',
     'title' => 'Staff sign in',
-    'intro' => 'Sign in with your faculty account to maintain your own profile.',
-    'email' => $email,
+    'intro' => 'Sign in with your Staff ID to maintain your own profile.',
+    'identifier' => $identifier,
+    'identifierLabel' => 'Staff ID',
+    'identifierPlaceholder' => 'e.g. UCEN-CSE-1042',
     'errors' => $errors,
     'message' => $message,
     'notice' => $notice,
@@ -93,6 +93,8 @@ $content = render_login_panel([
     'authConfigured' => $authConfigured,
     'altLoginUrl' => app_url('/admin/login.php'),
     'altLoginLabel' => 'Administrator',
+    'registerUrl' => app_url('/staff/register.php'),
+    'registerLabel' => 'Register with your Staff ID',
 ]);
 
 require dirname(__DIR__, 2) . '/views/layout.php';

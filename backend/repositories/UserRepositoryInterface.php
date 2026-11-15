@@ -17,6 +17,12 @@ interface UserRepositoryInterface
     /** @return array<string, mixed>|null */
     public function findByEmail(string $email): ?array;
 
+    /** @return array<string, mixed>|null */
+    public function findByStaffId(string $staffId): ?array;
+
+    /** @return array<string, mixed>|null */
+    public function findByAdminId(string $adminId): ?array;
+
     /** @param array<string, mixed> $user */
     public function create(array $user): array;
 

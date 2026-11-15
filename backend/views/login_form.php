@@ -6,7 +6,8 @@ declare(strict_types=1);
  * Shared sign-in panel used by the staff and administrator login pages.
  *
  * There is deliberately no role selector here: each login URL is bound to a
- * single role, so the radio/card selector is not needed.
+ * single role, so the radio/card selector is not needed. Sign-in uses an
+ * identifier (staff ID or admin ID) plus password, mirroring production.
  */
 
 if (!function_exists('render_login_panel')) {
@@ -18,14 +19,19 @@ if (!function_exists('render_login_panel')) {
      *   eyebrow?: string,
      *   title?: string,
      *   intro?: string,
-     *   email?: string,
+     *   identifier?: string,
+     *   identifierLabel?: string,
+     *   identifierPlaceholder?: string,
+     *   identifierHint?: string,
      *   errors?: array<string, string>,
      *   message?: string,
      *   notice?: string,
      *   signedOut?: bool,
      *   authConfigured?: bool,
      *   altLoginUrl?: string,
-     *   altLoginLabel?: string
+     *   altLoginLabel?: string,
+     *   registerUrl?: string,
+     *   registerLabel?: string
      * } $options
      */
     function render_login_panel(array $options): string
@@ -35,7 +41,10 @@ if (!function_exists('render_login_panel')) {
         $eyebrow = (string) ($options['eyebrow'] ?? 'Authorised access');
         $title = (string) ($options['title'] ?? 'Sign in');
         $intro = (string) ($options['intro'] ?? '');
-        $email = (string) ($options['email'] ?? '');
+        $identifier = (string) ($options['identifier'] ?? '');
+        $identifierLabel = (string) ($options['identifierLabel'] ?? 'Staff ID');
+        $identifierPlaceholder = (string) ($options['identifierPlaceholder'] ?? '');
+        $identifierHint = (string) ($options['identifierHint'] ?? '');
         $errors = (array) ($options['errors'] ?? []);
         $message = (string) ($options['message'] ?? '');
         $notice = (string) ($options['notice'] ?? '');
@@ -43,6 +52,8 @@ if (!function_exists('render_login_panel')) {
         $authConfigured = (bool) ($options['authConfigured'] ?? true);
         $altLoginUrl = (string) ($options['altLoginUrl'] ?? '');
         $altLoginLabel = (string) ($options['altLoginLabel'] ?? '');
+        $registerUrl = (string) ($options['registerUrl'] ?? '');
+        $registerLabel = (string) ($options['registerLabel'] ?? 'Create an account');
 
         ob_start();
         ?>
@@ -67,7 +78,7 @@ if (!function_exists('render_login_panel')) {
         <div>
           <strong>Authentication is not configured.</strong>
           <p>Create the first account from the project root:</p>
-          <pre class="code-block">php backend/bin/make-user.php --email=you@ucen.ac.in --role=admin</pre>
+          <pre class="code-block">php backend/bin/make-user.php --role=admin --admin-id=admin --email=you@ucen.ac.in</pre>
         </div>
       </div>
     <?php endif; ?>
@@ -93,10 +104,11 @@ if (!function_exists('render_login_panel')) {
     <form class="login-form" method="post" action="<?= e($action) ?>" novalidate>
       <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
 
-      <div class="field<?= isset($errors['email']) ? ' is-invalid' : '' ?>">
-        <label for="login-email">Email address</label>
-        <input id="login-email" type="email" name="email" value="<?= e($email) ?>" placeholder="name@ucen.ac.in" autocomplete="username" required autofocus>
-        <?php if (isset($errors['email'])): ?><span class="field-error"><?= e($errors['email']) ?></span><?php endif; ?>
+      <div class="field<?= isset($errors['identifier']) ? ' is-invalid' : '' ?>">
+        <label for="login-identifier"><?= e($identifierLabel) ?></label>
+        <input id="login-identifier" type="text" name="identifier" value="<?= e($identifier) ?>"<?= $identifierPlaceholder !== '' ? ' placeholder="' . e($identifierPlaceholder) . '"' : '' ?> autocomplete="username" autocapitalize="off" spellcheck="false" required autofocus>
+        <?php if ($identifierHint !== '' && !isset($errors['identifier'])): ?><small class="field-hint"><?= e($identifierHint) ?></small><?php endif; ?>
+        <?php if (isset($errors['identifier'])): ?><span class="field-error"><?= e($errors['identifier']) ?></span><?php endif; ?>
       </div>
 
       <div class="field<?= isset($errors['password']) ? ' is-invalid' : '' ?>">
@@ -116,6 +128,9 @@ if (!function_exists('render_login_panel')) {
     </form>
 
     <div class="login-help">
+      <?php if ($registerUrl !== ''): ?>
+        <p><i class="bi bi-person-plus" aria-hidden="true"></i> First time here? <a href="<?= e($registerUrl) ?>"><?= e($registerLabel) ?></a>.</p>
+      <?php endif; ?>
       <p><i class="bi bi-info-circle" aria-hidden="true"></i> Public profiles are visible without signing in. <a href="<?= e(app_url('/')) ?>">Browse the staff list</a>.</p>
       <?php if ($altLoginUrl !== ''): ?>
         <p><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> <?= e($altLoginLabel) ?>: <a href="<?= e($altLoginUrl) ?>">sign in here</a>.</p>

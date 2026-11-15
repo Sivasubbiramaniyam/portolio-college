@@ -53,12 +53,12 @@ Get-ChildItem -Recurse -Filter *.php | ForEach-Object { php -l $_.FullName }
 ├── backend/
 │   ├── pages/                Server-rendered pages (same public URLs)
 │   │   ├── index.php         Public faculty directory
-│   │   ├── login.php         Sign-in page (admin/faculty)
+│   │   ├── login.php         Legacy sign-in URL (redirects to /staff/login.php)
 │   │   ├── logout.php        POST-only sign-out
 │   │   ├── media.php         Unguessable-ID file delivery
 │   │   ├── faculty/view.php  Public read-only profile viewer
-│   │   ├── staff/            Faculty workspace + editor
-│   │   └── admin/            Admin dashboard + editor
+│   │   ├── staff/            Staff sign-in/registration + workspace/editor
+│   │   └── admin/            Admin sign-in/registration + dashboard/editor
 │   ├── public/
 │   │   ├── index.php         Front controller (pages + JSON API)
 │   │   └── pages.php         Maps URLs to backend/pages/*.php
@@ -106,7 +106,7 @@ Then open <http://localhost:8000/>.
 - denies `/backend/`, `/docs/`, `/storage/`, dotfiles, `router.php`,
   `server.js`, `package.json` and `README.md`.
 
-The front controller maps `/` and page URLs such as `/login.php` and
+The front controller maps `/` and page URLs such as `/staff/login.php` and
 `/admin/dashboard.php` to `backend/pages/`, and `/api/v1/*` to the JSON API.
 Public URLs are unchanged from the pre-reorganization layout.
 
@@ -215,6 +215,7 @@ profiles**: 11 directory members and the dean (`fac-dean`).
 | `backend/storage/faculty.json` | Faculty profiles (JSON provider only) |
 | `backend/storage/assets.json` | Upload metadata (JSON provider only) |
 | `backend/storage/users.json` | Authentication users (JSON provider only) |
+| `backend/storage/whitelist.json` | Approved staff/admin IDs (JSON provider only) |
 | `backend/storage/uploads/YYYY/MM/*` | Uploaded files (both providers) |
 | `backend/logs/app.log` | Structured JSON-lines application log |
 
@@ -229,7 +230,7 @@ There are **no shipped credentials** and no plaintext passwords anywhere in the
 repository. Create the first account from the CLI:
 
 ```bash
-php backend/bin/make-user.php --email=you@ucen.ac.in --role=admin
+php backend/bin/make-user.php --role=admin --admin-id=admin --email=you@ucen.ac.in
 ```
 
 The command prompts for a password (hidden on Unix) with these rules:
@@ -238,14 +239,15 @@ The command prompts for a password (hidden on Unix) with these rules:
 - at least one letter and one digit,
 - hashed with Argon2id where available, otherwise bcrypt.
 
-Create a faculty account linked to a seed profile:
+Create a staff account. The faculty profile is linked automatically when its
+faculty ID matches the staff ID, and the display name is taken from the
+`validuser` whitelist:
 
 ```bash
 php backend/bin/make-user.php \
-  --email=faculty@ucen.ac.in \
   --role=faculty \
-  --faculty=fac-ramanathan \
-  --name="Dr. K. Ramanathan"
+  --staff-id=UCEN-CSE-1042 \
+  --email=faculty@ucen.ac.in
 ```
 
 Useful options:
@@ -254,18 +256,25 @@ Useful options:
 php backend/bin/make-user.php --list          # list users without hashes
 php backend/bin/make-user.php --help
 printf '%s\n' 'StrongPass123' | php backend/bin/make-user.php \
-  --email=admin@ucen.ac.in --role=admin --password-stdin
+  --role=admin --admin-id=admin --email=admin@ucen.ac.in --password-stdin
 ```
 
 Notes:
 
 - `--role` is `admin`, `faculty` or `viewer` (default `faculty`).
-- A faculty account **must** be linked to a unique existing profile ID.
+- Staff sign in with their **staff ID** (`--staff-id`, e.g. `UCEN-CSE-1042`);
+  administrators with their **admin ID** (`--admin-id`) or their email.
+- A faculty account **must** carry a staff ID; its profile link defaults to the
+  profile whose faculty ID matches.
+- Self-registration is gated by the `validuser` / `validadmin` tables: staff and
+  administrators can only register an ID that has been pre-approved. Run
+  `backend/db/migrations/2026-11-15-staff-admin-auth.sql` to add the columns and
+  seed both whitelists from the faculty profiles.
 - `--password=…` is supported for automation but is discouraged because the
   password can remain in shell history.
 - Until the user store (MySQL `users` table, or `backend/storage/users.json`
   with the JSON provider) has at least one active user, sign-in returns
-  `AUTH_NOT_CONFIGURED` and `login.php` disables submission.
+  `AUTH_NOT_CONFIGURED` and the login pages disable submission.
 
 ---
 
@@ -306,7 +315,11 @@ shell, via Apache `SetEnv`, or through your service manager before starting PHP.
 |---|---|---|
 | `/` | public | Directory, stats, filters, dean spotlight |
 | `/faculty/view.php?id=fac-ramanathan` | public | Full read-only profile and completion checklist |
-| `/login.php` | public | Sign in as admin or faculty |
+| `/staff/login.php` | public | Staff sign-in (Staff ID + password) |
+| `/staff/register.php` | public | Staff self-registration (gated by `validuser`) |
+| `/admin/login.php` | public | Administrator sign-in (Admin ID or email + password) |
+| `/admin/register.php` | public | Administrator self-registration (gated by `validadmin`) |
+| `/login.php` | public | Legacy sign-in URL; redirects to `/staff/login.php` |
 | `/staff/workspace.php` | faculty (owner) | Own profile summary, completion, account panel |
 | `/staff/edit.php` | faculty (owner) | Edit own profile with uploads |
 | `/admin/dashboard.php` | admin | Accurate stats, dean spotlight, all profiles |
@@ -343,31 +356,33 @@ clear the session cookie) between roles.
 
 ### 9.2 Faculty owner
 
-1. Create the account:
-   `php backend/bin/make-user.php --email=faculty@ucen.ac.in --role=faculty --faculty=fac-ramanathan`
-2. Sign in at `/login.php` with the faculty role card. Confirm redirect to
-   `/staff/workspace.php`.
+1. Create the account (the faculty profile is auto-linked when its faculty ID
+   matches the staff ID):
+   `php backend/bin/make-user.php --role=faculty --staff-id=UCEN-CSE-1042 --email=faculty@ucen.ac.in`
+2. Sign in at `/staff/login.php` with the **Staff ID** (`UCEN-CSE-1042`) and
+   password. Confirm redirect to `/staff/workspace.php`.
 3. Confirm the workspace shows only the linked profile and its true completion.
 4. Open `/staff/edit.php`. Change a field, add a collection entry, upload a new
    photo, and save. Confirm the success flash and updated values.
 5. Submit an invalid value (blank required field, bad email, invalid year).
    Confirm inline errors, retained input and no lost collections.
 6. Attempt to open `/admin/dashboard.php`. Confirm `403`/redirect — never a
-   rendered admin page.
+   rendered admin page. Also confirm `/staff/login.php` rejects an admin ID with
+   the generic "Staff ID or password is incorrect." message.
 7. As the owner, open `/faculty/view.php?id=<another profile>`; viewing is
    public, but confirm the edit button is not offered for other profiles.
 8. Call the API directly: `PATCH /api/v1/faculty/fac-ramanathan` succeeds with
    the session cookie and CSRF header; `PATCH` on another profile returns `403`;
    a request without `X-CSRF-Token` returns `403 CSRF_TOKEN_MISMATCH`.
 9. Sign out via the POST form. Confirm the session is destroyed and protected
-   pages redirect to `/login.php`.
+   pages redirect to `/staff/login.php`.
 
 ### 9.3 Admin
 
 1. Create the account:
-   `php backend/bin/make-user.php --email=admin@ucen.ac.in --role=admin`
-2. Sign in with the admin role card. Confirm redirect to
-   `/admin/dashboard.php`.
+   `php backend/bin/make-user.php --role=admin --admin-id=admin --email=admin@ucen.ac.in`
+2. Sign in at `/admin/login.php` with the **Admin ID** (`admin`) and password
+   (the account email also works). Confirm redirect to `/admin/dashboard.php`.
 3. Compare the overview numbers with `/api/v1/admin/overview`:
    - `total`/`complete`/`incomplete`/`rate` exclude the dean,
    - `totalProfiles` includes the dean,
@@ -447,7 +462,8 @@ Expected: success responses always have `data` and `meta`; every failure has
 | `503 degraded` from `/health` | `backend/storage`, `backend/storage/uploads` or `backend/logs` is not writable |
 | Page loads without CSS | You are not serving the repository root; keep `/frontend/…` reachable |
 | `/api/v1/...` returns 404 under Apache | `mod_rewrite`/`AllowOverride` disabled, or `.htaccess` not present |
-| Login redirects back to `/login.php` | Session cookie not stored (HTTPS/Secure mismatch or cookies blocked) |
+| Login redirects back to `/staff/login.php` or `/admin/login.php` | Session cookie not stored (HTTPS/Secure mismatch or cookies blocked) |
+| Registration says the ID is invalid | The staff/admin ID is missing from the `validuser` / `validadmin` whitelist; run the auth migration |
 | Uploads fail with `INVALID_FILE` | More than 5 MB (media) / 3 MB (attachments), or an unsupported/corrupt file |
 | Reset the demo data | Delete `backend/storage/faculty.json`; the seed is recreated on next read |
 | Check errors | Read `backend/logs/app.log` (JSON lines, secrets redacted) |

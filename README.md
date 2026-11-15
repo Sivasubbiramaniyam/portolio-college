@@ -52,13 +52,13 @@ php backend/bin/db-seed.php
 php -S localhost:8000 backend/router.php
 
 # 3. Create the first admin account (interactive password prompt)
-php backend/bin/make-user.php --email=you@ucen.ac.in --role=admin
+php backend/bin/make-user.php --role=admin --admin-id=admin --email=you@ucen.ac.in
 
-# 4. Create a faculty account linked to a seed profile
+# 4. Create a faculty account linked to a seed profile (auto-links by staff ID)
 php backend/bin/make-user.php \
-  --email=faculty@ucen.ac.in \
   --role=faculty \
-  --faculty=fac-ramanathan
+  --staff-id=UCEN-CSE-1042 \
+  --email=faculty@ucen.ac.in
 
 # 5. Open the portal
 #    http://localhost:8000/
@@ -86,7 +86,11 @@ API reference: [`docs/API.md`](docs/API.md).
 |---|---|---|
 | `/` | Public | Faculty directory, search/filters, dean spotlight, statistics |
 | `/faculty/view.php?id={faculty_id}` | Public | Read-only profile with all sections and completion |
-| `/login.php` | Public | Sign in as admin or faculty |
+| `/staff/login.php` | Public | Staff sign-in (Staff ID + password) |
+| `/staff/register.php` | Public | Staff self-registration (gated by the `validuser` whitelist) |
+| `/admin/login.php` | Public | Administrator sign-in (Admin ID or email + password) |
+| `/admin/register.php` | Public | Administrator self-registration (gated by the `validadmin` whitelist) |
+| `/login.php` | Public | Legacy sign-in URL; redirects to `/staff/login.php` |
 | `/logout.php` | Signed-in (POST) | Destroy the session |
 | `/staff/workspace.php` | Faculty owner | Own profile summary and completion |
 | `/staff/edit.php` | Faculty owner | Edit own profile and uploads |
@@ -151,7 +155,7 @@ Browser
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "Please correct the highlighted fields.",
-    "fields": { "email": "Enter a valid email address." }
+    "fields": { "identifier": "Staff or admin ID is required." }
   }
 }
 ```
@@ -234,6 +238,7 @@ Runtime data lives in `backend/storage/` (ignored by Git):
 |---|---|
 | `faculty.json` | Profiles (seeded from `seed/faculty.json` on first read) |
 | `users.json` | Authentication users with password hashes |
+| `whitelist.json` | Approved staff/admin IDs for self-registration |
 | `assets.json` | Upload metadata |
 | `uploads/YYYY/MM/*` | Uploaded files (both providers) |
 
@@ -248,7 +253,7 @@ a production database. Select it with `DATA_DRIVER=json` and
 ### Created — application entry points
 
 - `backend/pages/index.php` — public directory, statistics, dean spotlight
-- `backend/pages/login.php` — session sign-in with role selection and CSRF
+- `backend/pages/login.php` — legacy sign-in URL; redirects to the staff sign-in
 - `backend/pages/logout.php` — POST-only sign-out
 - `backend/pages/media.php` — guarded upload delivery
 - `backend/pages/faculty/view.php` — public read-only profile viewer
@@ -292,7 +297,7 @@ a production database. Select it with `DATA_DRIVER=json` and
 ### Created — frontend additions
 
 - `frontend/css/portal.css` — portal layout, editor, tables, responsive/print
-- `frontend/js/portal.js` — sidebar, role cards, previews, dynamic collections,
+- `frontend/js/portal.js` — sidebar, previews, dynamic collections,
   confirmations, unsaved-changes guard, toasts
 
 ### Created — documentation and configuration

@@ -45,6 +45,7 @@ return [
         'faculty_file' => $storagePath . DIRECTORY_SEPARATOR . 'faculty.json',
         'faculty_seed' => $storagePath . DIRECTORY_SEPARATOR . 'seed' . DIRECTORY_SEPARATOR . 'faculty.json',
         'users_file' => $storagePath . DIRECTORY_SEPARATOR . 'users.json',
+        'whitelist_file' => $storagePath . DIRECTORY_SEPARATOR . 'whitelist.json',
         'assets_file' => $storagePath . DIRECTORY_SEPARATOR . 'assets.json',
     ],
 

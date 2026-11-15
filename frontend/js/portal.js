@@ -317,28 +317,6 @@
   }
 
   /* ---------------------------------------------------------------
-     Sign-in role cards
-     --------------------------------------------------------------- */
-
-  function initRoleOptions() {
-    all(".role-option").forEach(function (label) {
-      var input = label.querySelector('input[type="radio"]');
-      if (!input) {
-        return;
-      }
-
-      function sync() {
-        all(".role-option").forEach(function (other) {
-          var otherInput = other.querySelector('input[type="radio"]');
-          other.classList.toggle("is-selected", Boolean(otherInput && otherInput.checked));
-        });
-      }
-
-      on(input, "change", sync);
-    });
-  }
-
-  /* ---------------------------------------------------------------
      Print buttons
      --------------------------------------------------------------- */
 
@@ -669,7 +647,6 @@
     initSidebar();
     initSidebarScroll();
     initPasswordToggles();
-    initRoleOptions();
     initPrint();
     initConfirmations();
     initUploadPreviews();

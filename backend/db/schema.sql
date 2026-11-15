@@ -66,10 +66,19 @@ CREATE TABLE IF NOT EXISTS faculty_profiles (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ─── Users / auth ───────────────────────────────────────────────────────────
+--
+-- Mirrors the production auth pattern (see the college-website repo):
+--   * staff sign in with staff_id (users.staff_id),
+--   * administrators sign in with admin_id (users.admin_id),
+--   * self-registration is gated by the validuser / validadmin whitelists.
+-- email is kept as a contact address and an administrator fallback login.
 CREATE TABLE IF NOT EXISTS users (
   id                 VARCHAR(64)  NOT NULL,
   email              VARCHAR(190) NOT NULL,
   name               VARCHAR(190) NULL,
+  staff_id           VARCHAR(190) NULL,
+  admin_id           VARCHAR(190) NULL,
+  department         VARCHAR(160) NOT NULL DEFAULT '',
   password_hash      VARCHAR(255) NOT NULL,
   role               VARCHAR(20)  NOT NULL,
   faculty_profile_id VARCHAR(80)  NULL,
@@ -79,9 +88,28 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at         VARCHAR(40)  NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uniq_users_email (email),
+  UNIQUE KEY uniq_users_staff_id (staff_id),
+  UNIQUE KEY uniq_users_admin_id (admin_id),
   UNIQUE KEY uniq_users_faculty (faculty_profile_id),
   CONSTRAINT fk_users_profile FOREIGN KEY (faculty_profile_id)
     REFERENCES faculty_profiles (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Pre-approved staff IDs. A staff account can only be created for an ID that
+-- exists here; the stored name is authoritative for the account.
+CREATE TABLE IF NOT EXISTS validuser (
+  staff_id   VARCHAR(190) NOT NULL,
+  name       VARCHAR(255) NULL,
+  created_at VARCHAR(40)  NULL,
+  PRIMARY KEY (staff_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Pre-approved administrator IDs, same idea as validuser.
+CREATE TABLE IF NOT EXISTS validadmin (
+  admin_id   VARCHAR(190) NOT NULL,
+  name       VARCHAR(255) NULL,
+  created_at VARCHAR(40)  NULL,
+  PRIMARY KEY (admin_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ─── Child collections ──────────────────────────────────────────────────────

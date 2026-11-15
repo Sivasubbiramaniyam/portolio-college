@@ -20,15 +20,16 @@ final class AuthController
 
     public function login(Request $request): never
     {
-        $email = trim((string) $request->input('email', ''));
+        // `identifier` is the staff ID (staff portal) or admin ID / email
+        // (admin portal). `email` is still accepted as an alias so older API
+        // clients keep working.
+        $identifier = trim((string) $request->input('identifier', $request->input('email', '')));
         $password = (string) $request->input('password', '');
         $expectedRole = trim((string) $request->input('expectedRole', ''));
 
         $fields = [];
-        if ($email === '') {
-            $fields['email'] = 'Email address is required.';
-        } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $fields['email'] = 'Enter a valid email address.';
+        if ($identifier === '') {
+            $fields['identifier'] = 'Staff or admin ID is required.';
         }
         if ($password === '') {
             $fields['password'] = 'Password is required.';
@@ -41,10 +42,10 @@ final class AuthController
         }
 
         try {
-            $result = $this->app->authService()->login($email, $password, $expectedRole !== '' ? $expectedRole : null);
+            $result = $this->app->authService()->login($identifier, $password, $expectedRole !== '' ? $expectedRole : null);
         } catch (ApiException $exception) {
             Logger::warning('Login failed', [
-                'email' => $email,
+                'identifier' => $identifier,
                 'ip' => $request->ip(),
                 'code' => $exception->errorCode(),
             ]);
@@ -52,7 +53,7 @@ final class AuthController
         }
 
         Logger::info('Login succeeded', [
-            'email' => $email,
+            'identifier' => $identifier,
             'role' => $result['user']['role'] ?? '',
             'ip' => $request->ip(),
         ]);

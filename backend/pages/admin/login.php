@@ -32,25 +32,23 @@ $csrfToken = Csrf::token();
 $errors = [];
 $message = '';
 $notice = '';
-$email = '';
+$identifier = '';
 $authConfigured = $app->authService()->isConfigured();
 $signedOut = isset($_GET['signedout']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim((string) ($_POST['email'] ?? ''));
+    $identifier = trim((string) ($_POST['identifier'] ?? ''));
     $password = (string) ($_POST['password'] ?? '');
 
     if (!Csrf::check(is_string($_POST['_csrf'] ?? null) ? (string) $_POST['_csrf'] : null)) {
         $message = 'The sign-in form expired. Refresh the page and try again.';
-    } elseif ($email === '') {
-        $errors['email'] = 'Email address is required.';
-    } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-        $errors['email'] = 'Enter a valid email address.';
+    } elseif ($identifier === '') {
+        $errors['identifier'] = 'Admin ID is required.';
     } elseif ($password === '') {
         $errors['password'] = 'Password is required.';
     } else {
         try {
-            $app->authService()->login($email, $password, $expectedRole);
+            $app->authService()->login($identifier, $password, $expectedRole);
             Session::flash('flash', [
                 'type' => 'success',
                 'message' => 'Welcome back. You are signed in as an administrator.',
@@ -58,14 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_to('/admin/dashboard.php');
         } catch (ApiException $exception) {
             if ($exception->errorCode() === 'AUTH_NOT_CONFIGURED') {
-                $notice = 'No accounts exist yet. Create one with <code>php backend/bin/make-user.php</code>.';
+                $notice = 'No accounts exist yet. Register with your Admin ID, or create one with <code>php backend/bin/make-user.php</code>.';
             } elseif ($exception->errorCode() === 'RATE_LIMITED') {
                 $message = $exception->getMessage();
             } elseif ($exception->errorCode() === 'VALIDATION_ERROR') {
                 $errors = $exception->fields();
                 $message = $exception->getMessage();
             } else {
-                $message = 'Email or password is incorrect.';
+                $message = 'Admin ID or password is incorrect.';
             }
         }
     }
@@ -85,7 +83,10 @@ $content = render_login_panel([
     'eyebrow' => 'Administrator access',
     'title' => 'Administrator sign in',
     'intro' => 'Sign in with an administrator account to manage every profile.',
-    'email' => $email,
+    'identifier' => $identifier,
+    'identifierLabel' => 'Admin ID',
+    'identifierPlaceholder' => 'Admin ID or email',
+    'identifierHint' => 'Your admin ID, or the email address on the account.',
     'errors' => $errors,
     'message' => $message,
     'notice' => $notice,
@@ -93,6 +94,8 @@ $content = render_login_panel([
     'authConfigured' => $authConfigured,
     'altLoginUrl' => app_url('/staff/login.php'),
     'altLoginLabel' => 'Staff',
+    'registerUrl' => app_url('/admin/register.php'),
+    'registerLabel' => 'Register with your Admin ID',
 ]);
 
 require dirname(__DIR__, 2) . '/views/layout.php';

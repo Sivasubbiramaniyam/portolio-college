@@ -226,49 +226,6 @@
 
 
 
-
-
-
-.role-option {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 13px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-  cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.role-option:hover {
-  border-color: #D8CCFF;
-  background: var(--purple-050);
-}
-
-.role-option.is-selected {
-  border-color: rgba(123, 94, 240, 0.55);
-  background: var(--purple-050);
-  box-shadow: 0 0 0 3px rgba(123, 94, 240, 0.11);
-}
-
-.role-option input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-
-
-
-
-
-
-
-
-
-
 .login-submit {
   width: 100%;
   padding: 13px 18px;

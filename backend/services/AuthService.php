@@ -33,18 +33,18 @@ final class AuthService
     /**
      * @return array{user: array<string, mixed>, profile: array<string, mixed>|null}
      */
-    public function login(string $email, string $password, ?string $expectedRole = null): array
+    public function login(string $identifier, string $password, ?string $expectedRole = null): array
     {
         $this->assertConfigured();
         $this->guardAttempts();
 
-        $email = strtolower(trim($email));
-        if ($email === '' || $password === '') {
+        $identifier = trim($identifier);
+        if ($identifier === '' || $password === '') {
             $this->recordFailure();
             throw ApiException::invalidCredentials();
         }
 
-        $user = $this->users->findByEmail($email);
+        $user = $this->resolveUser($identifier, $expectedRole);
         if ($user === null) {
             $this->recordFailure();
             throw ApiException::invalidCredentials();
@@ -150,6 +150,10 @@ final class AuthService
         return [
             'id' => (string) ($user['id'] ?? ''),
             'email' => (string) ($user['email'] ?? ''),
+            'name' => (string) ($user['name'] ?? ''),
+            'staffId' => $user['staffId'] ?? null,
+            'adminId' => $user['adminId'] ?? null,
+            'department' => (string) ($user['department'] ?? ''),
             'role' => (string) ($user['role'] ?? ''),
             'roleLabel' => Enums::roleLabel((string) ($user['role'] ?? '')),
             'facultyProfileId' => $user['facultyProfileId'] ?? null,
@@ -157,6 +161,32 @@ final class AuthService
             'lastLoginAt' => $user['lastLoginAt'] ?? null,
             'createdAt' => $user['createdAt'] ?? null,
         ];
+    }
+
+    /**
+     * Resolve the account behind a sign-in identifier.
+     *
+     * Staff sign in with their staff ID; administrators with their admin ID
+     * (falling back to email, as in the production schema). When no role is
+     * supplied every identifier space is tried, staff ID first.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function resolveUser(string $identifier, ?string $expectedRole): ?array
+    {
+        $expectedRole = $expectedRole !== null ? strtolower(trim($expectedRole)) : '';
+
+        if ($expectedRole === 'admin') {
+            return $this->users->findByAdminId($identifier) ?? $this->users->findByEmail($identifier);
+        }
+
+        if ($expectedRole === 'faculty') {
+            return $this->users->findByStaffId($identifier);
+        }
+
+        return $this->users->findByStaffId($identifier)
+            ?? $this->users->findByAdminId($identifier)
+            ?? $this->users->findByEmail($identifier);
     }
 
     private function assertConfigured(): void

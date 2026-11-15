@@ -1249,6 +1249,17 @@ body.sidebar-expanded .app-shell {
   line-height: 1.35;
 }
 
+.field-hint {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.field-optional {
+  color: var(--muted);
+  font-weight: 500;
+}
+
 
 
 

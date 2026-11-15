@@ -10,13 +10,17 @@ use App\Repositories\FacultyRepositoryInterface;
 use App\Repositories\JsonAssetRepository;
 use App\Repositories\JsonFacultyRepository;
 use App\Repositories\JsonUserRepository;
+use App\Repositories\JsonWhitelistRepository;
 use App\Repositories\MysqlAssetRepository;
 use App\Repositories\MysqlFacultyRepository;
 use App\Repositories\MysqlUserRepository;
+use App\Repositories\MysqlWhitelistRepository;
 use App\Repositories\UserRepositoryInterface;
+use App\Repositories\WhitelistRepositoryInterface;
 use App\Services\AuthService;
 use App\Services\FacultyService;
 use App\Services\ProfileCompletionService;
+use App\Services\RegistrationService;
 use App\Services\UploadService;
 
 /**
@@ -84,6 +88,17 @@ final class Application
         });
     }
 
+    public function whitelistRepository(): WhitelistRepositoryInterface
+    {
+        return $this->make('whitelist_repository', function (): WhitelistRepositoryInterface {
+            if (strtolower((string) $this->config('auth.user_provider', 'mysql')) === 'mysql') {
+                return new MysqlWhitelistRepository($this->database());
+            }
+
+            return new JsonWhitelistRepository((string) $this->config('paths.whitelist_file'));
+        });
+    }
+
     public function assetRepository(): AssetRepositoryInterface
     {
         return $this->make('asset_repository', function (): AssetRepositoryInterface {
@@ -131,6 +146,17 @@ final class Application
                 $this->assetRepository(),
                 (string) $this->config('paths.uploads'),
                 (array) $this->config('uploads', [])
+            );
+        });
+    }
+
+    public function registrationService(): RegistrationService
+    {
+        return $this->make('registration_service', function (): RegistrationService {
+            return new RegistrationService(
+                $this->userRepository(),
+                $this->whitelistRepository(),
+                $this->facultyService()
             );
         });
     }

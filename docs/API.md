@@ -51,7 +51,7 @@ serialises as `{}` when there is nothing extra to report.
 | Code | HTTP | Meaning |
 |---|---|---|
 | `VALIDATION_ERROR` | 422 | One or more fields failed validation |
-| `INVALID_CREDENTIALS` | 401 | Wrong email/password, inactive account or role mismatch |
+| `INVALID_CREDENTIALS` | 401 | Wrong staff/admin ID or password, inactive account or role mismatch |
 | `UNAUTHENTICATED` | 401 | No active session |
 | `FORBIDDEN` | 403 | Authenticated but not allowed to perform the action |
 | `NOT_FOUND` | 404 | Unknown profile, route or resource |
@@ -187,12 +187,14 @@ Request (JSON or form-encoded) plus `X-CSRF-Token`:
 
 ```json
 {
-  "email": "faculty@example.edu",
+  "identifier": "UCEN-CSE-1042",
   "password": "…",
   "expectedRole": "faculty"
 }
 ```
 
+`identifier` is the staff ID on the staff portal, or the admin ID / email on the
+administrator portal. `email` is still accepted as an alias for older clients.
 `expectedRole` is optional (`admin` or `faculty`). When supplied it must match
 the account role; a mismatch returns the generic `INVALID_CREDENTIALS` error.
 
@@ -204,6 +206,10 @@ Response `200`:
     "user": {
       "id": "usr_…",
       "email": "faculty@example.edu",
+      "name": "Dr. K. Ramanathan",
+      "staffId": "UCEN-CSE-1042",
+      "adminId": null,
+      "department": "Computer Science and Engineering",
       "role": "faculty",
       "roleLabel": "Faculty Member",
       "facultyProfileId": "fac-ramanathan",
@@ -497,11 +503,12 @@ certificate/sanction-letter URL fields, …).
 # 1. Get a CSRF token and cookie
 curl -c cookies.txt -s http://localhost:8000/api/v1/auth/me
 
-# 2. Sign in (copy csrfToken from the response)
+# 2. Sign in (copy csrfToken from the response).
+#    Staff sign in with their staff ID; administrators with their admin ID or email.
 curl -b cookies.txt -c cookies.txt \
   -H "Content-Type: application/json" \
   -H "X-CSRF-Token: <csrfToken>" \
-  -d '{"email":"faculty@example.edu","password":"…","expectedRole":"faculty"}' \
+  -d '{"identifier":"UCEN-CSE-1042","password":"…","expectedRole":"faculty"}' \
   http://localhost:8000/api/v1/auth/login
 ```
 

@@ -10,7 +10,9 @@ declare(strict_types=1);
  *   /                     -> backend/pages/index.php  (plain staff listing)
  *   /staff-list.php       -> backend/pages/staff-list.php (temporary duplicate)
  *   /staff/login.php      -> backend/pages/staff/login.php
+ *   /staff/register.php   -> backend/pages/staff/register.php
  *   /admin/login.php      -> backend/pages/admin/login.php
+ *   /admin/register.php   -> backend/pages/admin/register.php
  *   /login.php            -> backend/pages/login.php  (redirects to staff login)
  *   /admin/dashboard.php  -> backend/pages/admin/dashboard.php
  *   /faculty/view.php     -> backend/pages/faculty/view.php

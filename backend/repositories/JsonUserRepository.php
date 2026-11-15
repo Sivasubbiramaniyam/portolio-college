@@ -64,6 +64,38 @@ final class JsonUserRepository implements UserRepositoryInterface
         return null;
     }
 
+    /** @return array<string, mixed>|null */
+    public function findByStaffId(string $staffId): ?array
+    {
+        $staffId = trim($staffId);
+        if ($staffId === '') {
+            return null;
+        }
+        foreach ($this->all() as $user) {
+            if ((string) ($user['staffId'] ?? '') === $staffId) {
+                return $user;
+            }
+        }
+
+        return null;
+    }
+
+    /** @return array<string, mixed>|null */
+    public function findByAdminId(string $adminId): ?array
+    {
+        $adminId = trim($adminId);
+        if ($adminId === '') {
+            return null;
+        }
+        foreach ($this->all() as $user) {
+            if ((string) ($user['adminId'] ?? '') === $adminId) {
+                return $user;
+            }
+        }
+
+        return null;
+    }
+
     /** @param array<string, mixed> $user */
     public function create(array $user): array
     {

@@ -85,23 +85,26 @@ function print_help(): void
     out('UCEN Faculty Portal — create an authentication user');
     out('');
     out('Usage:');
-    out('  php backend/bin/make-user.php --email=you@ucen.ac.in --role=admin');
-    out('  php backend/bin/make-user.php --email=you@ucen.ac.in --role=faculty --faculty=fac-ramanathan');
+    out('  php backend/bin/make-user.php --role=admin --admin-id=admin --email=you@ucen.ac.in');
+    out('  php backend/bin/make-user.php --role=faculty --staff-id=UCEN-CSE-1042 --email=you@ucen.ac.in');
     out('  php backend/bin/make-user.php --list');
     out('');
     out('Options:');
-    out('  --email=EMAIL         Login email address');
+    out('  --email=EMAIL         Contact email address (required, unique)');
     out('  --role=ROLE           admin, faculty or viewer (default: faculty)');
-    out('  --faculty=PROFILE_ID  Required for faculty accounts; optional for admin');
+    out('  --staff-id=ID         Sign-in ID for a staff account (e.g. UCEN-CSE-1042)');
+    out('  --admin-id=ID         Sign-in ID for an administrator account (e.g. admin)');
+    out('  --department=DEPT     Department stored with a staff account');
+    out('  --faculty=PROFILE_ID  Faculty profile to link (defaults to the profile whose');
+    out('                        faculty ID matches --staff-id)');
     out('  --name=NAME           Display name stored with the account');
     out('  --password-stdin      Read the password from the first line of STDIN');
     out('  --password=PASSWORD   Supply a password (avoid: shell history)');
     out('  --list                List configured users without hashes');
     out('  --help                Show this help');
     out('');
-    out('Passwords must be at least 10 characters. Users are stored in backend/storage/users.json,');
-    out('which is ignored by Git. Replace the JSON user provider with MySQL later without changing');
-    out('the HTTP layer.');
+    out('Staff sign in with their staff ID; administrators with their admin ID (or email).');
+    out('Passwords must be at least 10 characters.');
 }
 
 $options = cli_options($argv);
@@ -120,10 +123,12 @@ if (isset($options['list'])) {
         out('  php backend/bin/make-user.php --email=you@ucen.ac.in --role=admin');
         exit(0);
     }
-    out(sprintf('%-32s %-9s %-18s %-8s %s', 'Email', 'Role', 'Faculty profile', 'Active', 'Last login'));
+    out(sprintf('%-20s %-30s %-9s %-18s %-8s %s', 'Sign-in ID', 'Email', 'Role', 'Faculty profile', 'Active', 'Last login'));
     foreach ($all as $user) {
+        $signInId = (string) (($user['staffId'] ?? '') ?: ($user['adminId'] ?? ''));
         out(sprintf(
-            '%-32s %-9s %-18s %-8s %s',
+            '%-20s %-30s %-9s %-18s %-8s %s',
+            $signInId !== '' ? $signInId : '—',
             (string) ($user['email'] ?? ''),
             (string) ($user['role'] ?? ''),
             (string) (($user['facultyProfileId'] ?? '') ?: '—'),
@@ -155,14 +160,43 @@ if ($existing !== null) {
     fail('A user with that email already exists.');
 }
 
+$whitelist = $app->whitelistRepository();
 $facultyProfiles = $app->facultyService()->all();
+
+$staffId = trim((string) ($options['staff-id'] ?? ''));
+$adminId = trim((string) ($options['admin-id'] ?? ''));
+$department = trim((string) ($options['department'] ?? ''));
+
+if ($role === 'faculty' && $staffId === '') {
+    $staffId = prompt('Staff ID (sign-in ID)');
+}
+if ($role === 'faculty' && $staffId === '') {
+    fail('A staff ID is required for a faculty account.');
+}
+
+if ($staffId !== '' && $users->findByStaffId($staffId) !== null) {
+    fail('A user with staff ID "' . $staffId . '" already exists.');
+}
+if ($adminId !== '' && $users->findByAdminId($adminId) !== null) {
+    fail('A user with admin ID "' . $adminId . '" already exists.');
+}
+
+// Auto-link the faculty profile whose faculty ID matches the staff ID.
 $facultyProfileId = trim((string) ($options['faculty'] ?? ''));
+if ($facultyProfileId === '' && $staffId !== '') {
+    foreach ($facultyProfiles as $profile) {
+        if (trim((string) ($profile['facultyId'] ?? '')) === $staffId) {
+            $facultyProfileId = (string) $profile['id'];
+            break;
+        }
+    }
+}
 if ($facultyProfileId === '' && $role === 'faculty') {
     out('Published faculty profiles:');
     foreach ($facultyProfiles as $profile) {
         out('  ' . $profile['id'] . '  ' . $profile['name'] . '  (' . ($profile['department'] ?: 'no department') . ')');
     }
-    $facultyProfileId = prompt('Faculty profile ID');
+    $facultyProfileId = prompt('Faculty profile ID (leave blank to skip)');
 }
 if ($facultyProfileId !== '') {
     $linked = $app->facultyService()->maybeFind($facultyProfileId);
@@ -174,6 +208,24 @@ if ($facultyProfileId !== '') {
             fail('That faculty profile is already linked to ' . (string) ($user['email'] ?? 'another user') . '.');
         }
     }
+    if ($department === '') {
+        $department = trim((string) ($linked['department'] ?? ''));
+    }
+}
+
+// The display name comes from the whitelist for staff accounts.
+$name = trim((string) ($options['name'] ?? ''));
+if ($name === '' && $staffId !== '') {
+    $entry = $whitelist->findStaff($staffId);
+    if ($entry !== null) {
+        $name = (string) ($entry['name'] ?? '');
+    }
+}
+if ($staffId !== '' && $whitelist->findStaff($staffId) === null) {
+    fwrite(STDERR, 'Warning: staff ID "' . $staffId . '" is not in the validuser whitelist; self-registration will not work for it.' . PHP_EOL);
+}
+if ($adminId !== '' && $whitelist->findAdmin($adminId) === null) {
+    fwrite(STDERR, 'Warning: admin ID "' . $adminId . '" is not in the validadmin whitelist; self-registration will not work for it.' . PHP_EOL);
 }
 
 $password = '';
@@ -207,11 +259,14 @@ if (!is_string($hash) || $hash === '') {
     fail('The password could not be hashed.');
 }
 
-$name = trim((string) ($options['name'] ?? ''));
+$name = trim($name);
 $user = [
     'id' => 'usr-' . bin2hex(random_bytes(6)),
     'email' => strtolower($email),
     'name' => $name,
+    'staffId' => $staffId !== '' ? $staffId : null,
+    'adminId' => $adminId !== '' ? $adminId : null,
+    'department' => $department,
     'role' => $role,
     'facultyProfileId' => $facultyProfileId !== '' ? $facultyProfileId : null,
     'passwordHash' => $hash,
@@ -231,8 +286,10 @@ try {
 out('');
 out('User created successfully.');
 out('  Email:           ' . $user['email']);
+out('  Sign-in ID:      ' . (($staffId !== '') ? $staffId : (($adminId !== '') ? $adminId : '— (email only)')));
 out('  Role:            ' . $user['role']);
+out('  Department:      ' . ($department !== '' ? $department : '—'));
 out('  Faculty profile: ' . ($user['facultyProfileId'] ?? '—'));
 out('  Password hash:   ' . (str_starts_with($hash, '$argon2id$') ? 'Argon2id' : 'bcrypt'));
 out('');
-out('Sign in at /staff/login.php (administrators: /admin/login.php). Review the manual testing steps in docs/SETUP.md.');
+out('Staff sign in at /staff/login.php with their staff ID (administrators: /admin/login.php with their admin ID).');

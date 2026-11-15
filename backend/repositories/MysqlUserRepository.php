@@ -24,6 +24,9 @@ final class MysqlUserRepository implements UserRepositoryInterface
         'id' => 'id',
         'email' => 'email',
         'name' => 'name',
+        'staffId' => 'staff_id',
+        'adminId' => 'admin_id',
+        'department' => 'department',
         'passwordHash' => 'password_hash',
         'role' => 'role',
         'facultyProfileId' => 'faculty_profile_id',
@@ -77,6 +80,32 @@ final class MysqlUserRepository implements UserRepositoryInterface
         return $row === null ? null : $this->hydrate($row);
     }
 
+    /** @return array<string, mixed>|null */
+    public function findByStaffId(string $staffId): ?array
+    {
+        $staffId = trim($staffId);
+        if ($staffId === '') {
+            return null;
+        }
+
+        $row = $this->db->selectOne('SELECT * FROM users WHERE staff_id = ? LIMIT 1', [$staffId]);
+
+        return $row === null ? null : $this->hydrate($row);
+    }
+
+    /** @return array<string, mixed>|null */
+    public function findByAdminId(string $adminId): ?array
+    {
+        $adminId = trim($adminId);
+        if ($adminId === '') {
+            return null;
+        }
+
+        $row = $this->db->selectOne('SELECT * FROM users WHERE admin_id = ? LIMIT 1', [$adminId]);
+
+        return $row === null ? null : $this->hydrate($row);
+    }
+
     /** @param array<string, mixed> $user */
     public function create(array $user): array
     {
@@ -89,7 +118,19 @@ final class MysqlUserRepository implements UserRepositoryInterface
             throw ApiException::conflict('A user with this email already exists.');
         }
 
+        $staffId = trim((string) ($user['staffId'] ?? ''));
+        if ($staffId !== '' && $this->findByStaffId($staffId) !== null) {
+            throw ApiException::conflict('A user with this staff ID already exists.');
+        }
+
+        $adminId = trim((string) ($user['adminId'] ?? ''));
+        if ($adminId !== '' && $this->findByAdminId($adminId) !== null) {
+            throw ApiException::conflict('A user with this admin ID already exists.');
+        }
+
         $user['email'] = $email;
+        $user['staffId'] = $staffId === '' ? null : $staffId;
+        $user['adminId'] = $adminId === '' ? null : $adminId;
         $values = $this->values($user);
 
         $sql = 'INSERT INTO users (' . implode(', ', array_keys($values)) . ')'
@@ -126,7 +167,7 @@ final class MysqlUserRepository implements UserRepositoryInterface
             $value = $row[$column] ?? null;
             if ($api === 'isActive') {
                 $user[$api] = ((int) $value) === 1;
-            } elseif ($api === 'facultyProfileId') {
+            } elseif (in_array($api, ['facultyProfileId', 'staffId', 'adminId'], true)) {
                 $user[$api] = ($value === null || $value === '') ? null : (string) $value;
             } elseif (in_array($api, ['lastLoginAt', 'createdAt', 'updatedAt'], true)) {
                 $user[$api] = $value === null ? null : (string) $value;
@@ -151,7 +192,7 @@ final class MysqlUserRepository implements UserRepositoryInterface
                 $values[$column] = ($value === null || $value === true) ? 1 : (int) (bool) $value;
                 continue;
             }
-            if ($api === 'facultyProfileId') {
+            if (in_array($api, ['facultyProfileId', 'staffId', 'adminId'], true)) {
                 $text = trim((string) ($value ?? ''));
                 $values[$column] = $text === '' ? null : $text;
                 continue;

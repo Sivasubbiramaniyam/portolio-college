@@ -369,15 +369,18 @@ Base path: `/api/v1`. All responses JSON; errors in a consistent envelope.
 #### `POST /auth/login`
 
 ```json
-{ "email": "radhakrishnan1974@ucen.ac.in", "password": "…", "expectedRole": "faculty" }
+{ "identifier": "UCEN-CSE-1042", "password": "…", "expectedRole": "faculty" }
 ```
+
+`identifier` is the staff ID on the staff portal, or the admin ID / email on the
+administrator portal (`email` remains accepted as an alias).
 
 Response:
 
 ```json
 {
   "data": {
-    "user": { "id": "uuid", "email": "…", "role": "faculty", "facultyProfileId": "fac-ramanathan" },
+    "user": { "id": "uuid", "email": "…", "staffId": "UCEN-CSE-1042", "adminId": null, "role": "faculty", "facultyProfileId": "fac-ramanathan" },
     "profile": { /* FacultyProfile */ }
   }
 }
@@ -1390,24 +1393,24 @@ Browser
 ### 14.2 Login
 
 ```text
-Role gate
-  │ Admin: email + password ──────────────▶ POST /auth/login {expectedRole:"admin"}
-  │ Faculty: email + password ────────────▶ POST /auth/login {expectedRole:"faculty"}
-  │ Viewer: no credentials ───────────────▶ POST /auth/login {role:"viewer"} or local flag
+/staff/login.php            /admin/login.php
+  │ Staff ID + password ──────▶ POST /auth/login {expectedRole:"faculty"}
+  │ Admin ID (or email) + password ─▶ POST /auth/login {expectedRole:"admin"}
   ▼
 Server validates credentials + role, sets HttpOnly cookie
   ▼
-200 { user, profile } → frontend sets session, loads dashboard
+200 { user, profile } → redirect to /staff/workspace.php or /admin/dashboard.php
 ```
+
+Registration is whitelist-gated: a staff account needs an approved staff ID
+(`validuser`) and an administrator account an approved admin ID (`validadmin`).
 
 Failure cases the UI currently distinguishes:
 
-- Empty email/password → inline toast.
-- Invalid email format.
-- Admin email used in faculty login → "use Admin sign in".
-- Faculty email used in admin login → "use Faculty sign in".
-- Unknown email → "not registered".
-- Wrong password → "incorrect password".
+- Empty ID/password → inline field error.
+- Unknown ID, wrong password or wrong portal → one generic message
+  ("Staff ID or password is incorrect." / "Admin ID or password is incorrect.")
+  so the response never reveals which part failed.
 
 The backend should return a generic `INVALID_CREDENTIALS` to avoid account enumeration;
 the frontend can map it to a generic message.
