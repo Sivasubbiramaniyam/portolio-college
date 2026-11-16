@@ -116,10 +116,8 @@ if ($status !== 200) {
 
 $flash = pull_flash();
 $sidebarLinks = [
-    ['key' => 'overview', 'label' => 'My Workspace', 'href' => app_url('/staff/workspace.php'), 'icon' => 'speedometer2'],
+    ['key' => 'overview', 'label' => 'Dashboard', 'href' => app_url('/staff/workspace.php'), 'icon' => 'speedometer2'],
     ['key' => 'edit', 'label' => 'Edit Profile', 'href' => app_url('/staff/edit.php'), 'icon' => 'pencil-square'],
-    ['key' => 'public', 'label' => 'Public Profile', 'href' => app_url('/faculty/view.php?id=' . rawurlencode((string) $profile['id'])), 'icon' => 'box-arrow-up-right'],
-    ['key' => 'directory', 'label' => 'Staff list', 'href' => app_url('/'), 'icon' => 'people-fill'],
 ];
 
 $pageTitle = 'Edit my profile';
@@ -131,10 +129,7 @@ ob_start();
 ?>
 <nav class="view-bar reveal" aria-label="Editor navigation">
   <div>
-    <a class="btn btn-ghost" href="<?= e(app_url('/staff/workspace.php')) ?>"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to workspace</a>
-  </div>
-  <div class="section-heading__actions">
-    <a class="btn btn-soft" href="<?= e(app_url('/faculty/view.php?id=' . rawurlencode((string) $profile['id']))) ?>"><i class="bi bi-eye" aria-hidden="true"></i> View public profile</a>
+    <a class="btn btn-ghost" href="<?= e(app_url('/staff/workspace.php')) ?>"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to dashboard</a>
   </div>
 </nav>
 

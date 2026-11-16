@@ -155,7 +155,6 @@ $flash = pull_flash();
 $sidebarLinks = [
     ['key' => 'overview', 'label' => 'Admin Dashboard', 'href' => app_url('/admin/dashboard.php'), 'icon' => 'speedometer2'],
     ['key' => 'create', 'label' => 'Create Profile', 'href' => app_url('/admin/edit.php'), 'icon' => 'person-plus'],
-    ['key' => 'directory', 'label' => 'Staff list', 'href' => app_url('/'), 'icon' => 'people-fill'],
 ];
 
 $pageTitle = $isCreate ? 'Create faculty profile' : 'Edit faculty profile';

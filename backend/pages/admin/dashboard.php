@@ -61,8 +61,6 @@ $q = trim((string) ($_GET['q'] ?? ''));
 $department = trim((string) ($_GET['department'] ?? ''));
 $designation = trim((string) ($_GET['designation'] ?? ''));
 
-$allProfiles = $facultyService->all();
-$stats = $completionService->directoryStats($allProfiles);
 $dean = $facultyService->dean();
 
 $result = $facultyService->list([
@@ -87,11 +85,9 @@ $hasFilters = $q !== '' || $department !== '' || $designation !== '';
 
 $sidebarLinks = [
     ['key' => 'overview', 'label' => 'Admin Dashboard', 'href' => app_url('/admin/dashboard.php'), 'icon' => 'speedometer2'],
-    ['key' => 'create', 'label' => 'Create Profile', 'href' => app_url('/admin/edit.php'), 'icon' => 'person-plus'],
-    ['key' => 'directory', 'label' => 'Staff list', 'href' => app_url('/'), 'icon' => 'people-fill'],
 ];
 if ($dean !== null) {
-    $sidebarLinks[] = ['key' => 'dean', 'label' => 'Dean Profile', 'href' => app_url('/faculty/view.php?id=' . rawurlencode((string) $dean['id'])), 'icon' => 'award-fill'];
+    $sidebarLinks[] = ['key' => 'dean', 'label' => 'My Profile', 'href' => app_url('/faculty/view.php?id=' . rawurlencode((string) $dean['id'])), 'icon' => 'person-circle'];
 }
 
 $pageTitle = 'Administrator dashboard';
@@ -101,49 +97,6 @@ $useSidebar = true;
 
 ob_start();
 ?>
-<section class="workspace-hero reveal">
-  <div class="workspace-hero__identity">
-    <span class="avatar avatar--xl" style="--av-a: #5A3BD4; --av-b: #9E86F5" aria-hidden="true">AD</span>
-    <div class="workspace-hero__copy">
-      <span class="eyebrow"><i class="bi bi-shield-lock-fill" aria-hidden="true"></i> Administrator workspace</span>
-      <h2>Manage every faculty profile</h2>
-      <p>Create, edit, review and remove profiles. Directory statistics exclude the dean, matching the public directory.</p>
-      <div class="workspace-hero__meta">
-        <span class="badge badge--muted"><i class="bi bi-person-badge" aria-hidden="true"></i> <?= e((string) ($user['email'] ?? '')) ?></span>
-        <span class="badge"><i class="bi bi-clock" aria-hidden="true"></i> <?= e((string) (($user['lastLoginAt'] ?? null) ?: 'This session')) ?></span>
-      </div>
-    </div>
-  </div>
-  <div class="workspace-hero__actions">
-    <a class="btn btn-primary" href="<?= e(app_url('/admin/edit.php')) ?>"><i class="bi bi-person-plus" aria-hidden="true"></i> Create profile</a>
-    <a class="btn btn-soft" href="<?= e(app_url('/')) ?>"><i class="bi bi-people" aria-hidden="true"></i> Staff list</a>
-    <button class="btn btn-ghost" type="button" data-print-page><i class="bi bi-printer" aria-hidden="true"></i> Print overview</button>
-  </div>
-</section>
-
-<div class="summary-grid reveal" aria-label="Administrator summary">
-  <article class="summary-tile">
-    <span>Total profiles</span>
-    <strong><?= count($allProfiles) ?></strong>
-    <small><?= $stats['total'] ?> in the directory, <?= $dean !== null ? 1 : 0 ?> dean profile.</small>
-  </article>
-  <article class="summary-tile">
-    <span>Complete</span>
-    <strong><?= (int) $stats['complete'] ?></strong>
-    <small>All 15 sections filled. <?= (int) $stats['rate'] ?>% directory completion.</small>
-  </article>
-  <article class="summary-tile">
-    <span>In progress</span>
-    <strong><?= (int) $stats['incomplete'] ?></strong>
-    <small>Profiles missing one or more sections.</small>
-  </article>
-  <article class="summary-tile">
-    <span>Departments</span>
-    <strong><?= count($stats['departments']) ?></strong>
-    <small>Departments represented in the directory.</small>
-  </article>
-</div>
-
 <?php if ($dean !== null): ?>
 <section class="dean-card reveal" aria-labelledby="admin-dean-name">
   <div class="dean-card__avatar"><?= render_avatar($dean, 'avatar--lg') ?></div>
@@ -154,41 +107,16 @@ ob_start();
     <p class="dean-card__department"><i class="bi bi-envelope" aria-hidden="true"></i> <?= e(format_value($dean['email'] ?? '', 'Contact not published')) ?></p>
   </div>
   <div class="dean-card__actions">
-    <span class="dean-card__tag"><i class="bi bi-shield-check" aria-hidden="true"></i> Protected profile</span>
-    <a class="btn btn-white" href="<?= e(app_url('/admin/edit.php?id=' . rawurlencode((string) $dean['id']))) ?>">Edit dean profile <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+    <a class="btn btn-white" href="<?= e(app_url('/faculty/view.php?id=' . rawurlencode((string) $dean['id']))) ?>"><i class="bi bi-eye" aria-hidden="true"></i> View</a>
+    <a class="btn btn-white" href="<?= e(app_url('/admin/edit.php?id=' . rawurlencode((string) $dean['id']))) ?>"><i class="bi bi-pencil-square" aria-hidden="true"></i> Edit <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
   </div>
 </section>
 <?php endif; ?>
-
-<section class="card admin-overview reveal" aria-labelledby="department-title">
-  <div class="admin-overview__head">
-    <div>
-      <h2 id="department-title">Department distribution</h2>
-      <p class="admin-overview__note">Directory profiles grouped by department. The dean is excluded.</p>
-    </div>
-  </div>
-  <div class="department-list">
-    <?php foreach ($stats['departments'] as $departmentRow): ?>
-      <?php $share = $stats['total'] > 0 ? (int) round(($departmentRow['count'] / $stats['total']) * 100) : 0; ?>
-      <div class="department-row">
-        <div class="department-row__top">
-          <strong><?= e((string) $departmentRow['department']) ?></strong>
-          <span><?= (int) $departmentRow['count'] ?> · <?= $share ?>%</span>
-        </div>
-        <div class="progress-track"><span style="width: <?= $share ?>%"></span></div>
-      </div>
-    <?php endforeach; ?>
-    <?php if ($stats['departments'] === []): ?>
-      <p class="view-note"><i class="bi bi-info-circle" aria-hidden="true"></i> No directory profiles are published yet.</p>
-    <?php endif; ?>
-  </div>
-</section>
 
 <section class="stack reveal" aria-labelledby="profiles-title">
   <div class="section-heading">
     <div>
       <h2 id="profiles-title">All faculty profiles</h2>
-      <p><?= count($profiles) ?> profile<?= count($profiles) === 1 ? '' : 's' ?><?= $hasFilters ? ' match your filters' : ' in the repository' ?>.</p>
     </div>
     <div class="section-heading__actions">
       <a class="btn btn-primary btn-sm" href="<?= e(app_url('/admin/edit.php')) ?>"><i class="bi bi-plus-lg" aria-hidden="true"></i> New profile</a>
@@ -236,14 +164,13 @@ ob_start();
   <?php else: ?>
     <div class="table-wrap">
       <table class="data-table">
-        <caption>Every profile in the repository, including the dean. Select an action to view, edit or delete.</caption>
         <thead>
           <tr>
             <th scope="col">Faculty member</th>
             <th scope="col">Department</th>
             <th scope="col">Designation</th>
             <th scope="col">Completion</th>
-            <th scope="col">Flags</th>
+            <th scope="col">Progress</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -274,22 +201,21 @@ ob_start();
                   <span><?= $percent ?>%</span>
                 </div>
               </td>
-              <td>
-                <div class="badge-row">
-                  <?php if ($isDean): ?><span class="badge"><i class="bi bi-award-fill" aria-hidden="true"></i> Dean</span><?php endif; ?>
-                  <span class="<?= e(profile_badge_class((string) ($completion['badge']['tone'] ?? 'start'))) ?>"><?= e((string) ($completion['badge']['label'] ?? 'Profile')) ?></span>
-                </div>
-              </td>
+              <td><?= $isDean ? 'Dean · ' : '' ?><?= e((string) ($completion['badge']['label'] ?? 'Profile')) ?></td>
               <td>
                 <div class="table-actions">
-                  <a class="btn btn-ghost" href="<?= e($viewUrl) ?>" title="View public profile"><i class="bi bi-eye" aria-hidden="true"></i><span>View</span></a>
-                  <a class="btn btn-soft" href="<?= e($editUrl) ?>" title="Edit profile"><i class="bi bi-pencil-square" aria-hidden="true"></i><span>Edit</span></a>
-                  <?php if (!$isDean): ?>
-                    <form method="post" action="<?= e(app_url('/admin/dashboard.php')) ?>" data-confirm="Delete this profile permanently? This cannot be undone.">
+                  <?php if ($isDean): ?>
+                    <a class="table-action" href="<?= e($editUrl) ?>" title="Edit profile"><i class="bi bi-pencil-square" aria-hidden="true"></i><span>Edit</span></a>
+                    <span class="table-actions__sep" aria-hidden="true">|</span>
+                    <a class="table-action" href="<?= e($editUrl) ?>" title="View profile"><i class="bi bi-eye" aria-hidden="true"></i><span>View</span></a>
+                  <?php else: ?>
+                    <a class="table-action" href="<?= e($viewUrl) ?>" title="View public profile"><i class="bi bi-eye" aria-hidden="true"></i><span>View</span></a>
+                    <span class="table-actions__sep" aria-hidden="true">|</span>
+                    <form method="post" action="<?= e(app_url('/admin/dashboard.php')) ?>" data-confirm="aare you sure , you want to delete this profile">
                       <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="id" value="<?= e((string) $profile['id']) ?>">
-                      <button class="btn btn-danger" type="submit" title="Delete profile"><i class="bi bi-trash3" aria-hidden="true"></i><span>Delete</span></button>
+                      <button class="table-action table-action--danger" type="submit" title="Delete profile"><i class="bi bi-trash3" aria-hidden="true"></i><span>Delete</span></button>
                     </form>
                   <?php endif; ?>
                 </div>

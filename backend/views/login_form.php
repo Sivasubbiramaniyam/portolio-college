@@ -107,14 +107,21 @@ if (!function_exists('render_login_panel')) {
     </form>
 
     <div class="login-help">
-      <?php if ($registerUrl !== ''): ?>
-        <p><i class="bi bi-person-plus" aria-hidden="true"></i> <a href="<?= e($registerUrl) ?>"><?= e($registerLabel) ?></a></p>
+      <?php if ($registerUrl !== '' || $altLoginUrl !== ''): ?>
+        <div class="login-help__links">
+          <?php if ($registerUrl !== ''): ?>
+            <a href="<?= e($registerUrl) ?>"><?= e($registerLabel) ?></a>
+          <?php endif; ?>
+          <?php if ($registerUrl !== '' && $altLoginUrl !== ''): ?>
+            <span class="login-help__sep" aria-hidden="true">|</span>
+          <?php endif; ?>
+          <?php if ($altLoginUrl !== ''): ?>
+            <a href="<?= e($altLoginUrl) ?>"><?= e($altLoginLabel) ?> Login</a>
+          <?php endif; ?>
+        </div>
       <?php endif; ?>
       <?php if ($showPublicLink): ?>
         <p><i class="bi bi-info-circle" aria-hidden="true"></i> Public profiles are visible without signing in. <a href="<?= e(app_url('/')) ?>">Browse the staff list</a>.</p>
-      <?php endif; ?>
-      <?php if ($altLoginUrl !== ''): ?>
-        <p><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> <a href="<?= e($altLoginUrl) ?>"><?= e($altLoginLabel) ?> Login</a></p>
       <?php endif; ?>
       <?php if ($showPasswordHelp): ?>
         <p><i class="bi bi-key" aria-hidden="true"></i> Forgotten passwords are reset by an administrator using the CLI user tool.</p>

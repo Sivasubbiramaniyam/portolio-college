@@ -44,7 +44,7 @@ if (is_array($user)) {
     if ((string) ($user['role'] ?? '') === 'admin') {
         $sidebarAccountLinks[] = ['label' => 'Admin Dashboard', 'href' => app_url('/admin/dashboard.php'), 'icon' => 'sliders2'];
     } elseif ((string) ($user['role'] ?? '') === 'faculty') {
-        $sidebarAccountLinks[] = ['label' => 'My Workspace', 'href' => app_url('/staff/workspace.php'), 'icon' => 'person-circle'];
+        $sidebarAccountLinks[] = ['label' => 'Dashboard', 'href' => app_url('/staff/workspace.php'), 'icon' => 'person-circle'];
     }
 }
 

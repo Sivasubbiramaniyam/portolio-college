@@ -170,7 +170,8 @@ if (!function_exists('render_toast')) {
         $role = $tone === 'error' ? 'alert' : 'status';
 
         return '<div class="toast toast--' . $tone . ' show" role="' . $role . '" data-server-toast>'
-            . '<i class="bi bi-' . $icon . '" aria-hidden="true"></i><span>' . e($message) . '</span></div>';
+            . '<i class="bi bi-' . $icon . '" aria-hidden="true"></i>'
+            . '<span>' . e($message) . '</span></div>';
     }
 }
 

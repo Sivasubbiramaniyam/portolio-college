@@ -39,6 +39,12 @@
      Toast notifications
      --------------------------------------------------------------- */
 
+  var toastIcons = {
+    success: "check2-circle",
+    error: "exclamation-octagon-fill",
+    info: "info-circle-fill"
+  };
+
   function toast(message, tone) {
     var stack = doc.getElementById("toast-stack");
     if (!stack || !message) {
@@ -51,9 +57,7 @@
     node.setAttribute("role", normalizedTone === "error" ? "alert" : "status");
 
     var icon = doc.createElement("i");
-    icon.className = "bi bi-" + (normalizedTone === "error"
-      ? "exclamation-octagon-fill"
-      : normalizedTone === "info" ? "info-circle-fill" : "check2-circle");
+    icon.className = "bi bi-" + toastIcons[normalizedTone];
     icon.setAttribute("aria-hidden", "true");
 
     var text = doc.createElement("span");
@@ -73,20 +77,19 @@
           node.parentNode.removeChild(node);
         }
       }, 240);
-    }, 3200);
+    }, 3000);
   }
 
   function initServerToasts() {
     all("[data-server-toast]").forEach(function (node) {
       window.setTimeout(function () {
-        node.classList.remove("show");
         node.classList.add("is-leaving");
         window.setTimeout(function () {
           if (node.parentNode) {
             node.parentNode.removeChild(node);
           }
-        }, 320);
-      }, 3200);
+        }, 240);
+      }, 3000);
     });
   }
 
@@ -353,24 +356,102 @@
      Confirm destructive actions
      --------------------------------------------------------------- */
 
+  function showConfirm(message) {
+    return new Promise(function (resolve) {
+      var backdrop = doc.createElement("div");
+      backdrop.className = "confirm-backdrop";
+
+      var dialog = doc.createElement("div");
+      dialog.className = "confirm-dialog";
+      dialog.setAttribute("role", "alertdialog");
+      dialog.setAttribute("aria-modal", "true");
+
+      var icon = doc.createElement("span");
+      icon.className = "confirm-dialog__icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.innerHTML = '<i class="bi bi-exclamation-triangle"></i>';
+
+      var text = doc.createElement("p");
+      text.className = "confirm-dialog__message";
+      text.textContent = message;
+
+      var actions = doc.createElement("div");
+      actions.className = "confirm-dialog__actions";
+
+      var no = doc.createElement("button");
+      no.type = "button";
+      no.className = "btn btn-ghost";
+      no.textContent = "No";
+
+      var yes = doc.createElement("button");
+      yes.type = "button";
+      yes.className = "btn btn-danger";
+      yes.textContent = "Yes";
+
+      actions.appendChild(no);
+      actions.appendChild(yes);
+      dialog.appendChild(icon);
+      dialog.appendChild(text);
+      dialog.appendChild(actions);
+      backdrop.appendChild(dialog);
+      doc.body.appendChild(backdrop);
+
+      function close(result) {
+        if (backdrop.parentNode) {
+          backdrop.parentNode.removeChild(backdrop);
+        }
+        doc.removeEventListener("keydown", onKey);
+        resolve(result);
+      }
+
+      function onKey(event) {
+        if (event.key === "Escape") {
+          close(false);
+        }
+      }
+
+      on(no, "click", function () { close(false); });
+      on(yes, "click", function () { close(true); });
+      on(backdrop, "click", function (event) {
+        if (event.target === backdrop) {
+          close(false);
+        }
+      });
+      doc.addEventListener("keydown", onKey);
+      yes.focus();
+      window.requestAnimationFrame(function () {
+        backdrop.classList.add("is-open");
+      });
+    });
+  }
+
   function initConfirmations() {
     all("[data-confirm]").forEach(function (element) {
       var message = element.getAttribute("data-confirm") || "Are you sure?";
 
       if (element.tagName === "FORM") {
         on(element, "submit", function (event) {
-          if (!window.confirm(message)) {
-            event.preventDefault();
+          if (event.defaultPrevented) {
+            return;
           }
+          event.preventDefault();
+          showConfirm(message).then(function (confirmed) {
+            if (confirmed) {
+              element.submit();
+            }
+          });
         });
         return;
       }
 
       if (element.tagName === "A") {
         on(element, "click", function (event) {
-          if (!window.confirm(message)) {
-            event.preventDefault();
-          }
+          event.preventDefault();
+          showConfirm(message).then(function (confirmed) {
+            if (confirmed) {
+              window.location.href = element.href;
+            }
+          });
         });
         return;
       }
@@ -381,9 +462,12 @@
           if (event.defaultPrevented) {
             return;
           }
-          if (!window.confirm(message)) {
-            event.preventDefault();
-          }
+          event.preventDefault();
+          showConfirm(message).then(function (confirmed) {
+            if (confirmed) {
+              form.submit();
+            }
+          });
         });
       }
     });
@@ -565,12 +649,13 @@
     }
 
     var message = item.getAttribute("data-remove-message") || "Remove this entry? Existing saved values will be deleted when you save.";
-    if (!window.confirm(message)) {
-      return;
-    }
-
-    item.parentNode.removeChild(item);
-    refreshCollection(container);
+    showConfirm(message).then(function (confirmed) {
+      if (!confirmed) {
+        return;
+      }
+      item.parentNode.removeChild(item);
+      refreshCollection(container);
+    });
   }
 
   function initCollections() {

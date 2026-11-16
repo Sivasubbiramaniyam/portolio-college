@@ -2958,15 +2958,18 @@
   function showToast(message, tone) {
     const stack = $("#toast-stack");
     if (!stack) return;
+    const normalizedTone = tone === "error" ? "error" : tone === "info" ? "info" : "success";
+    const icons = { success: "check2-circle", error: "exclamation-octagon-fill", info: "info-circle-fill" };
     const toast = document.createElement("div");
-    toast.className = "toast toast--" + (tone === "error" ? "error" : "success");
-    toast.setAttribute("role", "status");
-    toast.innerHTML = `<i class="bi ${tone === "error" ? "bi-exclamation-triangle" : "bi-check-circle"}" aria-hidden="true"></i><span>${escapeHTML(message)}</span>`;
+    toast.className = "toast toast--" + normalizedTone;
+    toast.setAttribute("role", normalizedTone === "error" ? "alert" : "status");
+    toast.innerHTML = `<i class="bi bi-${icons[normalizedTone]}" aria-hidden="true"></i><span>${escapeHTML(message)}</span>`;
     stack.appendChild(toast);
+    window.requestAnimationFrame(function () { toast.classList.add("show"); });
     window.setTimeout(function () {
       toast.classList.add("is-leaving");
-      window.setTimeout(function () { toast.remove(); }, 320);
-    }, tone === "error" ? 4600 : 3400);
+      window.setTimeout(function () { toast.remove(); }, 240);
+    }, 3000);
   }
 
   function openModal() {

@@ -117,7 +117,7 @@ if (!function_exists('render_profile_hero')) {
      * @param array<string, mixed> $profile
      * @param array<string, mixed> $completion
      */
-    function render_profile_hero(array $profile, array $completion, string $actions = '', bool $showCompletion = true): string
+    function render_profile_hero(array $profile, array $completion, string $actions = '', bool $showCompletion = true, bool $showCompletionRing = false): string
     {
         $name = (string) ($profile['name'] ?? 'Faculty member');
         $department = (string) ($profile['department'] ?? '');
@@ -165,8 +165,20 @@ if (!function_exists('render_profile_hero')) {
         $html .= render_research_links($profile);
 
         $html .= '</div>';
-        if ($actions !== '') {
-            $html .= '<div class="profile-hero__actions">' . $actions . '</div>';
+        if ($actions !== '' || $showCompletionRing) {
+            $actionsClass = 'profile-hero__actions' . ($showCompletionRing ? ' profile-hero__actions--with-ring' : '');
+            $html .= '<div class="' . $actionsClass . '">';
+            if ($showCompletionRing) {
+                $ringOffset = number_format(2 * M_PI * 18 * (1 - $percent / 100), 2, '.', '');
+                $html .= '<div class="profile-hero__ring" role="img" aria-label="Profile ' . $percent . '% complete">';
+                $html .= '<svg viewBox="0 0 44 44" aria-hidden="true">';
+                $html .= '<circle class="profile-hero__ring-track" cx="22" cy="22" r="18"></circle>';
+                $html .= '<circle class="profile-hero__ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="' . e($ringOffset) . '"></circle>';
+                $html .= '</svg>';
+                $html .= '<span>' . $percent . '%</span>';
+                $html .= '</div>';
+            }
+            $html .= $actions . '</div>';
         }
         $html .= '</div></article>';
 

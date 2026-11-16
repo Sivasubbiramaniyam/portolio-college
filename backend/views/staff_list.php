@@ -31,17 +31,19 @@ if (!function_exists('render_staff_list_document')) {
   <meta name="robots" content="noindex, nofollow">
   <title><?= e($heading) ?> | UCEN Faculty Portal</title>
   <style>
-    body { margin: 0; padding: 24px; font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif; color: #1c1c1c; background: #fff; }
+    body { margin: 0; padding: 24px; font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif; color: #201b33; background: #f7f6fc; }
     h1 { margin: 0 0 4px; font-size: 1.5rem; }
-    .lede { margin: 0 0 18px; color: #555; }
-    .bar { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 0 0 20px; padding: 0; list-style: none; }
-    .bar a, .bar button { color: #4b2ecc; }
-    table { border-collapse: collapse; width: 100%; max-width: 980px; }
-    th, td { border: 1px solid #cfcfcf; padding: 8px 10px; text-align: left; font-size: 0.95rem; vertical-align: top; }
-    th { background: #f3f0ff; }
+    .lede { margin: 0 0 18px; color: #6e6887; }
+    .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 20px; padding: 0; list-style: none; }
+    .bar a, .bar button { display: inline-flex; align-items: center; padding: 8px 15px; border: 1px solid #e1d9ff; border-radius: 99px; background: #f4f1ff; color: #5a3bd4; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+    .bar a:hover, .bar button:hover { background: #eae4ff; }
+    .table-shell { max-width: 980px; overflow: hidden; border: 1px solid #e9e5f5; border-radius: 16px; background: #fff; box-shadow: 0 12px 30px -20px rgba(46, 26, 120, 0.35); }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 11px 13px; border: 0; border-bottom: 1px solid #f0edf9; text-align: left; font-size: 0.95rem; vertical-align: top; }
+    th { background: #f4f1ff; color: #5a3bd4; font-weight: 700; }
+    tbody tr:last-child td { border-bottom: 0; }
     form.signout { display: inline; margin: 0; }
-    button.link { padding: 0; border: 0; background: none; font: inherit; text-decoration: underline; cursor: pointer; }
-    .muted { color: #666; }
+    .muted { color: #6e6887; }
   </style>
 </head>
 <body>
@@ -63,26 +65,28 @@ if (!function_exists('render_staff_list_document')) {
   <?php if ($profiles === []): ?>
     <p class="muted">No staff profiles are published yet.</p>
   <?php else: ?>
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Department</th>
-          <th scope="col">Designation</th>
-          <th scope="col">Profile</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($profiles as $profile): ?>
+    <div class="table-shell">
+      <table>
+        <thead>
           <tr>
-            <td><?= e((string) ($profile['name'] ?? 'Unnamed profile')) ?></td>
-            <td><?= e(format_value($profile['department'] ?? '')) ?></td>
-            <td><?= e(format_value($profile['designation'] ?? '')) ?></td>
-            <td><a href="<?= e(app_url('/faculty/view.php?id=' . rawurlencode((string) ($profile['id'] ?? '')))) ?>">View profile</a></td>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Designation</th>
+            <th scope="col">Profile</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($profiles as $profile): ?>
+            <tr>
+              <td><?= e((string) ($profile['name'] ?? 'Unnamed profile')) ?></td>
+              <td><?= e(format_value($profile['department'] ?? '')) ?></td>
+              <td><?= e(format_value($profile['designation'] ?? '')) ?></td>
+              <td><a href="<?= e(app_url('/faculty/view.php?id=' . rawurlencode((string) ($profile['id'] ?? '')))) ?>">View profile</a></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   <?php endif; ?>
 </body>
 </html>

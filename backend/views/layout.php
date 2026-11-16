@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Core\Config;
-use App\Core\Enums;
 
 /** @var string $content */
 /** @var string $pageTitle */
@@ -35,7 +34,6 @@ $sidebarPinned = $sidebarPinned ?? false;
 $sidebarAccountLinks = $sidebarAccountLinks ?? [];
 $institution = (array) Config::get('institution', []);
 $logo = asset_url((string) ($institution['logoUrl'] ?? '/frontend/assets/anna-university-logo.svg'));
-$roleLabel = is_array($user) ? Enums::roleLabel((string) ($user['role'] ?? '')) : '';
 $isAdmin = is_array($user) && (string) ($user['role'] ?? '') === 'admin';
 $isFaculty = is_array($user) && (string) ($user['role'] ?? '') === 'faculty';
 $homeLink = app_url('/');
@@ -82,11 +80,6 @@ if ($isAdmin) {
     <?php endif; ?>
 
     <nav class="sidebar__nav" aria-label="Portal navigation">
-      <span class="sidebar__compass" aria-hidden="true">
-        <span class="sidebar__compass-axis"></span>
-        <span class="sidebar__compass-needle"></span>
-      </span>
-
       <?php if ($sidebarTitle !== ''): ?>
         <span class="sidebar__nav-label"><?= e($sidebarTitle) ?></span>
       <?php endif; ?>
@@ -112,14 +105,6 @@ if ($isAdmin) {
 
     <?php if (is_array($user)): ?>
     <div class="sidebar__footer">
-      <div class="sidebar__account">
-        <span class="sidebar__account-icon"><i class="bi bi-person-badge-fill" aria-hidden="true"></i></span>
-        <span class="sidebar__account-copy">
-          <small>Signed in as</small>
-          <strong><?= e($roleLabel) ?></strong>
-          <span><?= e((string) ($user['email'] ?? '')) ?></span>
-        </span>
-      </div>
       <form class="sidebar__signout" method="post" action="<?= e(app_url('/logout.php')) ?>">
         <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
         <button class="side-link side-link--button" type="submit">
@@ -152,22 +137,6 @@ if ($isAdmin) {
 
         <div class="topbar__actions">
           <?= $pageActions ?>
-          <?php if (is_array($user)): ?>
-            <div class="role-indicator" aria-live="polite">
-              <span class="role-indicator__icon"><i class="bi bi-person-badge-fill" aria-hidden="true"></i></span>
-              <span class="role-indicator__copy">
-                <small>Signed in as</small>
-                <strong><?= e($roleLabel) ?></strong>
-                <span><?= e((string) ($user['email'] ?? '')) ?></span>
-              </span>
-            </div>
-            <form class="topbar__logout" method="post" action="<?= e(app_url('/logout.php')) ?>">
-              <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
-              <button class="btn btn-ghost topbar__btn" type="submit">
-                <i class="bi bi-box-arrow-right" aria-hidden="true"></i><span>Sign out</span>
-              </button>
-            </form>
-          <?php endif; ?>
         </div>
       </div>
     </header>
@@ -181,11 +150,7 @@ if ($isAdmin) {
 
       <footer class="footer">
         <div class="footer__brand">
-          <img src="<?= e($logo) ?>" alt="">
           <span>&copy; <?= date('Y') ?> Faculty Portal</span>
-        </div>
-        <div class="footer__side">
-          <a class="footer__reset" href="<?= e(app_url('/')) ?>">Staff list</a>
         </div>
       </footer>
     </main>
