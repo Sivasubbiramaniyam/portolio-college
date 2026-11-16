@@ -60,6 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (ApiException $exception) {
             if ($exception->errorCode() === 'VALIDATION_ERROR') {
                 $errors = $exception->fields();
+                if (isset($errors['adminId'])) {
+                    $errors['identifier'] = $errors['adminId'];
+                    unset($errors['adminId']);
+                }
                 $message = $exception->getMessage();
             } elseif ($exception->errorCode() === 'CONFLICT') {
                 $message = $exception->getMessage();

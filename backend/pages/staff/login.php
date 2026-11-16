@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors = $exception->fields();
                 $message = $exception->getMessage();
             } else {
-                $message = 'Staff ID or password is incorrect.';
+                $errors['password'] = 'Staff ID or password is incorrect.';
             }
         }
     }
@@ -85,16 +85,18 @@ $content = render_login_panel([
     'intro' => 'Sign in with your Staff ID to maintain your own profile.',
     'identifier' => $identifier,
     'identifierLabel' => 'Staff ID',
-    'identifierPlaceholder' => 'e.g. UCEN-CSE-1042',
+    'identifierPlaceholder' => 'Enter your Staff ID',
     'errors' => $errors,
     'message' => $message,
     'notice' => $notice,
     'signedOut' => $signedOut,
     'authConfigured' => $authConfigured,
-    'altLoginUrl' => app_url('/admin/login.php'),
-    'altLoginLabel' => 'Administrator',
     'registerUrl' => app_url('/staff/register.php'),
-    'registerLabel' => 'Register with your Staff ID',
+    'registerLabel' => 'Register User',
+    'altLoginUrl' => app_url('/admin/login.php'),
+    'showPublicLink' => false,
+    'showPasswordHelp' => false,
+    'altLoginLabel' => 'Admin',
 ]);
 
 require dirname(__DIR__, 2) . '/views/layout.php';

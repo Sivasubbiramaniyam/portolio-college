@@ -45,12 +45,15 @@
       return;
     }
 
+    var normalizedTone = tone === "error" || tone === "info" ? tone : "success";
     var node = doc.createElement("div");
-    node.className = "toast toast--" + (tone === "error" ? "error" : "success");
-    node.setAttribute("role", "status");
+    node.className = "toast toast--" + normalizedTone;
+    node.setAttribute("role", normalizedTone === "error" ? "alert" : "status");
 
     var icon = doc.createElement("i");
-    icon.className = "bi bi-" + (tone === "error" ? "exclamation-octagon-fill" : "check2-circle");
+    icon.className = "bi bi-" + (normalizedTone === "error"
+      ? "exclamation-octagon-fill"
+      : normalizedTone === "info" ? "info-circle-fill" : "check2-circle");
     icon.setAttribute("aria-hidden", "true");
 
     var text = doc.createElement("span");
@@ -59,6 +62,9 @@
     node.appendChild(icon);
     node.appendChild(text);
     stack.appendChild(node);
+    window.requestAnimationFrame(function () {
+      node.classList.add("show");
+    });
 
     window.setTimeout(function () {
       node.classList.add("is-leaving");
@@ -67,7 +73,21 @@
           node.parentNode.removeChild(node);
         }
       }, 240);
-    }, 4200);
+    }, 3200);
+  }
+
+  function initServerToasts() {
+    all("[data-server-toast]").forEach(function (node) {
+      window.setTimeout(function () {
+        node.classList.remove("show");
+        node.classList.add("is-leaving");
+        window.setTimeout(function () {
+          if (node.parentNode) {
+            node.parentNode.removeChild(node);
+          }
+        }, 320);
+      }, 3200);
+    });
   }
 
   window.portalToast = toast;
@@ -644,6 +664,7 @@
      --------------------------------------------------------------- */
 
   function init() {
+    initServerToasts();
     initSidebar();
     initSidebarScroll();
     initPasswordToggles();

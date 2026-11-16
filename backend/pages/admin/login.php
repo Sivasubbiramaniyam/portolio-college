@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors = $exception->fields();
                 $message = $exception->getMessage();
             } else {
-                $message = 'Admin ID or password is incorrect.';
+                $errors['password'] = 'Admin ID or password is incorrect.';
             }
         }
     }
@@ -85,17 +85,16 @@ $content = render_login_panel([
     'intro' => 'Sign in with an administrator account to manage every profile.',
     'identifier' => $identifier,
     'identifierLabel' => 'Admin ID',
-    'identifierPlaceholder' => 'Admin ID or email',
-    'identifierHint' => 'Your admin ID, or the email address on the account.',
+    'identifierPlaceholder' => 'Enter your Admin ID',
     'errors' => $errors,
     'message' => $message,
     'notice' => $notice,
     'signedOut' => $signedOut,
     'authConfigured' => $authConfigured,
     'altLoginUrl' => app_url('/staff/login.php'),
+    'showPublicLink' => false,
+    'showPasswordHelp' => false,
     'altLoginLabel' => 'Staff',
-    'registerUrl' => app_url('/admin/register.php'),
-    'registerLabel' => 'Register with your Admin ID',
 ]);
 
 require dirname(__DIR__, 2) . '/views/layout.php';

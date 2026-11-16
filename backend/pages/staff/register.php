@@ -60,6 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (ApiException $exception) {
             if ($exception->errorCode() === 'VALIDATION_ERROR') {
                 $errors = $exception->fields();
+                if (isset($errors['staffId'])) {
+                    $errors['identifier'] = $errors['staffId'];
+                    unset($errors['staffId']);
+                }
                 $message = $exception->getMessage();
             } elseif ($exception->errorCode() === 'CONFLICT') {
                 $message = $exception->getMessage();
@@ -74,7 +78,7 @@ $pageTitle = 'Staff registration';
 $pageHeading = 'Staff registration';
 $activeNav = '';
 $useSidebar = false;
-$bodyClass = 'portal-login-page';
+$bodyClass = 'portal-login-page portal-register-page';
 $flash = pull_flash();
 $pageActions = '';
 
@@ -84,10 +88,8 @@ $content = render_register_panel([
     'role' => 'staff',
     'eyebrow' => 'Staff registration',
     'title' => 'Create your staff account',
-    'intro' => 'Register with the Staff ID your administration has approved for you.',
     'identifierLabel' => 'Staff ID',
-    'identifierPlaceholder' => 'e.g. UCEN-CSE-1042',
-    'identifierHint' => 'Your approved staff ID (the employee / faculty ID on your profile).',
+    'identifierPlaceholder' => 'Enter your Staff ID',
     'values' => $values,
     'errors' => $errors,
     'message' => $message,

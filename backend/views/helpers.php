@@ -154,23 +154,39 @@ if (!function_exists('pull_flash')) {
     }
 }
 
+if (!function_exists('render_toast')) {
+    function render_toast(string $message, string $tone = 'success'): string
+    {
+        if ($message === '') {
+            return '';
+        }
+
+        $tone = in_array($tone, ['success', 'error', 'info'], true) ? $tone : 'success';
+        $icon = match ($tone) {
+            'error' => 'exclamation-octagon-fill',
+            'info' => 'info-circle-fill',
+            default => 'check2-circle',
+        };
+        $role = $tone === 'error' ? 'alert' : 'status';
+
+        return '<div class="toast toast--' . $tone . ' show" role="' . $role . '" data-server-toast>'
+            . '<i class="bi bi-' . $icon . '" aria-hidden="true"></i><span>' . e($message) . '</span></div>';
+    }
+}
+
 if (!function_exists('render_flash')) {
     /** @param array<string, mixed> $flash */
     function render_flash(array $flash): string
     {
-        if ($flash === []) {
+        $message = (string) ($flash['message'] ?? '');
+        if ($message === '') {
             return '';
         }
 
-        $label = (string) ($flash['message'] ?? '');
-        if ($label === '') {
-            return '';
-        }
-        $tone = ($flash['type'] ?? 'success') === 'error' ? 'error' : 'success';
-        $icon = $tone === 'error' ? 'exclamation-octagon-fill' : 'check2-circle';
+        $type = (string) ($flash['type'] ?? 'success');
+        $tone = $type === 'warning' ? 'info' : $type;
 
-        return '<div class="portal-alert portal-alert--' . $tone . '" role="status">'
-            . '<i class="bi bi-' . $icon . '" aria-hidden="true"></i><div>' . e($label) . '</div></div>';
+        return render_toast($message, $tone);
     }
 }
 

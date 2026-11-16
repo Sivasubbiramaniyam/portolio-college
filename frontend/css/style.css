@@ -2037,58 +2037,64 @@ body.sidebar-expanded .app-shell {
 
 .toast-stack {
   position: fixed;
-  right: 22px;
-  bottom: 22px;
-  z-index: 300;
+  top: 20px;
+  left: 50%;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: min(340px, calc(100vw - 32px));
+  gap: 12px;
+  width: min(480px, calc(100vw - 32px));
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .toast {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--purple);
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 0;
   border-radius: 14px;
-  background: #fff;
-  color: var(--ink);
-  font-size: 0.78rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
   line-height: 1.5;
-  box-shadow: 0 20px 40px -18px rgba(40, 24, 100, 0.4);
-  animation: toastIn 0.3s ease both;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-18px);
   transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: auto;
 }
 
 .toast i {
   flex: 0 0 auto;
-  color: var(--purple);
-  font-size: 1rem;
+  color: #fff;
+  font-size: 1.1rem;
   line-height: 1.3;
 }
 
-.toast--success {
-  border-left-color: var(--green);
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.toast--success i {
-  color: var(--green);
+.toast--success {
+  background: linear-gradient(135deg, #28a745, #1f8a34);
 }
 
 .toast--error {
-  border-left-color: var(--red);
+  background: linear-gradient(135deg, #dc3545, #b02a37);
 }
 
-.toast--error i {
-  color: var(--red);
+.toast--info {
+  background: linear-gradient(135deg, #3a7bd5, #1e5dc4);
 }
 
 .toast.is-leaving {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(-18px);
 }
 
 .footer {
@@ -2522,8 +2528,8 @@ body.sidebar-expanded .app-shell {
   
 
   .toast-stack {
-    right: 16px;
-    bottom: 16px;
+    top: 14px;
+    width: calc(100vw - 28px);
   }
 
   .footer {
@@ -3045,6 +3051,11 @@ body.sidebar-expanded .app-shell {
 .password-field {
   position: relative;
   display: block;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }
 
 

@@ -175,7 +175,6 @@ if ($isAdmin) {
     <main class="main" id="main-content">
       <div class="view">
         <div class="view__inner">
-          <?= render_flash($flash) ?>
           <?= $content ?>
         </div>
       </div>
@@ -192,7 +191,18 @@ if ($isAdmin) {
     </main>
   </div>
 
-  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="true"></div>
+  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="true">
+    <?= render_flash($flash) ?>
+    <?php if (!empty($message) && empty($errors)): ?>
+      <?= render_toast((string) $message, 'error') ?>
+    <?php endif; ?>
+    <?php if (!empty($notice) && (empty($authConfigured) || $authConfigured)): ?>
+      <?= render_toast(strip_tags((string) $notice), 'info') ?>
+    <?php endif; ?>
+    <?php if (!empty($signedOut)): ?>
+      <?= render_toast('You have been signed out safely.', 'success') ?>
+    <?php endif; ?>
+  </div>
   <script src="<?= e(asset_url('/frontend/js/portal.js')) ?>" defer></script>
 </body>
 </html>

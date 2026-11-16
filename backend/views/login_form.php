@@ -28,6 +28,8 @@ if (!function_exists('render_login_panel')) {
      *   notice?: string,
      *   signedOut?: bool,
      *   authConfigured?: bool,
+     *   showPublicLink?: bool,
+     *   showPasswordHelp?: bool,
      *   altLoginUrl?: string,
      *   altLoginLabel?: string,
      *   registerUrl?: string,
@@ -50,6 +52,8 @@ if (!function_exists('render_login_panel')) {
         $notice = (string) ($options['notice'] ?? '');
         $signedOut = (bool) ($options['signedOut'] ?? false);
         $authConfigured = (bool) ($options['authConfigured'] ?? true);
+        $showPublicLink = (bool) ($options['showPublicLink'] ?? true);
+        $showPasswordHelp = (bool) ($options['showPasswordHelp'] ?? true);
         $altLoginUrl = (string) ($options['altLoginUrl'] ?? '');
         $altLoginLabel = (string) ($options['altLoginLabel'] ?? '');
         $registerUrl = (string) ($options['registerUrl'] ?? '');
@@ -58,19 +62,12 @@ if (!function_exists('render_login_panel')) {
         ob_start();
         ?>
 <section class="login-shell login-shell--single">
-  <div class="login-card card">
+  <div class="login-card login-box card">
     <div class="login-card__head">
       <span class="eyebrow"><i class="bi bi-shield-lock" aria-hidden="true"></i> <?= e($eyebrow) ?></span>
       <h2><?= e($title) ?></h2>
       <?php if ($intro !== ''): ?><p><?= e($intro) ?></p><?php endif; ?>
     </div>
-
-    <?php if ($signedOut): ?>
-      <div class="portal-alert portal-alert--success" role="status">
-        <i class="bi bi-check2-circle" aria-hidden="true"></i>
-        <div>You have been signed out safely.</div>
-      </div>
-    <?php endif; ?>
 
     <?php if (!$authConfigured): ?>
       <div class="portal-alert portal-alert--warning" role="alert">
@@ -81,24 +78,6 @@ if (!function_exists('render_login_panel')) {
           <pre class="code-block">php backend/bin/make-user.php --role=admin --admin-id=admin --email=you@ucen.ac.in</pre>
         </div>
       </div>
-    <?php endif; ?>
-
-    <?php if ($message !== ''): ?>
-      <div class="portal-alert portal-alert--error" role="alert">
-        <i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i>
-        <div><?= e($message) ?></div>
-      </div>
-    <?php endif; ?>
-
-    <?php if ($notice !== ''): ?>
-      <div class="portal-alert portal-alert--warning" role="alert">
-        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
-        <div><?= $notice ?></div>
-      </div>
-    <?php endif; ?>
-
-    <?php if ($errors !== []): ?>
-      <?= render_error_summary($errors, 'Please check the sign-in form.') ?>
     <?php endif; ?>
 
     <form class="login-form" method="post" action="<?= e($action) ?>" novalidate>
@@ -129,13 +108,17 @@ if (!function_exists('render_login_panel')) {
 
     <div class="login-help">
       <?php if ($registerUrl !== ''): ?>
-        <p><i class="bi bi-person-plus" aria-hidden="true"></i> First time here? <a href="<?= e($registerUrl) ?>"><?= e($registerLabel) ?></a>.</p>
+        <p><i class="bi bi-person-plus" aria-hidden="true"></i> <a href="<?= e($registerUrl) ?>"><?= e($registerLabel) ?></a></p>
       <?php endif; ?>
-      <p><i class="bi bi-info-circle" aria-hidden="true"></i> Public profiles are visible without signing in. <a href="<?= e(app_url('/')) ?>">Browse the staff list</a>.</p>
+      <?php if ($showPublicLink): ?>
+        <p><i class="bi bi-info-circle" aria-hidden="true"></i> Public profiles are visible without signing in. <a href="<?= e(app_url('/')) ?>">Browse the staff list</a>.</p>
+      <?php endif; ?>
       <?php if ($altLoginUrl !== ''): ?>
-        <p><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> <?= e($altLoginLabel) ?>: <a href="<?= e($altLoginUrl) ?>">sign in here</a>.</p>
+        <p><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> <a href="<?= e($altLoginUrl) ?>"><?= e($altLoginLabel) ?> Login</a></p>
       <?php endif; ?>
-      <p><i class="bi bi-key" aria-hidden="true"></i> Forgotten passwords are reset by an administrator using the CLI user tool.</p>
+      <?php if ($showPasswordHelp): ?>
+        <p><i class="bi bi-key" aria-hidden="true"></i> Forgotten passwords are reset by an administrator using the CLI user tool.</p>
+      <?php endif; ?>
     </div>
   </div>
 </section>

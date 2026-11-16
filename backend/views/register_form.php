@@ -60,9 +60,9 @@ if (!function_exists('render_register_panel')) {
 
         ob_start();
         ?>
-<section class="login-shell login-shell--single">
-  <div class="login-card card">
-    <div class="login-card__head">
+<section class="login-shell login-shell--single register-shell">
+  <div class="login-card card register-card">
+    <div class="login-card__head register-card__head">
       <span class="eyebrow"><i class="bi bi-person-plus" aria-hidden="true"></i> <?= e($eyebrow) ?></span>
       <h2><?= e($title) ?></h2>
       <?php if ($intro !== ''): ?><p><?= e($intro) ?></p><?php endif; ?>
@@ -75,25 +75,7 @@ if (!function_exists('render_register_panel')) {
       </div>
     <?php endif; ?>
 
-    <?php if ($message !== ''): ?>
-      <div class="portal-alert portal-alert--error" role="alert">
-        <i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i>
-        <div><?= e($message) ?></div>
-      </div>
-    <?php endif; ?>
-
-    <?php if ($notice !== ''): ?>
-      <div class="portal-alert portal-alert--warning" role="alert">
-        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
-        <div><?= $notice ?></div>
-      </div>
-    <?php endif; ?>
-
-    <?php if ($errors !== []): ?>
-      <?= render_error_summary($errors, 'Please check the registration form.') ?>
-    <?php endif; ?>
-
-    <form class="login-form" method="post" action="<?= e($action) ?>" novalidate>
+    <form class="login-form register-form" method="post" action="<?= e($action) ?>" novalidate>
       <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
 
       <div class="field<?= $invalid('identifier') ?>">
@@ -120,8 +102,7 @@ if (!function_exists('render_register_panel')) {
       <?php if (!$isAdmin): ?>
       <div class="field<?= $invalid('department') ?>">
         <label for="reg-department">Department <span class="field-optional">(optional)</span></label>
-        <input id="reg-department" type="text" name="department" value="<?= e($value('department')) ?>" placeholder="Leave blank to use your department on file" autocomplete="organization">
-        <small class="field-hint">Prefilled from your faculty profile when one matches your Staff ID.</small>
+        <input id="reg-department" type="text" name="department" value="<?= e($value('department')) ?>" placeholder="Enter your department" autocomplete="organization">
         <?= $error('department') ?>
       </div>
       <?php endif; ?>
@@ -154,7 +135,6 @@ if (!function_exists('render_register_panel')) {
     </form>
 
     <div class="login-help">
-      <p><i class="bi bi-info-circle" aria-hidden="true"></i> Your ID must be approved by the administration before you can register.</p>
       <?php if ($loginUrl !== ''): ?>
         <p><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Already registered? <a href="<?= e($loginUrl) ?>"><?= e($loginLabel) ?></a>.</p>
       <?php endif; ?>
