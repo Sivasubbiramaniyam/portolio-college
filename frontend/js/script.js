@@ -1448,7 +1448,10 @@
   }
 
   function isDeanProfile(profile) {
-    return !!profile && profile.id === DEAN_ID;
+    if (!profile) return false;
+    if (profile.id === DEAN_ID) return true;
+    if (String(profile.email || "").trim().toLowerCase() === DEAN_EMAIL) return true;
+    return /^dean\b/i.test(String(profile.designation || "").trim());
   }
 
   function regularFaculty() {
@@ -1616,7 +1619,7 @@
   function renderDeanSpotlight() {
     const spotlight = $("#dean-spotlight");
     if (!spotlight) return;
-    const dean = findFaculty(DEAN_ID);
+    const dean = allFaculty().filter(isDeanProfile)[0] || null;
     if (!dean) {
       spotlight.hidden = true;
       spotlight.innerHTML = "";

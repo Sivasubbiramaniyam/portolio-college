@@ -87,7 +87,7 @@ $sidebarLinks = [
     ['key' => 'overview', 'label' => 'Admin Dashboard', 'href' => app_url('/admin/dashboard.php'), 'icon' => 'speedometer2'],
 ];
 if ($dean !== null) {
-    $sidebarLinks[] = ['key' => 'dean', 'label' => 'My Profile', 'href' => app_url('/faculty/view.php?id=' . rawurlencode((string) $dean['id'])), 'icon' => 'person-circle'];
+    $sidebarLinks[] = ['key' => 'dean', 'label' => 'Dean Profile', 'href' => app_url('/faculty/view.php?id=' . rawurlencode((string) $dean['id'])), 'icon' => 'person-circle'];
 }
 
 $pageTitle = 'Administrator dashboard';
@@ -207,7 +207,7 @@ ob_start();
                   <?php if ($isDean): ?>
                     <a class="table-action" href="<?= e($editUrl) ?>" title="Edit profile"><i class="bi bi-pencil-square" aria-hidden="true"></i><span>Edit</span></a>
                     <span class="table-actions__sep" aria-hidden="true">|</span>
-                    <a class="table-action" href="<?= e($editUrl) ?>" title="View profile"><i class="bi bi-eye" aria-hidden="true"></i><span>View</span></a>
+                    <a class="table-action" href="<?= e($viewUrl) ?>" title="View profile"><i class="bi bi-eye" aria-hidden="true"></i><span>View</span></a>
                   <?php else: ?>
                     <a class="table-action" href="<?= e($viewUrl) ?>" title="View public profile"><i class="bi bi-eye" aria-hidden="true"></i><span>View</span></a>
                     <span class="table-actions__sep" aria-hidden="true">|</span>
