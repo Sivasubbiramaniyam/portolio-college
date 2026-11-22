@@ -80,6 +80,41 @@ if (!function_exists('render_collection_item')) {
     }
 }
 
+if (!function_exists('render_root_group_fields')) {
+    /**
+     * Render the root-level fields of one field group inside an editor section.
+     *
+     * @param array<string, mixed> $group
+     * @param array<string, mixed> $profile
+     * @param array<string, string> $errors
+     */
+    function render_root_group_fields(array $group, array $profile, array $errors, bool $admin = false, bool $showHeading = false): string
+    {
+        $html = '';
+        if ($showHeading) {
+            $html .= '<h3 class="form-subheading">' . e((string) ($group['title'] ?? 'Details')) . '</h3>';
+        }
+        $html .= '<div class="form-grid">';
+        foreach (($group['fields'] ?? []) as $field) {
+            $key = (string) ($field['key'] ?? '');
+            if ($key === '') {
+                continue;
+            }
+            $html .= render_field($key, $field, $profile[$key] ?? '', $errors);
+        }
+        $html .= '</div>';
+
+        if (($group['key'] ?? '') === 'identity' && $admin) {
+            $html .= '<div class="field field--checkbox" style="margin-top:14px">';
+            $html .= '<label class="check-field"><input type="checkbox" name="isDean" value="1"' . (($profile['isDean'] ?? false) === true ? ' checked' : '') . '> <span>Mark this profile as the Dean</span></label>';
+            $html .= '<small class="field-hint">Only one profile can be the dean. The dean is excluded from directory statistics and cannot be deleted.</small>';
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
+}
+
 if (!function_exists('render_upload_field')) {
     /**
      * @param array<string, mixed> $profile
@@ -88,20 +123,20 @@ if (!function_exists('render_upload_field')) {
         string $name,
         string $label,
         string $help,
-        string $currentUrl,
-        bool $banner = false
+        string $currentUrl
     ): string {
         $rawValue = trim($currentUrl);
         $preview = safe_asset_url($rawValue, '');
         $id = 'upload-' . $name;
+        $cropMode = 'photo';
 
-        $html = '<div class="upload-field' . ($banner ? ' upload-field--banner' : '') . '">';
+        $html = '<div class="upload-field" data-upload-mode="' . e($cropMode) . '">';
         $html .= '<input type="hidden" name="' . e($name) . '" value="' . e($rawValue) . '">';
         $html .= '<span class="upload-field__preview">';
         if ($preview !== '') {
             $html .= '<img src="' . e($preview) . '" alt="" data-upload-preview="' . e($name) . '" data-original-src="' . e($preview) . '">';
         } else {
-            $html .= '<i class="bi bi-' . ($banner ? 'image' : 'person-bounding-box') . '" aria-hidden="true" data-upload-empty="' . e($name) . '"></i>';
+            $html .= '<i class="bi bi-person-bounding-box" aria-hidden="true" data-upload-empty="' . e($name) . '"></i>';
             $html .= '<img src="" alt="" hidden data-upload-preview="' . e($name) . '">';
         }
         $html .= '</span>';
@@ -110,8 +145,9 @@ if (!function_exists('render_upload_field')) {
         $html .= '<small>' . e($help) . '</small>';
         $html .= '<div class="upload-field__actions">';
         $html .= '<label class="btn btn-soft btn-sm" for="' . e($id) . '"><i class="bi bi-upload" aria-hidden="true"></i> Choose file</label>';
-        $html .= '<input id="' . e($id) . '" class="sr-only" type="file" name="' . e($name) . '_file" accept="image/jpeg,image/png,image/webp" data-upload-file="' . e($name) . '" data-preview-image="[data-upload-preview=&quot;' . e($name) . '&quot;]" data-preview-empty="[data-upload-empty=&quot;' . e($name) . '&quot;]">';
+        $html .= '<input id="' . e($id) . '" class="sr-only" type="file" name="' . e($name) . '_file" accept="image/jpeg,image/png,image/webp" data-upload-file="' . e($name) . '" data-crop-mode="' . e($cropMode) . '" data-preview-image="[data-upload-preview=&quot;' . e($name) . '&quot;]" data-preview-empty="[data-upload-empty=&quot;' . e($name) . '&quot;]">';
         if ($preview !== '') {
+            $html .= '<button type="button" class="btn btn-ghost btn-sm" data-adjust-upload="' . e($name) . '" data-adjust-src="' . e($preview) . '" data-crop-mode="' . e($cropMode) . '"><i class="bi bi-sliders" aria-hidden="true"></i> Adjust</button>';
             $html .= '<label class="check-field"><input type="checkbox" name="remove_' . e($name) . '" value="1" data-clear-upload="' . e($name) . '"> <span>Remove current ' . e(strtolower($label)) . '</span></label>';
         }
         $html .= '</div></div></div>';
@@ -141,7 +177,6 @@ if (!function_exists('render_profile_form')) {
         $csrfToken = (string) ($options['csrfToken'] ?? '');
         $errors = map_validation_errors($errors);
         $photo = (string) ($profile['photo'] ?? '');
-        $banner = (string) ($profile['banner'] ?? '');
 
         $html = '<form class="editor-shell" method="post" action="' . e($action) . '" enctype="multipart/form-data" data-guard-unsaved novalidate>';
         $html .= '<input type="hidden" name="_csrf" value="' . e($csrfToken) . '">';
@@ -154,7 +189,7 @@ if (!function_exists('render_profile_form')) {
         $html .= '<div><h2>' . ($profile['id'] !== '' ? 'Edit profile' : 'Create profile') . '</h2>';
         $html .= '<p>Required fields are marked with an asterisk. Changes appear on the public profile as soon as you save.</p></div>';
         $html .= '<div class="editor-intro__actions">';
-        $html .= '<a class="btn btn-ghost" href="' . e($cancelUrl) . '"><i class="bi bi-arrow-left" aria-hidden="true"></i> Cancel</a>';
+        $html .= '<a class="btn btn-ghost" href="' . e($cancelUrl) . '" data-cancel-guard="true"><i class="bi bi-arrow-left" aria-hidden="true"></i> Cancel</a>';
         if ($previewUrl !== '') {
             $html .= '<a class="btn btn-soft" href="' . e($previewUrl) . '" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Preview</a>';
         }
@@ -164,64 +199,93 @@ if (!function_exists('render_profile_form')) {
             $html .= render_error_summary($errors, 'The profile could not be saved. Please correct the highlighted fields.');
         }
 
-        // Media
-        $html .= '<section class="card form-section" id="section-media">';
-        $html .= '<header class="form-section__head"><span class="icon-badge"><i class="bi bi-camera" aria-hidden="true"></i></span><div><h2>Profile photo &amp; banner</h2><p>Images are validated by content type, stored outside the web root and served through media.php.</p></div></header>';
-        $html .= '<div class="form-grid">';
-        $html .= render_upload_field('photo', 'Profile photo', 'JPEG, PNG or WebP. Maximum 5 MB. Square images work best.', $photo);
-        $html .= render_upload_field('banner', 'Profile banner', 'JPEG, PNG or WebP. Maximum 5 MB. A wide 3:1 image works best.', $banner, true);
-        $html .= '</div>';
-        $html .= '</section>';
+        // Media is part of the first (Personal information) section so the
+        // editor follows the same top-to-bottom order as the public profile.
+        $mediaHtml = '<h3 class="form-subheading">Profile photo</h3>';
+        $mediaHtml .= '<div class="form-grid">';
+        $mediaHtml .= render_upload_field('photo', 'Profile photo', 'JPEG, PNG or WebP. Maximum 5 MB. Drag and zoom to set a square crop.', $photo);
+        $mediaHtml .= '</div>';
 
-        foreach (($config['rootGroups'] ?? []) as $group) {
-            $html .= '<section class="card form-section" id="section-' . e((string) ($group['key'] ?? '')) . '">';
-            $html .= '<header class="form-section__head"><span class="icon-badge"><i class="bi bi-' . e((string) ($group['icon'] ?? 'pencil-square')) . '" aria-hidden="true"></i></span><div><h2>' . e((string) ($group['title'] ?? 'Details')) . '</h2><p>' . e((string) ($group['description'] ?? '')) . '</p></div></header>';
-            $html .= '<div class="form-grid">';
-            foreach (($group['fields'] ?? []) as $field) {
-                $key = (string) ($field['key'] ?? '');
-                if ($key === '') {
-                    continue;
-                }
-                $html .= render_field($key, $field, $profile[$key] ?? '', $errors);
+        // Sections are ordered to match the public profile and its sidebar.
+        $sections = $config['sections'] ?? [];
+        if ($sections === []) {
+            $sections = [];
+            foreach (($config['rootGroups'] ?? []) as $groupKey => $group) {
+                $sections[] = [
+                    'id' => $groupKey,
+                    'title' => $group['title'] ?? '',
+                    'description' => $group['description'] ?? '',
+                    'icon' => $group['icon'] ?? 'pencil-square',
+                    'groups' => [$groupKey],
+                ];
             }
-            $html .= '</div>';
-            if (($group['key'] ?? '') === 'identity' && $admin) {
-                $html .= '<div class="field field--checkbox" style="margin-top:14px">';
-                $html .= '<label class="check-field"><input type="checkbox" name="isDean" value="1"' . (($profile['isDean'] ?? false) === true ? ' checked' : '') . '> <span>Mark this profile as the Dean</span></label>';
-                $html .= '<small class="field-hint">Only one profile can be the dean. The dean is excluded from directory statistics and cannot be deleted.</small>';
-                $html .= '</div>';
+            foreach (array_keys($config['collections'] ?? []) as $collectionKey) {
+                $sections[] = [
+                    'id' => $collectionKey,
+                    'groups' => [],
+                    'collections' => [$collectionKey],
+                ];
             }
-            $html .= '</section>';
         }
 
-        foreach (($config['collections'] ?? []) as $collectionKey => $definition) {
-            $items = is_array($profile[$collectionKey] ?? null) ? array_values($profile[$collectionKey]) : [];
-            $title = (string) ($definition['title'] ?? ucfirst($collectionKey));
-            $templateId = 'template-' . $collectionKey;
+        foreach ($sections as $section) {
+            $sectionId = (string) ($section['id'] ?? '');
+            $groups = array_values(array_filter((array) ($section['groups'] ?? []), 'is_string'));
+            $collectionKeys = array_values(array_filter((array) ($section['collections'] ?? []), 'is_string'));
 
-            $html .= '<section class="card form-section" id="section-' . e($collectionKey) . '">';
-            $html .= '<header class="form-section__head"><span class="icon-badge"><i class="bi bi-' . e((string) ($definition['icon'] ?? 'collection')) . '" aria-hidden="true"></i></span><div><h2>' . e($title) . '</h2><p>' . e((string) ($definition['description'] ?? '')) . '</p></div>';
-            if ($items !== []) {
-                $html .= '<span class="profile-section__count">' . count($items) . ' item' . (count($items) === 1 ? '' : 's') . '</span>';
+            $itemCount = 0;
+            foreach ($collectionKeys as $collectionKey) {
+                $candidate = $profile[$collectionKey] ?? null;
+                $itemCount += is_array($candidate) ? count($candidate) : 0;
+            }
+
+            $html .= '<section class="card form-section" id="section-' . e($sectionId) . '">';
+            $html .= '<header class="form-section__head"><span class="icon-badge"><i class="bi bi-' . e((string) ($section['icon'] ?? 'pencil-square')) . '" aria-hidden="true"></i></span><div><h2>' . e((string) ($section['title'] ?? 'Details')) . '</h2><p>' . e((string) ($section['description'] ?? '')) . '</p></div>';
+            if ($itemCount > 0) {
+                $html .= '<span class="profile-section__count">' . $itemCount . ' item' . ($itemCount === 1 ? '' : 's') . '</span>';
             }
             $html .= '</header>';
 
-            $html .= '<div data-collection="' . e($collectionKey) . '" data-template="' . e($templateId) . '" data-item-label="' . e($title) . '">';
-            $html .= '<div class="collection-list" data-collection-items>';
-            foreach ($items as $index => $entry) {
-                $html .= render_collection_item($collectionKey, (int) $index, (array) $entry, $definition, $errors);
+            if ($sectionId === 'personal') {
+                $html .= $mediaHtml;
             }
-            $html .= '</div>';
-            $html .= '<div class="collection-empty" data-collection-empty' . ($items !== [] ? ' hidden' : '') . '><i class="bi bi-inbox" aria-hidden="true"></i> No ' . e(strtolower($title)) . ' have been added yet. Use the button below to add the first entry.</div>';
-            $html .= '<div class="collection-add"><button class="btn btn-soft" type="button" data-add-collection><i class="bi bi-plus-lg" aria-hidden="true"></i> Add ' . e(strtolower($title)) . '</button></div>';
-            $html .= '<template id="' . e($templateId) . '">' . render_collection_item($collectionKey, 0, [], $definition, $errors, true) . '</template>';
-            $html .= '</div></section>';
+
+            foreach ($groups as $groupKey) {
+                $group = $config['rootGroups'][$groupKey] ?? null;
+                if (!is_array($group)) {
+                    continue;
+                }
+                $html .= render_root_group_fields($group, $profile, $errors, $admin, count($groups) > 1);
+            }
+
+            foreach ($collectionKeys as $collectionKey) {
+                $definition = $config['collections'][$collectionKey] ?? null;
+                if (!is_array($definition)) {
+                    continue;
+                }
+                $items = is_array($profile[$collectionKey] ?? null) ? array_values($profile[$collectionKey]) : [];
+                $title = (string) ($definition['title'] ?? ucfirst($collectionKey));
+                $templateId = 'template-' . $collectionKey;
+
+                $html .= '<div data-collection="' . e($collectionKey) . '" data-template="' . e($templateId) . '" data-item-label="' . e($title) . '">';
+                $html .= '<div class="collection-list" data-collection-items>';
+                foreach ($items as $index => $entry) {
+                    $html .= render_collection_item($collectionKey, (int) $index, (array) $entry, $definition, $errors);
+                }
+                $html .= '</div>';
+                $html .= '<div class="collection-empty" data-collection-empty' . ($items !== [] ? ' hidden' : '') . '><i class="bi bi-inbox" aria-hidden="true"></i> No ' . e(strtolower($title)) . ' have been added yet. Use the button below to add the first entry.</div>';
+                $html .= '<div class="collection-add"><button class="btn btn-soft" type="button" data-add-collection><i class="bi bi-plus-lg" aria-hidden="true"></i> Add ' . e(strtolower($title)) . '</button></div>';
+                $html .= '<template id="' . e($templateId) . '">' . render_collection_item($collectionKey, 0, [], $definition, $errors, true) . '</template>';
+                $html .= '</div>';
+            }
+
+            $html .= '</section>';
         }
 
         $html .= '<div class="form-actions form-actions--sticky">';
         $html .= '<p><i class="bi bi-shield-check" aria-hidden="true"></i> Saved with server-side validation and CSRF protection.</p>';
         $html .= '<div class="form-actions__buttons">';
-        $html .= '<a class="btn btn-ghost" href="' . e($cancelUrl) . '">Cancel</a>';
+        $html .= '<a class="btn btn-ghost" href="' . e($cancelUrl) . '" data-cancel-guard="true">Cancel</a>';
         $html .= '<button class="btn btn-primary" type="submit"><i class="bi bi-check2-circle" aria-hidden="true"></i> ' . e($submitLabel) . '</button>';
         $html .= '</div></div>';
 
@@ -259,7 +323,7 @@ if (!function_exists('collect_profile_form_input')) {
         }
 
         $input['photo'] = isset($source['remove_photo']) ? '' : (string) ($source['photo'] ?? ($existing['photo'] ?? ''));
-        $input['banner'] = isset($source['remove_banner']) ? '' : (string) ($source['banner'] ?? ($existing['banner'] ?? ''));
+        $input['banner'] = '';
         $input['displayOrder'] = (string) ($source['displayOrder'] ?? ($existing['displayOrder'] ?? '0'));
 
         if ($admin) {
@@ -305,10 +369,8 @@ if (!function_exists('collect_profile_form_input')) {
 
         // Preserve the currently stored hidden values even when the browser
         // omits them because the form was partially submitted.
-        foreach (['photo', 'banner'] as $media) {
-            if (!array_key_exists($media, $source) && !isset($source['remove_' . $media])) {
-                $input[$media] = (string) ($existing[$media] ?? '');
-            }
+        if (!array_key_exists('photo', $source) && !isset($source['remove_photo'])) {
+            $input['photo'] = (string) ($existing['photo'] ?? '');
         }
 
         return $input;

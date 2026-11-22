@@ -121,15 +121,12 @@ if (!function_exists('render_profile_hero')) {
     {
         $name = (string) ($profile['name'] ?? 'Faculty member');
         $department = (string) ($profile['department'] ?? '');
-        $banner = banner_url($profile);
         $percent = (int) ($completion['percent'] ?? 0);
         $badge = (array) ($completion['badge'] ?? []);
         $badgeClass = profile_badge_class((string) ($badge['tone'] ?? 'start'));
 
         $html = '<article class="profile-hero" id="profile-overview">';
-        $html .= '<div class="profile-hero__banner' . ($banner !== '' ? ' profile-hero__banner--custom' : '') . '"'
-            . ($banner !== '' ? ' style="background-image: url(&quot;' . e($banner) . '&quot;)"' : '')
-            . '></div>';
+        $html .= '<div class="profile-hero__banner" aria-hidden="true"></div>';
         $html .= '<div class="profile-hero__body">';
         $html .= '<div class="profile-hero__avatar">' . render_avatar($profile, 'avatar--xl') . '</div>';
         $html .= '<div class="profile-hero__main">';

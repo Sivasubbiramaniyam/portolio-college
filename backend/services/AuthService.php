@@ -22,11 +22,11 @@ final class AuthService
      *  @param array<string, mixed> $sessionConfig
      */
     public function __construct(
-        private readonly UserRepositoryInterface $users,
-        private readonly FacultyRepositoryInterface $faculty,
-        private readonly array $authConfig,
-        private readonly array $securityConfig,
-        private readonly array $sessionConfig = []
+        private UserRepositoryInterface $users,
+        private FacultyRepositoryInterface $faculty,
+        private array $authConfig,
+        private array $securityConfig,
+        private array $sessionConfig = []
     ) {
     }
 

@@ -33,7 +33,7 @@ final class Application
     private array $instances = [];
 
     /** @param array<string, mixed> $config */
-    public function __construct(private readonly array $config)
+    public function __construct(private array $config)
     {
         foreach (['storage', 'uploads', 'logs'] as $pathKey) {
             $path = (string) ($config['paths'][$pathKey] ?? '');

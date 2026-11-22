@@ -33,8 +33,8 @@ final class Request
      * @param array<string, string> $headers
      */
     public function __construct(
-        private readonly string $method,
-        private readonly string $path,
+        private string $method,
+        private string $path,
         array $body = [],
         array $query = [],
         array $files = [],

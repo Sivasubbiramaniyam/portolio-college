@@ -16,9 +16,9 @@ final class ApiException extends RuntimeException
 
     /** @param array<string, string> $fields */
     public function __construct(
-        private readonly string $errorCode,
+        private string $errorCode,
         string $message,
-        private readonly int $httpStatus = 400,
+        private int $httpStatus = 400,
         array $fields = []
     ) {
         parent::__construct($message);

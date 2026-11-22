@@ -73,7 +73,7 @@ if ($isAdmin) {
     </a>
 
     <?php if (is_array($sidebarBack) && (string) ($sidebarBack['href'] ?? '') !== ''): ?>
-      <a class="sidebar__back" href="<?= e((string) $sidebarBack['href']) ?>">
+      <a class="sidebar__back" href="<?= e((string) $sidebarBack['href']) ?>" data-tooltip="<?= e((string) ($sidebarBack['label'] ?? 'Back')) ?>">
         <i class="bi bi-arrow-left" aria-hidden="true"></i>
         <span><?= e((string) ($sidebarBack['label'] ?? 'Back')) ?></span>
       </a>
@@ -86,7 +86,7 @@ if ($isAdmin) {
 
       <?php foreach ($sidebarLinks as $link): ?>
         <?php $isActive = $activeNav === (string) ($link['key'] ?? ''); ?>
-        <a class="side-link<?= $isActive ? ' is-active' : '' ?>" href="<?= e((string) $link['href']) ?>"<?= $isActive ? ' aria-current="page"' : '' ?> data-sidebar-item data-sidebar-label="<?= e(strtolower((string) $link['label'])) ?>">
+        <a class="side-link<?= $isActive ? ' is-active' : '' ?>" href="<?= e((string) $link['href']) ?>"<?= $isActive ? ' aria-current="page"' : '' ?> data-sidebar-item data-sidebar-label="<?= e(strtolower((string) $link['label'])) ?>" data-tooltip="<?= e((string) $link['label']) ?>">
           <span class="side-link__icon"><i class="bi bi-<?= e((string) $link['icon']) ?>" aria-hidden="true"></i></span>
           <span class="side-link__label"><?= e((string) $link['label']) ?></span>
         </a>
@@ -95,7 +95,7 @@ if ($isAdmin) {
       <?php if ($sidebarAccountLinks !== []): ?>
         <span class="sidebar__nav-label">Account</span>
         <?php foreach ($sidebarAccountLinks as $link): ?>
-          <a class="side-link" href="<?= e((string) $link['href']) ?>" data-sidebar-item data-sidebar-label="<?= e(strtolower((string) $link['label'])) ?>">
+          <a class="side-link" href="<?= e((string) $link['href']) ?>" data-sidebar-item data-sidebar-label="<?= e(strtolower((string) $link['label'])) ?>" data-tooltip="<?= e((string) $link['label']) ?>">
             <span class="side-link__icon"><i class="bi bi-<?= e((string) $link['icon']) ?>" aria-hidden="true"></i></span>
             <span class="side-link__label"><?= e((string) $link['label']) ?></span>
           </a>
@@ -105,9 +105,9 @@ if ($isAdmin) {
 
     <?php if (is_array($user)): ?>
     <div class="sidebar__footer">
-      <form class="sidebar__signout" method="post" action="<?= e(app_url('/logout.php')) ?>">
+      <form class="sidebar__signout" method="post" action="<?= e(app_url('/logout.php')) ?>" data-confirm="Do you want to sign out?">
         <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
-        <button class="side-link side-link--button" type="submit">
+        <button class="side-link side-link--button" type="submit" data-tooltip="Sign out">
           <span class="side-link__icon"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></span>
           <span class="side-link__label">Sign out</span>
         </button>

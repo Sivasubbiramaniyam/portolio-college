@@ -53,7 +53,7 @@ ob_start();
     <p>Your account is active, but an administrator has not linked it to a faculty profile yet. Ask an administrator to connect your account, or contact the portal maintainer.</p>
     <div class="inline-actions">
       <a class="btn btn-primary" href="<?= e(app_url('/')) ?>"><i class="bi bi-people" aria-hidden="true"></i> Browse staff list</a>
-      <form method="post" action="<?= e(app_url('/logout.php')) ?>">
+      <form method="post" action="<?= e(app_url('/logout.php')) ?>" data-confirm="Do you want to sign out?">
         <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
         <button class="btn btn-ghost" type="submit"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Sign out</button>
       </form>

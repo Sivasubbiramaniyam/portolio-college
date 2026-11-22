@@ -14,10 +14,10 @@ use App\Core\Enums;
 
 return [
     'rootGroups' => [
-        [
+        'identity' => [
             'key' => 'identity',
-            'title' => 'Identity & contact',
-            'description' => 'The mandatory details shown on the directory card and public profile.',
+            'title' => 'Personal information',
+            'description' => 'Directory identity and contact details',
             'icon' => 'person-vcard',
             'fields' => [
                 ['key' => 'name', 'label' => 'Full name', 'type' => 'text', 'required' => true, 'maxlength' => 120, 'placeholder' => 'Dr. K. Ramanathan'],
@@ -26,10 +26,18 @@ return [
                 ['key' => 'designation', 'label' => 'Designation', 'type' => 'select', 'required' => true, 'options' => Enums::DESIGNATIONS],
                 ['key' => 'email', 'label' => 'Email address', 'type' => 'email', 'required' => true, 'maxlength' => 180, 'placeholder' => 'name@ucen.ac.in'],
                 ['key' => 'contact', 'label' => 'Contact number', 'type' => 'tel', 'required' => true, 'maxlength' => 40, 'placeholder' => '+91 94432 18765'],
+            ],
+        ],
+        'specializations' => [
+            'key' => 'specializations',
+            'title' => 'Areas of specialization',
+            'description' => 'Research and teaching expertise',
+            'icon' => 'stars',
+            'fields' => [
                 ['key' => 'specialization', 'label' => 'Areas of specialization', 'type' => 'textarea', 'required' => true, 'rows' => 3, 'maxlength' => 500, 'full' => true, 'placeholder' => 'Artificial Intelligence, Cloud Computing, Data Mining', 'help' => 'Separate each area with a comma.'],
             ],
         ],
-        [
+        'research' => [
             'key' => 'research',
             'title' => 'Research guide recognition',
             'description' => 'Recognition details and scholar counts used by the Research section and completion score.',
@@ -47,7 +55,7 @@ return [
                 ['key' => 'otherGuiding', 'label' => 'Other scholars guiding', 'type' => 'number', 'min' => 0],
             ],
         ],
-        [
+        'researchIds' => [
             'key' => 'researchIds',
             'title' => 'Research profile IDs',
             'description' => 'Any one identifier completes the Research Profile IDs section.',
@@ -263,6 +271,112 @@ return [
                 ['key' => 'to', 'label' => 'To', 'type' => 'month'],
                 ['key' => 'current', 'label' => 'Currently active', 'type' => 'checkbox'],
             ],
+        ],
+    ],
+
+    /**
+     * Editor sections in the same order as the public profile and its sidebar.
+     * Each section can combine root field groups and repeatable collections.
+     */
+    'sections' => [
+        [
+            'id' => 'personal',
+            'title' => 'Personal information',
+            'description' => 'Directory identity and contact details',
+            'icon' => 'person-vcard',
+            'groups' => ['identity'],
+        ],
+        [
+            'id' => 'specializations',
+            'title' => 'Areas of specialization',
+            'description' => 'Research and teaching expertise',
+            'icon' => 'stars',
+            'groups' => ['specializations'],
+        ],
+        [
+            'id' => 'qualification',
+            'title' => 'Qualification',
+            'description' => 'Academic degrees and institutions',
+            'icon' => 'mortarboard',
+            'collections' => ['qualifications'],
+        ],
+        [
+            'id' => 'experience',
+            'title' => 'Professional experience',
+            'description' => 'Teaching and research positions',
+            'icon' => 'briefcase',
+            'collections' => ['experience'],
+        ],
+        [
+            'id' => 'publications',
+            'title' => 'Publications',
+            'description' => 'Journal articles, conference papers and books',
+            'icon' => 'journal-richtext',
+            'collections' => ['publications'],
+        ],
+        [
+            'id' => 'conferences-attended',
+            'title' => 'Conferences attended',
+            'description' => 'Conferences, workshops, symposia and seminars',
+            'icon' => 'easel2',
+            'collections' => ['conferencesAttended'],
+        ],
+        [
+            'id' => 'conferences-conducted',
+            'title' => 'Conferences conducted',
+            'description' => 'Events organised and delivered',
+            'icon' => 'mic',
+            'collections' => ['conferencesConducted'],
+        ],
+        [
+            'id' => 'training-programs-conducted',
+            'title' => 'Training programs conducted',
+            'description' => 'FDPs, workshops, STTPs and training programmes',
+            'icon' => 'clipboard2-check',
+            'collections' => ['trainingPrograms'],
+        ],
+        [
+            'id' => 'patents',
+            'title' => 'Patents',
+            'description' => 'Filed, granted and awarded patents',
+            'icon' => 'award',
+            'collections' => ['patents'],
+        ],
+        [
+            'id' => 'projects',
+            'title' => 'Funded projects',
+            'description' => 'Sponsored research, consultancy and grants',
+            'icon' => 'cash-stack',
+            'collections' => ['projects'],
+        ],
+        [
+            'id' => 'research',
+            'title' => 'Research',
+            'description' => 'Recognition, scholars and research areas',
+            'icon' => 'lightbulb',
+            'groups' => ['research', 'researchIds'],
+            'collections' => ['researchAreas'],
+        ],
+        [
+            'id' => 'achievements',
+            'title' => 'Achievements',
+            'description' => 'Awards, honours and notable achievements',
+            'icon' => 'trophy',
+            'collections' => ['achievements'],
+        ],
+        [
+            'id' => 'certifications',
+            'title' => 'Certifications',
+            'description' => 'Professional certifications and completed training',
+            'icon' => 'patch-check',
+            'collections' => ['certifications'],
+        ],
+        [
+            'id' => 'responsibilities',
+            'title' => 'Additional responsibilities',
+            'description' => 'Academic, administrative and institutional roles',
+            'icon' => 'diagram-3',
+            'collections' => ['responsibilities'],
         ],
     ],
 ];

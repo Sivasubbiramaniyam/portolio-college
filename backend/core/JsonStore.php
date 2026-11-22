@@ -16,8 +16,8 @@ use RuntimeException;
 final class JsonStore
 {
     public function __construct(
-        private readonly string $path,
-        private readonly ?string $seedPath = null
+        private string $path,
+        private ?string $seedPath = null
     ) {
     }
 

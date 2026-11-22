@@ -16,9 +16,9 @@ use App\Repositories\FacultyRepositoryInterface;
 final class FacultyService
 {
     public function __construct(
-        private readonly FacultyRepositoryInterface $repository,
-        private readonly ProfileCompletionService $completion,
-        private readonly string $deanId = 'fac-dean'
+        private FacultyRepositoryInterface $repository,
+        private ProfileCompletionService $completion,
+        private string $deanId = 'fac-dean'
     ) {
     }
 
@@ -271,7 +271,7 @@ final class FacultyService
             $validator->requiredString($profile, 'specialization', 'Areas of specialization', 500);
         }
 
-        foreach (['photo', 'banner'] as $mediaField) {
+        foreach (['photo'] as $mediaField) {
             if ($root($mediaField)) {
                 $validator->optionalString($profile, $mediaField, ucfirst($mediaField), 8_000_000);
             }

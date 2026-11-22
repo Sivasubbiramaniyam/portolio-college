@@ -12,7 +12,7 @@ use App\Core\Response;
 
 final class FacultyController
 {
-    public function __construct(private readonly Application $app)
+    public function __construct(private Application $app)
     {
     }
 

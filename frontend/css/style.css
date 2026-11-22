@@ -305,6 +305,43 @@ button {
   display: none;
 }
 
+/* Collapsed rail: show the item name briefly when the cursor is near it. */
+.sidebar:not(.is-expanded) [data-tooltip] {
+  position: relative;
+}
+
+.sidebar:not(.is-expanded) [data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 12px);
+  z-index: 120;
+  padding: 7px 11px;
+  border: 1px solid rgba(123, 94, 240, 0.18);
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 12px 26px -14px rgba(46, 26, 120, 0.55);
+  color: var(--purple-900);
+  font-family: Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(6px, -50%);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+}
+
+.sidebar:not(.is-expanded) [data-tooltip]:hover::after,
+.sidebar:not(.is-expanded) [data-tooltip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+}
+
 .sidebar__toggle {
   position: relative;
   z-index: 3;
@@ -1304,17 +1341,6 @@ body.sidebar-expanded .app-shell {
   background: linear-gradient(120deg, #8266F3, #5A3BD4 60%, #4326B4);
 }
 
-.profile-hero__banner--custom {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.profile-hero__banner--custom::before,
-.profile-hero__banner--custom::after {
-  display: none;
-}
-
 .profile-hero__banner--zoomable {
   cursor: zoom-in;
   transition: filter 0.25s ease;
@@ -2190,13 +2216,14 @@ body.sidebar-expanded .app-shell {
 }
 
 @media (max-width: 900px) {
+  /* Keep the topbar inside the content area so its title never sits under
+     the collapsed sidebar rail (which contains the logo). */
   .topbar {
-    width: calc(100% + var(--rail));
-    margin-left: calc(-1 * var(--rail));
+    width: 100%;
+    margin-left: 0;
   }
 
-  /* Let the full-width topbar sit above the collapsed rail without
-     the empty parts of the sidebar intercepting taps. */
+  /* Let the rail sit above the page without its empty parts intercepting taps. */
   .sidebar:not(.is-expanded),
   .sidebar:not(.is-expanded) .sidebar__brand,
   .sidebar:not(.is-expanded) .sidebar__nav {
@@ -2204,6 +2231,7 @@ body.sidebar-expanded .app-shell {
   }
 
   .sidebar:not(.is-expanded) .side-link,
+  .sidebar:not(.is-expanded) .sidebar__back,
   .sidebar:not(.is-expanded) .sidebar__toggle {
     pointer-events: auto;
   }

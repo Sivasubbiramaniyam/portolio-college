@@ -54,7 +54,7 @@ if (!function_exists('render_staff_list_document')) {
     <li><a href="<?= e(app_url('/staff-list.php')) ?>">Staff list</a></li>
     <?php if (is_array($user)): ?>
       <li>
-        <form class="signout" method="post" action="<?= e(app_url('/logout.php')) ?>">
+        <form class="signout" method="post" action="<?= e(app_url('/logout.php')) ?>" onsubmit="return confirm('Do you want to sign out?');">
           <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
           <button class="link" type="submit">Sign out</button>
         </form>

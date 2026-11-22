@@ -451,6 +451,11 @@ body.portal-login-page {
 
 @media (max-width: 480px) {
   .portal-login-page .main {
+    align-items: center;
+    padding: 15px 10px;
+  }
+
+  .portal-login-page.portal-register-page .main {
     align-items: flex-start;
     padding: 20px 10px 10px;
   }
@@ -486,6 +491,10 @@ body.portal-login-page {
 
 @media (max-width: 360px) {
   .portal-login-page .main {
+    padding: 12px 8px;
+  }
+
+  .portal-login-page.portal-register-page .main {
     padding: 15px 8px 8px;
   }
 
@@ -939,6 +948,15 @@ body.portal-login-page {
   flex: 0 0 44px;
 }
 
+.form-subheading {
+  margin: 12px 0 -4px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 .collection-list {
   display: flex;
   flex-direction: column;
@@ -1051,13 +1069,6 @@ body.portal-login-page {
   object-fit: cover;
 }
 
-.upload-field--banner .upload-field__preview {
-  flex-basis: 180px;
-  width: 180px;
-  height: 76px;
-  border-radius: 12px;
-}
-
 .upload-field__copy {
   flex: 1 1 220px;
   min-width: 0;
@@ -1086,6 +1097,144 @@ body.portal-login-page {
 .upload-field input[type="file"] {
   max-width: 100%;
   font-size: 0.72rem;
+}
+
+/* ---------- Image position / zoom adjuster ---------- */
+
+.media-adjust[hidden] {
+  display: none;
+}
+
+.media-adjust {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(24, 16, 56, 0.55);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.media-adjust.is-open {
+  opacity: 1;
+}
+
+.media-adjust__dialog {
+  width: min(760px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  border: 1px solid rgba(123, 94, 240, 0.18);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 30px 80px -30px rgba(46, 26, 120, 0.65);
+  transform: translateY(10px) scale(0.98);
+  transition: transform 0.2s ease;
+}
+
+.media-adjust.is-open .media-adjust__dialog {
+  transform: translateY(0) scale(1);
+}
+
+.media-adjust__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.media-adjust__head h2 {
+  margin: 0;
+  color: var(--purple-900);
+  font-size: 1rem;
+}
+
+.media-adjust__head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.media-adjust__close {
+  padding: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.media-adjust__close:hover {
+  background: rgba(123, 94, 240, 0.08);
+  color: var(--purple-900);
+}
+
+.media-adjust__stage {
+  display: grid;
+  place-items: center;
+  padding: 18px 20px 8px;
+  background: #F7F5FF;
+}
+
+.media-adjust__stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 52vh;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  cursor: grab;
+  touch-action: none;
+}
+
+.media-adjust__stage canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.media-adjust__controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 20px;
+}
+
+.media-adjust__zoom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 240px;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.media-adjust__zoom input[type="range"] {
+  flex: 1;
+  accent-color: var(--purple-600);
+}
+
+.media-adjust__value {
+  min-width: 44px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.media-adjust__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 20px 20px;
 }
 
 .form-actions--sticky {
@@ -1275,7 +1424,7 @@ body.portal-login-page {
   font-size: 1.02rem;
 }
 
-/* ---------- Profile view: rounded surfaces, no banner ---------- */
+/* ---------- Profile view: rounded surfaces ---------- */
 
 .portal-page .view__inner {
   gap: 23px;
@@ -1288,19 +1437,6 @@ body.portal-login-page {
 
 .portal-page .profile-section {
   padding: clamp(20px, 2.5vw, 29px) clamp(22px, 2.8vw, 32px);
-}
-
-.profile-view-page .profile-hero__banner {
-  display: none;
-}
-
-.profile-view-page .profile-hero__body {
-  align-items: center;
-  padding-top: clamp(20px, 2.7vw, 29px);
-}
-
-.profile-view-page .profile-hero__avatar {
-  margin-top: 0;
 }
 
 /* The profile page leads with the hero card, so the redundant top bar
@@ -1481,11 +1617,6 @@ body.portal-login-page {
     align-items: flex-start;
   }
 
-  .upload-field--banner .upload-field__preview {
-    flex-basis: 100%;
-    width: 100%;
-    height: 110px;
-  }
 }
 
 /* ---------- Print ---------- */

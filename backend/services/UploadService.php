@@ -18,9 +18,9 @@ final class UploadService
 {
     /** @param array<string, mixed> $config */
     public function __construct(
-        private readonly AssetRepositoryInterface $assets,
-        private readonly string $uploadsPath,
-        private readonly array $config
+        private AssetRepositoryInterface $assets,
+        private string $uploadsPath,
+        private array $config
     ) {
     }
 

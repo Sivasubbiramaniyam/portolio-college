@@ -41,6 +41,25 @@ spl_autoload_register(static function (string $class): void {
 
 require_once APP_BASE_PATH . '/backend/core/helpers.php';
 
+$envFile = APP_BASE_PATH . '/.env';
+if (is_file($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+            continue;
+        }
+        [$name, $val] = explode('=', $line, 2);
+        $name = trim($name);
+        $val = trim($val, " \t\n\r\0\x0B\"'");
+        if (getenv($name) === false) {
+            putenv("{$name}={$val}");
+            $_ENV[$name] = $val;
+            $_SERVER[$name] = $val;
+        }
+    }
+}
+
 $config = require APP_BASE_PATH . '/backend/config/app.php';
 Config::init($config);
 

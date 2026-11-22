@@ -30,7 +30,7 @@ final class MysqlAssetRepository implements AssetRepositoryInterface
         'createdAt' => 'created_at',
     ];
 
-    public function __construct(private readonly Database $db)
+    public function __construct(private Database $db)
     {
     }
 

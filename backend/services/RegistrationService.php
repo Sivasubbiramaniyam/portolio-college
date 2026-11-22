@@ -24,9 +24,9 @@ use App\Repositories\WhitelistRepositoryInterface;
 final class RegistrationService
 {
     public function __construct(
-        private readonly UserRepositoryInterface $users,
-        private readonly WhitelistRepositoryInterface $whitelist,
-        private readonly FacultyService $faculty
+        private UserRepositoryInterface $users,
+        private WhitelistRepositoryInterface $whitelist,
+        private FacultyService $faculty
     ) {
     }
 

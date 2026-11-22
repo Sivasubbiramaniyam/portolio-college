@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input['id'] = (string) $existing['id'];
         }
 
-        foreach (['photo', 'banner'] as $media) {
+        foreach (['photo'] as $media) {
             $fileKey = $media . '_file';
             $file = $_FILES[$fileKey] ?? null;
             if (!is_array($file) || (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {

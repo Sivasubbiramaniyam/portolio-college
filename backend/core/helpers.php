@@ -99,14 +99,6 @@ if (!function_exists('photo_url')) {
     }
 }
 
-if (!function_exists('banner_url')) {
-    /** @param array<string, mixed> $profile */
-    function banner_url(array $profile): string
-    {
-        return safe_asset_url($profile['banner'] ?? '', '');
-    }
-}
-
 if (!function_exists('safe_external_url')) {
     function safe_external_url(mixed $value): string
     {

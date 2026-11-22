@@ -17,7 +17,7 @@ final class MysqlWhitelistRepository implements WhitelistRepositoryInterface
 {
     use TranslatesDriverErrors;
 
-    public function __construct(private readonly Database $db)
+    public function __construct(private Database $db)
     {
     }
 

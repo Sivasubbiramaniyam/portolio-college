@@ -22,7 +22,7 @@ final class Database
     private ?PDO $pdo = null;
 
     /** @param array<string, mixed> $config */
-    public function __construct(private readonly array $config)
+    public function __construct(private array $config)
     {
     }
 

@@ -10,6 +10,7 @@
   "use strict";
 
   var doc = document;
+  var suppressUnsavedWarning = false;
 
   /* ---------------------------------------------------------------
      Small helpers
@@ -474,7 +475,7 @@
   }
 
   /* ---------------------------------------------------------------
-     Image / upload previews
+     Image / upload previews + position adjuster
      --------------------------------------------------------------- */
 
   function setPreview(input) {
@@ -513,10 +514,468 @@
     }
   }
 
+  var imageAdjuster = null;
+
+  function ensureImageAdjuster() {
+    if (imageAdjuster) {
+      return imageAdjuster;
+    }
+
+    var root = doc.createElement("div");
+    root.className = "media-adjust";
+    root.hidden = true;
+    root.innerHTML = ''
+      + '<div class="media-adjust__dialog" role="dialog" aria-modal="true" aria-labelledby="media-adjust-title">'
+      + '<header class="media-adjust__head">'
+      + '<div><h2 id="media-adjust-title" data-adjust-title>Adjust image</h2>'
+      + '<p data-adjust-hint>Drag to position, zoom to frame, then apply.</p></div>'
+      + '<button type="button" class="media-adjust__close" data-adjust-cancel aria-label="Close adjuster"><i class="bi bi-x-lg" aria-hidden="true"></i></button>'
+      + '</header>'
+      + '<div class="media-adjust__stage"><canvas data-adjust-canvas width="900" height="900"></canvas></div>'
+      + '<div class="media-adjust__controls">'
+      + '<label class="media-adjust__zoom">Zoom <input type="range" min="1" max="3" step="0.01" value="1" data-adjust-zoom></label>'
+      + '<span class="media-adjust__value" data-adjust-zoom-value>100%</span>'
+      + '<button type="button" class="btn btn-ghost btn-sm" data-adjust-reset>Reset</button>'
+      + '</div>'
+      + '<footer class="media-adjust__actions">'
+      + '<button type="button" class="btn btn-ghost" data-adjust-cancel>Cancel</button>'
+      + '<button type="button" class="btn btn-primary" data-adjust-apply>Apply image</button>'
+      + '</footer>'
+      + '</div>';
+    doc.body.appendChild(root);
+
+    var state = {
+      root: root,
+      canvas: root.querySelector("[data-adjust-canvas]"),
+      zoom: root.querySelector("[data-adjust-zoom]"),
+      zoomValue: root.querySelector("[data-adjust-zoom-value]"),
+      title: root.querySelector("[data-adjust-title]"),
+      hint: root.querySelector("[data-adjust-hint]"),
+      image: null,
+      input: null,
+      mode: "photo",
+      mime: "image/jpeg",
+      scale: 1,
+      offsetX: 0,
+      offsetY: 0,
+      dragging: false,
+      startX: 0,
+      startY: 0,
+      startOffsetX: 0,
+      startOffsetY: 0,
+      tempUrl: null,
+      fromFileSelection: false
+    };
+
+    function baseSize(canvasWidth, canvasHeight) {
+      if (!state.image) {
+        return { width: canvasWidth, height: canvasHeight };
+      }
+      var imageRatio = state.image.naturalWidth / state.image.naturalHeight;
+      var canvasRatio = canvasWidth / canvasHeight;
+      if (imageRatio > canvasRatio) {
+        return { width: canvasHeight * imageRatio, height: canvasHeight };
+      }
+      return { width: canvasWidth, height: canvasWidth / imageRatio };
+    }
+
+    function clampOffsets(canvasWidth, canvasHeight) {
+      var base = baseSize(canvasWidth, canvasHeight);
+      var maxX = Math.max(0, (base.width * state.scale - canvasWidth) / 2);
+      var maxY = Math.max(0, (base.height * state.scale - canvasHeight) / 2);
+      state.offsetX = Math.min(maxX, Math.max(-maxX, state.offsetX));
+      state.offsetY = Math.min(maxY, Math.max(-maxY, state.offsetY));
+    }
+
+    function draw() {
+      if (!state.image) {
+        return;
+      }
+      var canvas = state.canvas;
+      var ctx = canvas.getContext("2d");
+      if (!ctx) {
+        return;
+      }
+      var canvasWidth = canvas.width;
+      var canvasHeight = canvas.height;
+      clampOffsets(canvasWidth, canvasHeight);
+      var base = baseSize(canvasWidth, canvasHeight);
+      var drawWidth = base.width * state.scale;
+      var drawHeight = base.height * state.scale;
+      var x = (canvasWidth - drawWidth) / 2 + state.offsetX;
+      var y = (canvasHeight - drawHeight) / 2 + state.offsetY;
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.drawImage(state.image, x, y, drawWidth, drawHeight);
+    }
+
+    state.baseSize = baseSize;
+    state.clampOffsets = clampOffsets;
+    state.draw = draw;
+
+    function updateZoomLabel() {
+      state.zoomValue.textContent = Math.round(state.scale * 100) + "%";
+    }
+
+    on(state.zoom, "input", function () {
+      state.scale = parseFloat(state.zoom.value) || 1;
+      updateZoomLabel();
+      draw();
+    });
+
+    on(root.querySelector("[data-adjust-reset]"), "click", function () {
+      state.scale = 1;
+      state.offsetX = 0;
+      state.offsetY = 0;
+      state.zoom.value = "1";
+      updateZoomLabel();
+      draw();
+    });
+
+    all("[data-adjust-cancel]", root).forEach(function (button) {
+      on(button, "click", function () {
+        closeImageAdjuster();
+      });
+    });
+
+    on(root.querySelector("[data-adjust-apply]"), "click", applyImageAdjustment);
+
+    on(root, "click", function (event) {
+      if (event.target === root) {
+        closeImageAdjuster();
+      }
+    });
+
+    on(doc, "keydown", function (event) {
+      if (root.hidden) {
+        return;
+      }
+      if (event.key === "Escape") {
+        closeImageAdjuster();
+        return;
+      }
+      if (!state.image) {
+        return;
+      }
+      var step = event.shiftKey ? 20 : 6;
+      var handled = true;
+      if (event.key === "ArrowLeft") {
+        state.offsetX -= step;
+      } else if (event.key === "ArrowRight") {
+        state.offsetX += step;
+      } else if (event.key === "ArrowUp") {
+        state.offsetY -= step;
+      } else if (event.key === "ArrowDown") {
+        state.offsetY += step;
+      } else {
+        handled = false;
+      }
+      if (handled) {
+        event.preventDefault();
+        draw();
+      }
+    });
+
+    on(state.canvas, "pointerdown", function (event) {
+      if (!state.image) {
+        return;
+      }
+      event.preventDefault();
+      state.dragging = true;
+      state.startX = event.clientX;
+      state.startY = event.clientY;
+      state.startOffsetX = state.offsetX;
+      state.startOffsetY = state.offsetY;
+      state.canvas.classList.add("is-dragging");
+      if (state.canvas.setPointerCapture) {
+        state.canvas.setPointerCapture(event.pointerId);
+      }
+    });
+
+    on(state.canvas, "pointermove", function (event) {
+      if (!state.dragging) {
+        return;
+      }
+      var rect = state.canvas.getBoundingClientRect();
+      var factorX = rect.width ? state.canvas.width / rect.width : 1;
+      var factorY = rect.height ? state.canvas.height / rect.height : 1;
+      state.offsetX = state.startOffsetX + (event.clientX - state.startX) * factorX;
+      state.offsetY = state.startOffsetY + (event.clientY - state.startY) * factorY;
+      draw();
+    });
+
+    function endDrag(event) {
+      if (!state.dragging) {
+        return;
+      }
+      state.dragging = false;
+      state.canvas.classList.remove("is-dragging");
+      if (state.canvas.releasePointerCapture && event.pointerId !== undefined) {
+        try {
+          state.canvas.releasePointerCapture(event.pointerId);
+        } catch (ignored) {
+          /* Pointer capture may already be gone. */
+        }
+      }
+    }
+
+    on(state.canvas, "pointerup", endDrag);
+    on(state.canvas, "pointercancel", endDrag);
+
+    imageAdjuster = state;
+    return state;
+  }
+
+  function openImageAdjuster(config) {
+    var state = ensureImageAdjuster();
+    if (state.tempUrl) {
+      URL.revokeObjectURL(state.tempUrl);
+      state.tempUrl = null;
+    }
+
+    state.input = config.input || null;
+    state.mode = config.mode === "banner" ? "banner" : "photo";
+    state.mime = config.mime || "image/jpeg";
+    state.fromFileSelection = config.fromFileSelection === true;
+    state.tempUrl = config.tempUrl ? config.src : null;
+    state.scale = 1;
+    state.offsetX = 0;
+    state.offsetY = 0;
+    state.zoom.value = "1";
+    state.zoomValue.textContent = "100%";
+    state.canvas.width = state.mode === "banner" ? 1200 : 900;
+    state.canvas.height = state.mode === "banner" ? 400 : 900;
+    state.title.textContent = state.mode === "banner" ? "Adjust profile banner" : "Adjust profile photo";
+    state.hint.textContent = state.mode === "banner"
+      ? "Drag to reposition and zoom to frame. Saved as a wide 3:1 banner."
+      : "Drag to reposition and zoom to frame. Saved as a square profile photo.";
+
+    state.root.hidden = false;
+    window.requestAnimationFrame(function () {
+      state.root.classList.add("is-open");
+    });
+
+    var image = new Image();
+    state.image = null;
+    image.onload = function () {
+      state.image = image;
+      state.draw();
+    };
+    image.onerror = function () {
+      toast("That image could not be loaded.", "error");
+      closeImageAdjuster();
+    };
+    image.src = config.src;
+  }
+
+  function closeImageAdjuster(keepFile) {
+    var state = imageAdjuster;
+    if (!state) {
+      return;
+    }
+    if (state.tempUrl) {
+      URL.revokeObjectURL(state.tempUrl);
+      state.tempUrl = null;
+    }
+    state.root.classList.remove("is-open");
+    state.root.hidden = true;
+    state.image = null;
+    if (!keepFile && state.fromFileSelection && state.input) {
+      state.input.value = "";
+    }
+    state.input = null;
+    state.fromFileSelection = false;
+  }
+
+  function applyImageAdjustment() {
+    var state = imageAdjuster;
+    if (!state || !state.image || !state.input) {
+      return;
+    }
+
+    var input = state.input;
+    var mode = state.mode;
+    var previewCanvas = state.canvas;
+    var outWidth = mode === "banner" ? 1800 : 800;
+    var outHeight = mode === "banner" ? 600 : 800;
+    var output = doc.createElement("canvas");
+    output.width = outWidth;
+    output.height = outHeight;
+    var ctx = output.getContext("2d");
+    if (!ctx) {
+      toast("Your browser could not process the image.", "error");
+      return;
+    }
+
+    var base = state.baseSize(outWidth, outHeight);
+    var factorX = outWidth / previewCanvas.width;
+    var factorY = outHeight / previewCanvas.height;
+    var offsetX = state.offsetX * factorX;
+    var offsetY = state.offsetY * factorY;
+    var drawWidth = base.width * state.scale;
+    var drawHeight = base.height * state.scale;
+    var maxX = Math.max(0, (drawWidth - outWidth) / 2);
+    var maxY = Math.max(0, (drawHeight - outHeight) / 2);
+    offsetX = Math.min(maxX, Math.max(-maxX, offsetX));
+    offsetY = Math.min(maxY, Math.max(-maxY, offsetY));
+
+    var mime = state.mime === "image/png" || state.mime === "image/webp" ? state.mime : "image/jpeg";
+    if (mime === "image/jpeg") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, outWidth, outHeight);
+    }
+    ctx.drawImage(
+      state.image,
+      (outWidth - drawWidth) / 2 + offsetX,
+      (outHeight - drawHeight) / 2 + offsetY,
+      drawWidth,
+      drawHeight
+    );
+
+    var finish = function (blob) {
+      if (!blob) {
+        toast("The image could not be processed. Try another file.", "error");
+        return;
+      }
+      if (typeof DataTransfer === "undefined") {
+        toast("Your browser cannot apply the crop automatically. Please choose the file again.", "error");
+        return;
+      }
+
+      var extension = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
+      var fileName = (mode === "banner" ? "banner" : "photo") + "-cropped." + extension;
+      var file;
+      try {
+        file = new File([blob], fileName, { type: mime, lastModified: Date.now() });
+        var transfer = new DataTransfer();
+        transfer.items.add(file);
+        input.files = transfer.files;
+      } catch (error) {
+        toast("Your browser could not prepare the cropped image.", "error");
+        return;
+      }
+
+      var name = input.getAttribute("data-upload-file") || (mode === "banner" ? "banner" : "photo");
+      var previewSelector = input.getAttribute("data-preview-image");
+      var preview = previewSelector ? doc.querySelector(previewSelector) : null;
+      var emptySelector = input.getAttribute("data-preview-empty");
+      var empty = emptySelector ? doc.querySelector(emptySelector) : null;
+      var previewReader = new FileReader();
+      previewReader.onload = function () {
+        var previewUrl = String(previewReader.result);
+
+        if (preview) {
+          if (preview.dataset.objectUrl) {
+            URL.revokeObjectURL(preview.dataset.objectUrl);
+            delete preview.dataset.objectUrl;
+          }
+          preview.src = previewUrl;
+          preview.hidden = false;
+          preview.setAttribute("data-original-src", previewUrl);
+        }
+        if (empty) {
+          empty.hidden = true;
+        }
+
+        var clearBox = doc.querySelector('[data-clear-upload="' + name + '"]');
+        if (clearBox) {
+          clearBox.checked = false;
+        }
+
+        var adjustButton = doc.querySelector('[data-adjust-upload="' + name + '"]');
+        if (adjustButton) {
+          adjustButton.setAttribute("data-adjust-src", previewUrl);
+        } else {
+          var actions = closest(input, ".upload-field__actions");
+          if (actions) {
+            var newButton = doc.createElement("button");
+            newButton.type = "button";
+            newButton.className = "btn btn-ghost btn-sm";
+            newButton.setAttribute("data-adjust-upload", name);
+            newButton.setAttribute("data-adjust-src", previewUrl);
+            newButton.setAttribute("data-crop-mode", mode);
+            newButton.innerHTML = '<i class="bi bi-sliders" aria-hidden="true"></i> Adjust';
+            on(newButton, "click", function () {
+              openAdjusterFromButton(newButton);
+            });
+            actions.insertBefore(newButton, actions.firstChild);
+          }
+        }
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        closeImageAdjuster(true);
+        toast("Image adjusted. Save the profile to apply it.", "success");
+      };
+      previewReader.onerror = function () {
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        closeImageAdjuster(true);
+        toast("Image adjusted. Save the profile to apply it.", "success");
+      };
+      previewReader.readAsDataURL(file);
+    };
+
+    try {
+      output.toBlob(finish, mime, 0.92);
+    } catch (error) {
+      toast("Your browser could not process the image.", "error");
+    }
+  }
+
+  function openAdjusterFromButton(button) {
+    var name = button.getAttribute("data-adjust-upload");
+    var input = doc.querySelector('[data-upload-file="' + name + '"]');
+    var src = button.getAttribute("data-adjust-src");
+    if (!input || !src) {
+      return;
+    }
+    openImageAdjuster({
+      input: input,
+      mode: button.getAttribute("data-crop-mode") || "photo",
+      src: src,
+      tempUrl: false,
+      mime: "image/jpeg",
+      fromFileSelection: false
+    });
+  }
+
   function initUploadPreviews() {
     all("[data-preview-image]").forEach(function (input) {
       on(input, "change", function () {
+        var cropMode = input.getAttribute("data-crop-mode");
+        if (cropMode) {
+          var file = input.files && input.files[0];
+          if (!file) {
+            return;
+          }
+          if (file.type && file.type.indexOf("image/") !== 0) {
+            toast("Choose a JPEG, PNG or WebP image.", "error");
+            input.value = "";
+            return;
+          }
+          var reader = new FileReader();
+          reader.onload = function () {
+            openImageAdjuster({
+              input: input,
+              mode: cropMode,
+              src: String(reader.result),
+              tempUrl: false,
+              mime: file.type,
+              fromFileSelection: true
+            });
+          };
+          reader.onerror = function () {
+            toast("That image could not be read. Please choose another file.", "error");
+            input.value = "";
+          };
+          reader.readAsDataURL(file);
+          return;
+        }
         setPreview(input);
+      });
+    });
+
+    all("[data-adjust-upload]").forEach(function (button) {
+      on(button, "click", function () {
+        openAdjusterFromButton(button);
       });
     });
 
@@ -710,12 +1169,25 @@
       });
 
       on(window, "beforeunload", function (event) {
-        if (!dirty || submitting) {
+        if (!dirty || submitting || suppressUnsavedWarning) {
           return;
         }
         event.preventDefault();
         event.returnValue = "";
         return "";
+      });
+    });
+
+    all("a[data-cancel-guard]").forEach(function (link) {
+      on(link, "click", function (event) {
+        event.preventDefault();
+        showConfirm("Changes you made may not be saved?").then(function (confirmed) {
+          if (!confirmed) {
+            return;
+          }
+          suppressUnsavedWarning = true;
+          window.location.href = link.href;
+        });
       });
     });
   }

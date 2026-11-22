@@ -78,7 +78,7 @@ $pageTitle = 'Administrator registration';
 $pageHeading = 'Administrator registration';
 $activeNav = '';
 $useSidebar = false;
-$bodyClass = 'portal-login-page';
+$bodyClass = 'portal-login-page portal-register-page';
 $flash = pull_flash();
 $pageActions = '';
 

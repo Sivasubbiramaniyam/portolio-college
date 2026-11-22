@@ -36,7 +36,7 @@ final class MysqlUserRepository implements UserRepositoryInterface
         'updatedAt' => 'updated_at',
     ];
 
-    public function __construct(private readonly Database $db)
+    public function __construct(private Database $db)
     {
     }
 

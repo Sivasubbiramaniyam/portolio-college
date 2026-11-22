@@ -254,7 +254,7 @@ final class MysqlFacultyRepository implements FacultyRepositoryInterface
         ],
     ];
 
-    public function __construct(private readonly Database $db)
+    public function __construct(private Database $db)
     {
     }
 
