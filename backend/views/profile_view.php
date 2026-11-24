@@ -599,10 +599,8 @@ if (!function_exists('render_profile_sections')) {
             || trim((string) ($profile['researchGuideStatus'] ?? '')) !== '';
         $counts = [
             'Ph.D. completed' => (int) ($profile['phdCompleted'] ?? 0),
-            'M.Phil. completed' => (int) ($profile['mphilCompleted'] ?? 0),
             'Other completed' => (int) ($profile['otherCompleted'] ?? 0),
             'Ph.D. guiding' => (int) ($profile['phdGuiding'] ?? 0),
-            'M.Phil. guiding' => (int) ($profile['mphilGuiding'] ?? 0),
             'Other guiding' => (int) ($profile['otherGuiding'] ?? 0),
         ];
         $totalCounts = array_sum($counts);
@@ -675,7 +673,7 @@ if (!function_exists('render_profile_sections')) {
                 if (trim((string) ($item['description'] ?? '')) !== '') {
                     $html .= '<p>' . e((string) $item['description']) . '</p>';
                 }
-                $link = attachment_url($item['certificate'] ?? '') ?: safe_external_url($item['certificateUrl'] ?? '');
+                $link = attachment_url($item['certificateUrl'] ?? '') ?: safe_external_url($item['certificateUrl'] ?? '');
                 if ($link !== '') {
                     $html .= '<p class="timeline__meta"><a class="pub-link" href="' . e($link) . '" target="_blank" rel="noopener noreferrer"><i class="bi bi-paperclip" aria-hidden="true"></i>Certificate</a></p>';
                 }
@@ -707,7 +705,7 @@ if (!function_exists('render_profile_sections')) {
                 if (trim((string) ($item['description'] ?? '')) !== '') {
                     $html .= '<p>' . e((string) $item['description']) . '</p>';
                 }
-                $link = attachment_url($item['certificate'] ?? '') ?: safe_external_url($item['certificateUrl'] ?? '');
+                $link = attachment_url($item['certificateUrl'] ?? '') ?: safe_external_url($item['certificateUrl'] ?? '');
                 if ($link !== '') {
                     $html .= '<p class="timeline__meta"><a class="pub-link" href="' . e($link) . '" target="_blank" rel="noopener noreferrer"><i class="bi bi-paperclip" aria-hidden="true"></i>Certificate</a></p>';
                 }

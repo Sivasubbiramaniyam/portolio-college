@@ -39,10 +39,8 @@ CREATE TABLE IF NOT EXISTS faculty_profiles (
   research_guide_date       DATE         NULL,
   research_guide_status     VARCHAR(40)  NULL,
   phd_completed             INT          NOT NULL DEFAULT 0,
-  mphil_completed           INT          NOT NULL DEFAULT 0,
   other_completed           INT          NOT NULL DEFAULT 0,
   phd_guiding               INT          NOT NULL DEFAULT 0,
-  mphil_guiding             INT          NOT NULL DEFAULT 0,
   other_guiding             INT          NOT NULL DEFAULT 0,
   google_scholar_id         VARCHAR(190) NULL,
   google_scholar_url        TEXT         NULL,
@@ -294,7 +292,6 @@ CREATE TABLE IF NOT EXISTS faculty_achievements (
   certificate_number   VARCHAR(160) NULL,
   certificate_url      TEXT         NULL,
   description          TEXT         NULL,
-  certificate_file_url MEDIUMTEXT   NULL,
   PRIMARY KEY (id),
   KEY profile_sort_idx (profile_id, sort_order),
   CONSTRAINT fk_ach_profile FOREIGN KEY (profile_id)
@@ -312,7 +309,6 @@ CREATE TABLE IF NOT EXISTS faculty_certifications (
   certificate_number   VARCHAR(160) NULL,
   certificate_url      TEXT         NULL,
   description          TEXT         NULL,
-  certificate_file_url MEDIUMTEXT   NULL,
   PRIMARY KEY (id),
   KEY profile_sort_idx (profile_id, sort_order),
   CONSTRAINT fk_cert_profile FOREIGN KEY (profile_id)

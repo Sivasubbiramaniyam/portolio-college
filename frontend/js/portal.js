@@ -419,7 +419,7 @@
         }
       });
       doc.addEventListener("keydown", onKey);
-      yes.focus();
+      yes.focus({ preventScroll: true });
       window.requestAnimationFrame(function () {
         backdrop.classList.add("is-open");
       });
@@ -1217,6 +1217,92 @@
   }
 
   /* ---------------------------------------------------------------
+     URL fields: paste a link or upload a file
+     --------------------------------------------------------------- */
+
+  function initUrlUploads() {
+    on(doc, "change", function (event) {
+      var fileInput = closest(event.target, "[data-url-upload]");
+      if (!fileInput || !fileInput.files || !fileInput.files.length) {
+        return;
+      }
+
+      var file = fileInput.files[0];
+      var targetId = fileInput.getAttribute("data-url-target") || "";
+      var target = targetId ? doc.getElementById(targetId) : null;
+      var form = closest(fileInput, "form");
+      if (!target || !form) {
+        return;
+      }
+
+      var status = closest(fileInput, ".field-url-options")
+        ? closest(fileInput, ".field-url-options").querySelector("[data-url-status]")
+        : null;
+      var csrf = form.querySelector('input[name="_csrf"]');
+      var endpoint = form.getAttribute("data-upload-url") || "/api/v1/uploads";
+      var profileId = form.getAttribute("data-profile-id") || "";
+      var previous = target.value;
+
+      var body = new FormData();
+      body.append("file", file);
+      body.append("kind", fileInput.getAttribute("data-upload-kind") || "document");
+      if (profileId) {
+        body.append("profileId", profileId);
+      }
+
+      var headers = {};
+      if (csrf && csrf.value) {
+        headers["X-CSRF-Token"] = csrf.value;
+      }
+
+      function setStatus(message, tone) {
+        if (status) {
+          status.textContent = message;
+          status.setAttribute("data-tone", tone || "info");
+        }
+      }
+
+      setStatus("Uploading…", "info");
+      fileInput.disabled = true;
+
+      fetch(endpoint, {
+        method: "POST",
+        body: body,
+        headers: headers,
+        credentials: "same-origin"
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            return response.json().catch(function () { return {}; }).then(function (payload) {
+              var error = payload && payload.error ? (payload.error.message || payload.error.code) : "Upload failed.";
+              throw new Error(error);
+            });
+          }
+          return response.json();
+        })
+        .then(function (payload) {
+          var url = payload && payload.data ? payload.data.url : "";
+          if (!url) {
+            throw new Error("The upload did not return a URL.");
+          }
+          target.value = new URL(url, window.location.href).href;
+          target.dispatchEvent(new Event("input", { bubbles: true }));
+          setStatus("File uploaded.", "success");
+          toast("File uploaded. The URL has been added to the field.");
+        })
+        .catch(function (error) {
+          target.value = previous;
+          setStatus(error.message || "Upload failed.", "error");
+          toast(status && status.textContent ? status.textContent : "Upload failed.", "error");
+        })
+        .finally(function () {
+          fileInput.disabled = false;
+          fileInput.value = "";
+        });
+    });
+  }
+
+  /* ---------------------------------------------------------------
      Bootstrap
      --------------------------------------------------------------- */
 
@@ -1228,6 +1314,7 @@
     initPrint();
     initConfirmations();
     initUploadPreviews();
+    initUrlUploads();
     initCollections();
     initUnsavedGuard();
     initAnchors();

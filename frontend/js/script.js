@@ -359,7 +359,6 @@
         certificateNumber: "AU/AWD/2023/17",
         certificateUrl: "",
         description: "Recognised for sustained research output and externally funded projects in applied artificial intelligence.",
-        certificate: ""
       },
       {
         title: "Outstanding Contribution to Teaching",
@@ -369,7 +368,6 @@
         certificateNumber: "UCEN/AWD/2021/09",
         certificateUrl: "",
         description: "Awarded for curriculum innovation and mentorship of student research teams.",
-        certificate: ""
       },
       {
         title: "Patent Granted – Context-Aware Irrigation Advisory System",
@@ -379,7 +377,6 @@
         certificateNumber: "IN 412356",
         certificateUrl: "",
         description: "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage.",
-        certificate: ""
       }
     ],
     certifications: [
@@ -391,7 +388,6 @@
         certificateNumber: "AWS-2024-8842",
         certificateUrl: "",
         description: "Professional certification covering secure, scalable cloud architecture design.",
-        certificate: ""
       },
       {
         title: "NPTEL Certification in Deep Learning",
@@ -401,7 +397,6 @@
         certificateNumber: "NPTEL/2023/DL/1124",
         certificateUrl: "",
         description: "Completed the advanced NPTEL programme with elite distinction.",
-        certificate: ""
       },
       {
         title: "Certified Data Science Professional",
@@ -411,7 +406,6 @@
         certificateNumber: "IBM-DS-2022-5567",
         certificateUrl: "",
         description: "Credential focused on the end-to-end data science workflow and model deployment.",
-        certificate: ""
       }
     ],
     responsibilities: [
@@ -451,10 +445,8 @@
     researchGuideDate: "2012-05-18",
     researchGuideStatus: "Recognised",
     phdCompleted: "6",
-    mphilCompleted: "4",
     otherCompleted: "2",
     phdGuiding: "5",
-    mphilGuiding: "1",
     otherGuiding: "0",
     googleScholarId: "AbCdEf123456",
     googleScholarUrl: "https://scholar.google.com/citations?user=AbCdEf123456",
@@ -864,7 +856,6 @@
         { key: "certificateNumber", label: "Certificate number (optional)", placeholder: "AU/AWD/2023/17" },
         { key: "certificateUrl", label: "Certificate URL (optional)", type: "url", placeholder: "https://..." },
         { key: "description", label: "Description", type: "textarea", placeholder: "Briefly describe the achievement.", full: true },
-        { key: "certificate", label: "Certificate upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
       ]
     },
     certification: {
@@ -878,7 +869,6 @@
         { key: "certificateNumber", label: "Certificate number (optional)", placeholder: "AWS-2024-8842" },
         { key: "certificateUrl", label: "Certificate URL (optional)", type: "url", placeholder: "https://..." },
         { key: "description", label: "Description", type: "textarea", placeholder: "Add credential details or a short description.", full: true },
-        { key: "certificate", label: "Certificate upload (optional)", type: "file", accept: "image/*,application/pdf", full: true }
       ]
     },
     conferenceAttended: {
@@ -1022,10 +1012,8 @@
     researchGuideDate: "r-guide-date",
     researchGuideStatus: "r-guide-status",
     phdCompleted: "r-phd-completed",
-    mphilCompleted: "r-mphil-completed",
     otherCompleted: "r-other-completed",
     phdGuiding: "r-phd-guiding",
-    mphilGuiding: "r-mphil-guiding",
     otherGuiding: "r-other-guiding",
     googleScholarId: "r-gs-id",
     googleScholarUrl: "r-gs-url",
@@ -1206,7 +1194,7 @@
       const hasGuide = ["researchGuideNumber", "researchGuideUniversity", "researchGuideDate", "researchGuideStatus"].some(function (field) {
         return String(profile[field] || "").trim() !== "";
       });
-      const hasCounts = ["phdCompleted", "mphilCompleted", "otherCompleted", "phdGuiding", "mphilGuiding", "otherGuiding"].some(function (field) {
+      const hasCounts = ["phdCompleted", "otherCompleted", "phdGuiding", "otherGuiding"].some(function (field) {
         return String(profile[field] || "").trim() !== "";
       });
       return countItems(profile[key]) > 0 || hasGuide || hasCounts;
@@ -2154,12 +2142,10 @@
     ].filter(Boolean);
     const completed = [
       { label: "PhD completed", value: profile.phdCompleted },
-      { label: "M.Phil completed", value: profile.mphilCompleted },
       { label: "Other completed", value: profile.otherCompleted }
     ];
     const guiding = [
       { label: "PhD guiding", value: profile.phdGuiding },
-      { label: "M.Phil guiding", value: profile.mphilGuiding },
       { label: "Other guiding", value: profile.otherGuiding }
     ];
     const hasCounts = completed.concat(guiding).some(function (stat) {
@@ -2212,7 +2198,11 @@
     return `
       <div class="card-grid">
         ${items.map(function (item) {
-          const link = externalUrl(item.certificateUrl);
+          const certificate = String(item.certificateUrl || "").trim();
+          const link = externalUrl(certificate);
+          const certificateMarkup = /^data:/i.test(certificate)
+            ? attachmentHTML(certificate, "View certificate")
+            : (link ? `<a class="pub-link" href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> View certificate</a>` : "");
           return `
             <article class="achievement-card">
               <span class="achievement-card__icon${iconClass ? " " + iconClass : ""}"><i class="bi ${icon}" aria-hidden="true"></i></span>
@@ -2224,8 +2214,7 @@
               </div>
               ${item.certificateNumber ? `<p class="credential-number">Certificate no. ${escapeHTML(item.certificateNumber)}</p>` : ""}
               ${item.description ? `<p>${escapeHTML(item.description)}</p>` : ""}
-              ${link ? `<a class="pub-link" href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> View certificate</a>` : ""}
-              ${attachmentHTML(item.certificate, "Certificate")}
+              ${certificateMarkup}
             </article>
           `;
         }).join("")}
@@ -2477,7 +2466,19 @@
       control = `<input type="${field.type || "text"}" ${attrs}${nonnegative}${disabled} value="${escapeHTML(value)}" placeholder="${escapeHTML(field.placeholder || "")}">`;
     }
 
-    return `<div class="field${fullClass}">${label}${control}</div>`;
+    let urlOptions = "";
+    if (field.type === "url") {
+      const uploadId = id + "-upload";
+      urlOptions = `
+        <div class="field-url-options">
+          <label class="btn btn-ghost btn-sm" for="${uploadId}"><i class="bi bi-upload" aria-hidden="true"></i> Upload file</label>
+          <input class="sr-only" type="file" id="${uploadId}" data-url-file-input data-url-target="${id}" accept="image/*,application/pdf">
+          <span class="field-url-status" data-url-status aria-live="polite"></span>
+        </div>
+      `;
+    }
+
+    return `<div class="field${fullClass}">${label}${control}${urlOptions}</div>`;
   }
 
   function entryCardHTML(type, entry) {
@@ -2709,6 +2710,49 @@
       image.src = String(reader.result);
     };
     reader.onerror = function () {
+      showToast("We could not read that file. Please try again.", "error");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleUrlFile(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const targetId = input.dataset.urlTarget || "";
+    const target = targetId ? document.getElementById(targetId) : null;
+    if (!target) return;
+
+    const options = input.closest(".field-url-options");
+    const status = options ? options.querySelector("[data-url-status]") : null;
+    function setStatus(message, tone) {
+      if (!status) return;
+      status.textContent = message;
+      status.dataset.tone = tone || "info";
+    }
+
+    if (!/^(image\/(jpeg|png|webp|gif)|application\/pdf)$/i.test(file.type)) {
+      setStatus("Please choose an image or PDF file.", "error");
+      showToast("Please choose an image or PDF file.", "error");
+      input.value = "";
+      return;
+    }
+    if (file.size > 3 * 1024 * 1024) {
+      setStatus("That file is larger than 3 MB. Please choose a smaller file.", "error");
+      showToast("That file is larger than 3 MB. Please choose a smaller file.", "error");
+      input.value = "";
+      return;
+    }
+
+    setStatus("Reading file…", "info");
+    const reader = new FileReader();
+    reader.onload = function () {
+      target.value = String(reader.result || "");
+      target.dispatchEvent(new Event("input", { bubbles: true }));
+      setStatus("File added to the URL field.", "success");
+      showToast("File added. Remember to save your profile.", "success");
+    };
+    reader.onerror = function () {
+      setStatus("We could not read that file.", "error");
       showToast("We could not read that file. Please try again.", "error");
     };
     reader.readAsDataURL(file);
@@ -3919,6 +3963,10 @@
       form.addEventListener("change", function (event) {
         if (event.target.matches("[data-file-input]")) {
           handleEntryFile(event.target);
+          return;
+        }
+        if (event.target.matches("[data-url-file-input]")) {
+          handleUrlFile(event.target);
           return;
         }
         if (event.target.matches('[data-field="current"]')) {

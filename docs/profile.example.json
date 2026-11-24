@@ -14,10 +14,8 @@
   "researchGuideDate": "2012-05-18",
   "researchGuideStatus": "Recognized",
   "phdCompleted": "6",
-  "mphilCompleted": "4",
   "otherCompleted": "2",
   "phdGuiding": "5",
-  "mphilGuiding": "1",
   "otherGuiding": "0",
   "googleScholarId": "AbCdEf123456",
   "googleScholarUrl": "https://scholar.google.com/citations?user=AbCdEf123456",
@@ -327,8 +325,7 @@
       "year": "2023",
       "certificateNumber": "AU/AWD/2023/17",
       "certificateUrl": "",
-      "description": "Recognised for sustained research output and externally funded projects in applied artificial intelligence.",
-      "certificate": ""
+      "description": "Recognised for sustained research output and externally funded projects in applied artificial intelligence."
     },
     {
       "title": "Outstanding Contribution to Teaching",
@@ -337,8 +334,7 @@
       "year": "2021",
       "certificateNumber": "UCEN/AWD/2021/09",
       "certificateUrl": "",
-      "description": "Awarded for curriculum innovation and mentorship of student research teams.",
-      "certificate": ""
+      "description": "Awarded for curriculum innovation and mentorship of student research teams."
     },
     {
       "title": "Patent Granted – Context-Aware Irrigation Advisory System",
@@ -347,8 +343,7 @@
       "year": "2022",
       "certificateNumber": "IN 412356",
       "certificateUrl": "",
-      "description": "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage.",
-      "certificate": ""
+      "description": "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage."
     }
   ],
   "certifications": [
@@ -359,8 +354,7 @@
       "year": "2024",
       "certificateNumber": "AWS-2024-8842",
       "certificateUrl": "",
-      "description": "Professional certification covering secure, scalable cloud architecture design.",
-      "certificate": ""
+      "description": "Professional certification covering secure, scalable cloud architecture design."
     },
     {
       "title": "NPTEL Certification in Deep Learning",
@@ -369,8 +363,7 @@
       "year": "2023",
       "certificateNumber": "NPTEL/2023/DL/1124",
       "certificateUrl": "",
-      "description": "Completed the advanced NPTEL programme with elite distinction.",
-      "certificate": ""
+      "description": "Completed the advanced NPTEL programme with elite distinction."
     },
     {
       "title": "Certified Data Science Professional",
@@ -379,8 +372,7 @@
       "year": "2022",
       "certificateNumber": "IBM-DS-2022-5567",
       "certificateUrl": "",
-      "description": "Credential focused on the end-to-end data science workflow and model deployment.",
-      "certificate": ""
+      "description": "Credential focused on the end-to-end data science workflow and model deployment."
     }
   ],
   "responsibilities": [

@@ -4148,3 +4148,29 @@ select option:hover {
   background-position: right 10px center;
   padding-right: 32px !important;
 }
+
+/* URL fields with a paste-or-upload choice */
+.field-url-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.field-url-status {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.field-url-status:empty {
+  display: none;
+}
+
+.field-url-status[data-tone="success"] {
+  color: #2e7d4f;
+}
+
+.field-url-status[data-tone="error"] {
+  color: #b42318;
+}

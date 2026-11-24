@@ -48,10 +48,8 @@ return [
                 ['key' => 'researchGuideDate', 'label' => 'Recognition date', 'type' => 'date'],
                 ['key' => 'researchGuideStatus', 'label' => 'Recognition status', 'type' => 'select', 'options' => Enums::OPTIONS['researchGuideStatus']],
                 ['key' => 'phdCompleted', 'label' => 'Ph.D. scholars completed', 'type' => 'number', 'min' => 0],
-                ['key' => 'mphilCompleted', 'label' => 'M.Phil. scholars completed', 'type' => 'number', 'min' => 0],
                 ['key' => 'otherCompleted', 'label' => 'Other scholars completed', 'type' => 'number', 'min' => 0],
                 ['key' => 'phdGuiding', 'label' => 'Ph.D. scholars guiding', 'type' => 'number', 'min' => 0],
-                ['key' => 'mphilGuiding', 'label' => 'M.Phil. scholars guiding', 'type' => 'number', 'min' => 0],
                 ['key' => 'otherGuiding', 'label' => 'Other scholars guiding', 'type' => 'number', 'min' => 0],
             ],
         ],
@@ -138,7 +136,7 @@ return [
                 ['key' => 'status', 'label' => 'Status', 'type' => 'select', 'required' => true, 'options' => Enums::OPTIONS['projectStatus']],
                 ['key' => 'reference', 'label' => 'Reference number', 'type' => 'text', 'maxlength' => 120],
                 ['key' => 'description', 'label' => 'Description', 'type' => 'textarea', 'rows' => 3, 'maxlength' => 5000, 'full' => true],
-                ['key' => 'sanctionLetter', 'label' => 'Sanction letter URL', 'type' => 'url', 'maxlength' => 500, 'full' => true, 'help' => 'Upload the file through the API, then paste the returned media URL.'],
+                ['key' => 'sanctionLetter', 'label' => 'Sanction letter URL', 'type' => 'url', 'maxlength' => 500, 'full' => true],
             ],
         ],
         'conferencesAttended' => [
@@ -237,7 +235,6 @@ return [
                 ['key' => 'certificateNumber', 'label' => 'Certificate number', 'type' => 'text', 'maxlength' => 120],
                 ['key' => 'certificateUrl', 'label' => 'Certificate URL', 'type' => 'url', 'maxlength' => 500],
                 ['key' => 'description', 'label' => 'Description', 'type' => 'textarea', 'rows' => 3, 'maxlength' => 5000, 'full' => true],
-                ['key' => 'certificate', 'label' => 'Certificate file URL', 'type' => 'url', 'maxlength' => 500],
             ],
         ],
         'certifications' => [
@@ -253,7 +250,6 @@ return [
                 ['key' => 'certificateNumber', 'label' => 'Certificate number', 'type' => 'text', 'maxlength' => 120],
                 ['key' => 'certificateUrl', 'label' => 'Certificate URL', 'type' => 'url', 'maxlength' => 500],
                 ['key' => 'description', 'label' => 'Description', 'type' => 'textarea', 'rows' => 3, 'maxlength' => 5000, 'full' => true],
-                ['key' => 'certificate', 'label' => 'Certificate file URL', 'type' => 'url', 'maxlength' => 500],
             ],
         ],
         'responsibilities' => [

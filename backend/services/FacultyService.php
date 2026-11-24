@@ -290,7 +290,7 @@ final class FacultyService
             $validator->optionalEnum($profile, 'researchGuideStatus', 'Research guide status', Enums::OPTIONS['researchGuideStatus']);
         }
 
-        foreach (['phdCompleted', 'mphilCompleted', 'otherCompleted', 'phdGuiding', 'mphilGuiding', 'otherGuiding'] as $countField) {
+        foreach (['phdCompleted', 'otherCompleted', 'phdGuiding', 'otherGuiding'] as $countField) {
             if ($root($countField)) {
                 $validator->integerRange($profile, $countField, ucfirst($countField), 0);
             }
@@ -470,7 +470,6 @@ final class FacultyService
                 $validator->optionalString($entry, 'certificateNumber', 'Certificate number', 120, $p . 'certificateNumber');
                 $validator->url($entry, 'certificateUrl', 'Certificate URL', false, $p . 'certificateUrl');
                 $validator->optionalString($entry, 'description', 'Description', 5000, $p . 'description');
-                $validator->optionalString($entry, 'certificate', 'Certificate', 8_000_000, $p . 'certificate');
             }
         }
 

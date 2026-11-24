@@ -591,10 +591,6 @@
                     <input type="number" id="r-phd-completed" min="0" step="1" placeholder="0" data-nonnegative>
                   </div>
                   <div class="field">
-                    <label for="r-mphil-completed">M.Phil. scholars completed</label>
-                    <input type="number" id="r-mphil-completed" min="0" step="1" placeholder="0" data-nonnegative>
-                  </div>
-                  <div class="field">
                     <label for="r-other-completed">Other research scholars completed</label>
                     <input type="number" id="r-other-completed" min="0" step="1" placeholder="0" data-nonnegative>
                   </div>
@@ -610,10 +606,6 @@
                   <div class="field">
                     <label for="r-phd-guiding">Ph.D. scholars currently guiding</label>
                     <input type="number" id="r-phd-guiding" min="0" step="1" placeholder="0" data-nonnegative>
-                  </div>
-                  <div class="field">
-                    <label for="r-mphil-guiding">M.Phil. scholars currently guiding</label>
-                    <input type="number" id="r-mphil-guiding" min="0" step="1" placeholder="0" data-nonnegative>
                   </div>
                   <div class="field">
                     <label for="r-other-guiding">Other research scholars currently guiding</label>
@@ -698,6 +690,11 @@
                   <div class="field">
                     <label for="r-gs-url">Google Scholar profile URL</label>
                     <input type="url" id="r-gs-url" placeholder="https://scholar.google.com/citations?user=...">
+                    <div class="field-url-options">
+                      <label class="btn btn-ghost btn-sm" for="r-gs-url-upload"><i class="bi bi-upload" aria-hidden="true"></i> Upload file</label>
+                      <input class="sr-only" type="file" id="r-gs-url-upload" data-url-file-input data-url-target="r-gs-url" accept="image/*,application/pdf">
+                      <span class="field-url-status" data-url-status aria-live="polite"></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -715,6 +712,11 @@
                   <div class="field">
                     <label for="r-orcid-url">ORCID profile URL</label>
                     <input type="url" id="r-orcid-url" placeholder="https://orcid.org/0000-0000-0000-0000">
+                    <div class="field-url-options">
+                      <label class="btn btn-ghost btn-sm" for="r-orcid-url-upload"><i class="bi bi-upload" aria-hidden="true"></i> Upload file</label>
+                      <input class="sr-only" type="file" id="r-orcid-url-upload" data-url-file-input data-url-target="r-orcid-url" accept="image/*,application/pdf">
+                      <span class="field-url-status" data-url-status aria-live="polite"></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -732,6 +734,11 @@
                   <div class="field">
                     <label for="r-scopus-url">Scopus profile URL</label>
                     <input type="url" id="r-scopus-url" placeholder="https://www.scopus.com/authid/detail.uri?authorId=...">
+                    <div class="field-url-options">
+                      <label class="btn btn-ghost btn-sm" for="r-scopus-url-upload"><i class="bi bi-upload" aria-hidden="true"></i> Upload file</label>
+                      <input class="sr-only" type="file" id="r-scopus-url-upload" data-url-file-input data-url-target="r-scopus-url" accept="image/*,application/pdf">
+                      <span class="field-url-status" data-url-status aria-live="polite"></span>
+                    </div>
                   </div>
                 </div>
               </div>

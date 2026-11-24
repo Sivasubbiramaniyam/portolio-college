@@ -23,8 +23,8 @@ final class ProfileShape
         'trainingPrograms' => ['title', 'type', 'organizer', 'level', 'start', 'end', 'role', 'participants', 'certificate'],
         'patents' => ['title', 'number', 'type', 'inventors', 'authority', 'country', 'grantDate', 'status', 'url', 'certificate'],
         'researchAreas' => ['area', 'subject', 'specialization', 'keywords'],
-        'achievements' => ['title', 'category', 'organization', 'year', 'certificateNumber', 'certificateUrl', 'description', 'certificate'],
-        'certifications' => ['title', 'category', 'organization', 'year', 'certificateNumber', 'certificateUrl', 'description', 'certificate'],
+        'achievements' => ['title', 'category', 'organization', 'year', 'certificateNumber', 'certificateUrl', 'description'],
+        'certifications' => ['title', 'category', 'organization', 'year', 'certificateNumber', 'certificateUrl', 'description'],
         'responsibilities' => ['title', 'category', 'institution', 'position', 'level', 'from', 'to', 'current'],
     ];
 
@@ -60,10 +60,8 @@ final class ProfileShape
         'researchGuideDate' => '',
         'researchGuideStatus' => '',
         'phdCompleted' => 0,
-        'mphilCompleted' => 0,
         'otherCompleted' => 0,
         'phdGuiding' => 0,
-        'mphilGuiding' => 0,
         'otherGuiding' => 0,
         'googleScholarId' => '',
         'googleScholarUrl' => '',

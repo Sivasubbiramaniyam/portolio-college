@@ -158,7 +158,7 @@ final class ProfileCompletionService
                 }
             }
             $hasCounts = false;
-            foreach (['phdCompleted', 'mphilCompleted', 'otherCompleted', 'phdGuiding', 'mphilGuiding', 'otherGuiding'] as $field) {
+            foreach (['phdCompleted', 'otherCompleted', 'phdGuiding', 'otherGuiding'] as $field) {
                 if ((int) ($profile[$field] ?? 0) > 0) {
                     $hasCounts = true;
                     break;

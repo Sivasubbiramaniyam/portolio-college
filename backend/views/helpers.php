@@ -112,6 +112,21 @@ if (!function_exists('render_field')) {
             $html .= '<input type="' . $inputType . '"' . $attributes . ' value="' . e($valueText) . '">';
         }
 
+        if ($type === 'url') {
+            $uploadId = 'upload-' . $id;
+            $uploadKind = 'document';
+            if (stripos($name, 'sanction') !== false) {
+                $uploadKind = 'sanction-letter';
+            } elseif (stripos($name, 'certificate') !== false) {
+                $uploadKind = 'certificate';
+            }
+            $html .= '<div class="field-url-options">';
+            $html .= '<label class="btn btn-ghost btn-sm" for="' . e($uploadId) . '"><i class="bi bi-upload" aria-hidden="true"></i> Upload file</label>';
+            $html .= '<input id="' . e($uploadId) . '" class="sr-only" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" data-url-upload data-url-target="' . e($id) . '" data-upload-kind="' . e($uploadKind) . '">';
+            $html .= '<span class="field-url-status" data-url-status aria-live="polite"></span>';
+            $html .= '</div>';
+        }
+
         if ($help !== '') {
             $html .= '<small class="field-hint" id="' . e($id) . '-help">' . e($help) . '</small>';
         }

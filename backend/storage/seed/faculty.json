@@ -16,10 +16,8 @@
             "researchGuideDate": "2012-05-18",
             "researchGuideStatus": "Recognized",
             "phdCompleted": "6",
-            "mphilCompleted": "4",
             "otherCompleted": "2",
             "phdGuiding": "5",
-            "mphilGuiding": "1",
             "otherGuiding": "0",
             "googleScholarId": "AbCdEf123456",
             "googleScholarUrl": "https://scholar.google.com/citations?user=AbCdEf123456",
@@ -382,8 +380,7 @@
                     "year": "2023",
                     "certificateNumber": "AU/AWD/2023/17",
                     "certificateUrl": "",
-                    "description": "Recognised for sustained research output and externally funded projects in applied artificial intelligence.",
-                    "certificate": ""
+                    "description": "Recognised for sustained research output and externally funded projects in applied artificial intelligence."
                 },
                 {
                     "id": "fac-ramanathan-ach-2",
@@ -394,8 +391,7 @@
                     "year": "2021",
                     "certificateNumber": "UCEN/AWD/2021/09",
                     "certificateUrl": "",
-                    "description": "Awarded for curriculum innovation and mentorship of student research teams.",
-                    "certificate": ""
+                    "description": "Awarded for curriculum innovation and mentorship of student research teams."
                 },
                 {
                     "id": "fac-ramanathan-ach-3",
@@ -406,8 +402,7 @@
                     "year": "2022",
                     "certificateNumber": "IN 412356",
                     "certificateUrl": "",
-                    "description": "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage.",
-                    "certificate": ""
+                    "description": "A smart irrigation method that combines soil sensor data with local weather forecasts to reduce water usage."
                 }
             ],
             "certifications": [
@@ -420,8 +415,7 @@
                     "year": "2024",
                     "certificateNumber": "AWS-2024-8842",
                     "certificateUrl": "",
-                    "description": "Professional certification covering secure, scalable cloud architecture design.",
-                    "certificate": ""
+                    "description": "Professional certification covering secure, scalable cloud architecture design."
                 },
                 {
                     "id": "fac-ramanathan-cert-2",
@@ -432,8 +426,7 @@
                     "year": "2023",
                     "certificateNumber": "NPTEL/2023/DL/1124",
                     "certificateUrl": "",
-                    "description": "Completed the advanced NPTEL programme with elite distinction.",
-                    "certificate": ""
+                    "description": "Completed the advanced NPTEL programme with elite distinction."
                 },
                 {
                     "id": "fac-ramanathan-cert-3",
@@ -444,8 +437,7 @@
                     "year": "2022",
                     "certificateNumber": "IBM-DS-2022-5567",
                     "certificateUrl": "",
-                    "description": "Credential focused on the end-to-end data science workflow and model deployment.",
-                    "certificate": ""
+                    "description": "Credential focused on the end-to-end data science workflow and model deployment."
                 }
             ],
             "responsibilities": [
@@ -503,10 +495,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "AnI7hXk2Qm4",
             "googleScholarUrl": "https://scholar.google.com/citations?user=AnI7hXk2Qm4",
@@ -629,8 +619,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Awarded for a paper on energy-efficient filtering architectures.",
-                    "certificate": ""
+                    "description": "Awarded for a paper on energy-efficient filtering architectures."
                 }
             ],
             "certifications": [
@@ -643,8 +632,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Completed the advanced VLSI design programme with distinction.",
-                    "certificate": ""
+                    "description": "Completed the advanced VLSI design programme with distinction."
                 },
                 {
                     "id": "fac-anitha-cert-2",
@@ -655,8 +643,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Professional credential in digital IC design and verification.",
-                    "certificate": ""
+                    "description": "Professional credential in digital IC design and verification."
                 }
             ],
             "responsibilities": []
@@ -677,10 +664,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "PrY9tLm4Rn2",
             "googleScholarUrl": "https://scholar.google.com/citations?user=PrY9tLm4Rn2",
@@ -803,8 +788,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Recognised for contributions to inclusive entrepreneurship education.",
-                    "certificate": ""
+                    "description": "Recognised for contributions to inclusive entrepreneurship education."
                 }
             ],
             "certifications": [
@@ -817,8 +801,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Credential covering learning strategy and talent development.",
-                    "certificate": ""
+                    "description": "Credential covering learning strategy and talent development."
                 },
                 {
                     "id": "fac-priya-cert-2",
@@ -829,8 +812,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced programme in leadership practice and team dynamics.",
-                    "certificate": ""
+                    "description": "Advanced programme in leadership practice and team dynamics."
                 }
             ],
             "responsibilities": []
@@ -851,10 +833,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "ArU3wQp8Tz5",
             "googleScholarUrl": "https://scholar.google.com/citations?user=ArU3wQp8Tz5",
@@ -977,8 +957,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Awarded for research on thermal energy storage for decentralised solar applications.",
-                    "certificate": ""
+                    "description": "Awarded for research on thermal energy storage for decentralised solar applications."
                 }
             ],
             "certifications": [
@@ -991,8 +970,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Certified to conduct industrial and commercial energy audits.",
-                    "certificate": ""
+                    "description": "Certified to conduct industrial and commercial energy audits."
                 },
                 {
                     "id": "fac-arunachalam-cert-2",
@@ -1003,8 +981,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced course covering finite-volume methods and turbulence modelling.",
-                    "certificate": ""
+                    "description": "Advanced course covering finite-volume methods and turbulence modelling."
                 }
             ],
             "responsibilities": []
@@ -1025,10 +1002,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "MeE6sVb1Jc9",
             "googleScholarUrl": "https://scholar.google.com/citations?user=MeE6sVb1Jc9",
@@ -1151,8 +1126,7 @@
                     "year": "2024",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Recognised for contributions to low-resource language processing and inclusive AI.",
-                    "certificate": ""
+                    "description": "Recognised for contributions to low-resource language processing and inclusive AI."
                 }
             ],
             "certifications": [
@@ -1165,8 +1139,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Professional certification in building and deploying machine learning models.",
-                    "certificate": ""
+                    "description": "Professional certification in building and deploying machine learning models."
                 },
                 {
                     "id": "fac-meenakshi-cert-2",
@@ -1177,8 +1150,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced programme covering statistical and neural language processing.",
-                    "certificate": ""
+                    "description": "Advanced programme covering statistical and neural language processing."
                 }
             ],
             "responsibilities": []
@@ -1199,10 +1171,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "ViG2kDn7Fh3",
             "googleScholarUrl": "https://scholar.google.com/citations?user=ViG2kDn7Fh3",
@@ -1325,8 +1295,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Recognised for consultancy work on safe and sustainable public buildings.",
-                    "certificate": ""
+                    "description": "Recognised for consultancy work on safe and sustainable public buildings."
                 }
             ],
             "certifications": [
@@ -1339,8 +1308,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Professional certification in structural steel design.",
-                    "certificate": ""
+                    "description": "Professional certification in structural steel design."
                 },
                 {
                     "id": "fac-vignesh-cert-2",
@@ -1351,8 +1319,7 @@
                     "year": "2020",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced programme on seismic design of buildings.",
-                    "certificate": ""
+                    "description": "Advanced programme on seismic design of buildings."
                 }
             ],
             "responsibilities": []
@@ -1373,10 +1340,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "ShA5cMx9Lp4",
             "googleScholarUrl": "https://scholar.google.com/citations?user=ShA5cMx9Lp4",
@@ -1499,8 +1464,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Awarded for work on fractional-order epidemic models.",
-                    "certificate": ""
+                    "description": "Awarded for work on fractional-order epidemic models."
                 }
             ],
             "certifications": [
@@ -1513,8 +1477,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced programme in linear and integer programming.",
-                    "certificate": ""
+                    "description": "Advanced programme in linear and integer programming."
                 },
                 {
                     "id": "fac-sharmila-cert-2",
@@ -1525,8 +1488,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Professional certificate in numerical computing with Python.",
-                    "certificate": ""
+                    "description": "Professional certificate in numerical computing with Python."
                 }
             ],
             "responsibilities": []
@@ -1547,10 +1509,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "JeB8rYt3Wk6",
             "googleScholarUrl": "https://scholar.google.com/citations?user=JeB8rYt3Wk6",
@@ -1673,8 +1633,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Elected Fellow for contributions to power system research and education.",
-                    "certificate": ""
+                    "description": "Elected Fellow for contributions to power system research and education."
                 }
             ],
             "certifications": [
@@ -1687,8 +1646,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced certification in protection coordination and relay settings.",
-                    "certificate": ""
+                    "description": "Advanced certification in protection coordination and relay settings."
                 },
                 {
                     "id": "fac-jebasingh-cert-2",
@@ -1699,8 +1657,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Programme covering smart grid architecture, communication and control.",
-                    "certificate": ""
+                    "description": "Programme covering smart grid architecture, communication and control."
                 }
             ],
             "responsibilities": []
@@ -1721,10 +1678,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "KaV4nBq6Zd2",
             "googleScholarUrl": "https://scholar.google.com/citations?user=KaV4nBq6Zd2",
@@ -1847,8 +1802,7 @@
                     "year": "2023",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Recognised for building a strong undergraduate security research pipeline.",
-                    "certificate": ""
+                    "description": "Recognised for building a strong undergraduate security research pipeline."
                 }
             ],
             "certifications": [
@@ -1861,8 +1815,7 @@
                     "year": "2022",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Professional certification in information security governance and architecture.",
-                    "certificate": ""
+                    "description": "Professional certification in information security governance and architecture."
                 },
                 {
                     "id": "fac-kavitha-cert-2",
@@ -1873,8 +1826,7 @@
                     "year": "2021",
                     "certificateNumber": "",
                     "certificateUrl": "",
-                    "description": "Advanced programme on distributed ledgers and consensus mechanisms.",
-                    "certificate": ""
+                    "description": "Advanced programme on distributed ledgers and consensus mechanisms."
                 }
             ],
             "responsibilities": []
@@ -1895,10 +1847,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "AnA7fWj5Sc8",
             "googleScholarUrl": "https://scholar.google.com/citations?user=AnA7fWj5Sc8",
@@ -1939,10 +1889,8 @@
             "researchGuideDate": "",
             "researchGuideStatus": "",
             "phdCompleted": "0",
-            "mphilCompleted": "0",
             "otherCompleted": "0",
             "phdGuiding": "0",
-            "mphilGuiding": "0",
             "otherGuiding": "0",
             "googleScholarId": "ViS1pGm2Hd7",
             "googleScholarUrl": "https://scholar.google.com/citations?user=ViS1pGm2Hd7",
@@ -2004,10 +1952,8 @@
             "researchGuideDate": "2009-06-12",
             "researchGuideStatus": "Recognized",
             "phdCompleted": 7,
-            "mphilCompleted": 5,
             "otherCompleted": 2,
             "phdGuiding": 6,
-            "mphilGuiding": 2,
             "otherGuiding": 1,
             "googleScholarId": "SrR6tKc4Bv9",
             "googleScholarUrl": "https://scholar.google.com/citations?user=SrR6tKc4Bv9",
@@ -2370,8 +2316,7 @@
                     "year": 2023,
                     "certificateNumber": "AU/AWD/2023/18",
                     "certificateUrl": "",
-                    "description": "Recognised for sustained research output and externally funded projects in power systems and renewable energy.",
-                    "certificate": ""
+                    "description": "Recognised for sustained research output and externally funded projects in power systems and renewable energy."
                 },
                 {
                     "id": "fac-dean-ach-2",
@@ -2382,8 +2327,7 @@
                     "year": 2021,
                     "certificateNumber": "UCEN/AWD/2021/10",
                     "certificateUrl": "",
-                    "description": "Awarded for curriculum innovation and mentorship of student research teams in electrical engineering.",
-                    "certificate": ""
+                    "description": "Awarded for curriculum innovation and mentorship of student research teams in electrical engineering."
                 },
                 {
                     "id": "fac-dean-ach-3",
@@ -2394,8 +2338,7 @@
                     "year": 2022,
                     "certificateNumber": "IN 412357",
                     "certificateUrl": "",
-                    "description": "A protection method that adapts relay settings for networks with high renewable-energy penetration.",
-                    "certificate": ""
+                    "description": "A protection method that adapts relay settings for networks with high renewable-energy penetration."
                 }
             ],
             "certifications": [
@@ -2408,8 +2351,7 @@
                     "year": 2024,
                     "certificateNumber": "BEE/CEM/2024/4421",
                     "certificateUrl": "",
-                    "description": "Professional credential covering energy auditing, management and conservation practices.",
-                    "certificate": ""
+                    "description": "Professional credential covering energy auditing, management and conservation practices."
                 },
                 {
                     "id": "fac-dean-cert-2",
@@ -2420,8 +2362,7 @@
                     "year": 2023,
                     "certificateNumber": "NPTEL/2023/PSA/1125",
                     "certificateUrl": "",
-                    "description": "Completed the advanced NPTEL programme with elite distinction.",
-                    "certificate": ""
+                    "description": "Completed the advanced NPTEL programme with elite distinction."
                 },
                 {
                     "id": "fac-dean-cert-3",
@@ -2432,8 +2373,7 @@
                     "year": 2022,
                     "certificateNumber": "NISE-SPV-2022-5568",
                     "certificateUrl": "",
-                    "description": "Credential focused on solar photovoltaic system design, installation and commissioning.",
-                    "certificate": ""
+                    "description": "Credential focused on solar photovoltaic system design, installation and commissioning."
                 }
             ],
             "responsibilities": [

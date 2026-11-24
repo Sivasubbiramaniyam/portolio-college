@@ -178,7 +178,9 @@ if (!function_exists('render_profile_form')) {
         $errors = map_validation_errors($errors);
         $photo = (string) ($profile['photo'] ?? '');
 
-        $html = '<form class="editor-shell" method="post" action="' . e($action) . '" enctype="multipart/form-data" data-guard-unsaved novalidate>';
+        $html = '<form class="editor-shell" method="post" action="' . e($action) . '" enctype="multipart/form-data" data-guard-unsaved novalidate'
+            . ' data-upload-url="' . e(app_url('/api/v1/uploads')) . '"'
+            . ' data-profile-id="' . e((string) ($profile['id'] ?? '')) . '">';
         $html .= '<input type="hidden" name="_csrf" value="' . e($csrfToken) . '">';
         $html .= '<input type="hidden" name="displayOrder" value="' . e((string) ($profile['displayOrder'] ?? 0)) . '">';
         if (!$admin) {
@@ -283,7 +285,6 @@ if (!function_exists('render_profile_form')) {
         }
 
         $html .= '<div class="form-actions form-actions--sticky">';
-        $html .= '<p><i class="bi bi-shield-check" aria-hidden="true"></i> Saved with server-side validation and CSRF protection.</p>';
         $html .= '<div class="form-actions__buttons">';
         $html .= '<a class="btn btn-ghost" href="' . e($cancelUrl) . '" data-cancel-guard="true">Cancel</a>';
         $html .= '<button class="btn btn-primary" type="submit"><i class="bi bi-check2-circle" aria-hidden="true"></i> ' . e($submitLabel) . '</button>';

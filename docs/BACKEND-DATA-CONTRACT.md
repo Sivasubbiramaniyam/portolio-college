@@ -427,10 +427,8 @@ One row in `faculty_profiles`, plus one-to-many child collections.
 | `researchGuideDate` | date `YYYY-MM-DD` | no | `research_guide_date date` | Valid date | Research section (formatted) |
 | `researchGuideStatus` | enum | no | `research_guide_status text` | `Recognized`, `Provisional`, `Expired`, `Not Applicable` | Research section |
 | `phdCompleted` | integer | no | `phd_completed smallint` | ≥0 | Research stat card |
-| `mphilCompleted` | integer | no | `mphil_completed smallint` | ≥0 | Research stat card |
 | `otherCompleted` | integer | no | `other_completed smallint` | ≥0 | Research stat card |
 | `phdGuiding` | integer | no | `phd_guiding smallint` | ≥0 | Research stat card |
-| `mphilGuiding` | integer | no | `mphil_guiding smallint` | ≥0 | Research stat card |
 | `otherGuiding` | integer | no | `other_guiding smallint` | ≥0 | Research stat card |
 | `googleScholarId` | string | no | `google_scholar_id text` | ≤120 chars | Research Profile IDs |
 | `googleScholarUrl` | URL | no | `google_scholar_url text` | `https://` URL | Research Profile IDs |
@@ -656,8 +654,8 @@ The Research section also renders these **root** fields:
 
 - Research guide: `researchGuideNumber`, `researchGuideUniversity`,
   `researchGuideDate`, `researchGuideStatus`.
-- Scholars completed: `phdCompleted`, `mphilCompleted`, `otherCompleted`.
-- Currently guiding: `phdGuiding`, `mphilGuiding`, `otherGuiding`.
+- Scholars completed: `phdCompleted`, `otherCompleted`.
+- Currently guiding: `phdGuiding`, `otherGuiding`.
 
 ---
 
@@ -674,10 +672,9 @@ The Research section also renders these **root** fields:
 | `certificateNumber` | string | no | `certificate_number text` | ≤120 chars | Certificate number |
 | `certificateUrl` | URL | no | `certificate_url text` | `https://` URL | View certificate link |
 | `description` | string | no | `description text` | Long text | Paragraph |
-| `certificate` | file | no | `certificate_file_url text` | Image/PDF ≤3 MB | Attachment chip |
 
-> Note the two different fields: `certificateUrl` is an external link;
-> `certificate` is an uploaded file. Both can be present.
+> `certificateUrl` is the single certificate field: paste an external link or
+> upload an image/PDF in the editor; both produce one URL value.
 
 ---
 
@@ -694,7 +691,6 @@ The Research section also renders these **root** fields:
 | `certificateNumber` | string | no | `certificate_number text` | ≤120 chars | Certificate number |
 | `certificateUrl` | URL | no | `certificate_url text` | `https://` URL | External link |
 | `description` | string | no | `description text` | Long text | Paragraph |
-| `certificate` | file | no | `certificate_file_url text` | Image/PDF ≤3 MB | Attachment chip |
 
 ---
 
@@ -938,10 +934,8 @@ CREATE TABLE faculty_profiles (
     ('Recognized', 'Provisional', 'Expired', 'Not Applicable')
   ),
   phd_completed             smallint NOT NULL DEFAULT 0 CHECK (phd_completed >= 0),
-  mphil_completed           smallint NOT NULL DEFAULT 0 CHECK (mphil_completed >= 0),
   other_completed           smallint NOT NULL DEFAULT 0 CHECK (other_completed >= 0),
   phd_guiding               smallint NOT NULL DEFAULT 0 CHECK (phd_guiding >= 0),
-  mphil_guiding             smallint NOT NULL DEFAULT 0 CHECK (mphil_guiding >= 0),
   other_guiding             smallint NOT NULL DEFAULT 0 CHECK (other_guiding >= 0),
   google_scholar_id         text,
   google_scholar_url        text,
@@ -1123,8 +1117,7 @@ CREATE TABLE faculty_achievements (
   year               text,
   certificate_number text,
   certificate_url    text,
-  description        text,
-  certificate_file_url text
+  description        text
 );
 
 CREATE TABLE faculty_certifications (
@@ -1137,8 +1130,7 @@ CREATE TABLE faculty_certifications (
   year               text,
   certificate_number text,
   certificate_url    text,
-  description        text,
-  certificate_file_url text
+  description        text
 );
 
 CREATE TABLE faculty_responsibilities (
@@ -1246,8 +1238,7 @@ specialization 180, description 5000, certificate number 120, URLs 2048.
 | Profile photo | JPEG, PNG, WebP | 5 MB | Centre-cropped to 480×480 JPEG, quality 0.86 | base64 data URL in `photo` |
 | Profile banner | JPEG, PNG, WebP | 5 MB | Cover-cropped to 1200×320 JPEG, quality 0.82 | base64 data URL in `banner` |
 | Sanction letter | JPEG, PNG, WebP, GIF, PDF | 3 MB | None | base64 data URL in `sanctionLetter` |
-| Certificates | JPEG, PNG, WebP, GIF, PDF | 3 MB | None | base64 data URL in `certificate` |
-| External certificate link | URL | — | Validated `http(s)` | `certificateUrl` |
+| Certificate (paste or upload) | JPEG, PNG, WebP, GIF, PDF or URL | 3 MB | None | Single URL in `certificateUrl` |
 
 The demo server accepts JSON bodies up to **25 MB**, which is why base64 works but is
 not scalable.
@@ -1259,8 +1250,8 @@ not scalable.
    storage (S3/R2/local), returns a stable URL.
 3. Frontend saves only the returned URL in the profile/collection field.
 4. Serve images through a CDN or signed URL; never expose raw bucket paths.
-5. Keep `certificateUrl` (external link) separate from `certificate`
-   (uploaded file URL).
+5. Keep one `certificateUrl` field per entry; the editor offers both a URL
+   input and an upload control that writes the returned URL into that field.
 
 Suggested response:
 

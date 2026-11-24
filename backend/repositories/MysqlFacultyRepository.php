@@ -41,10 +41,8 @@ final class MysqlFacultyRepository implements FacultyRepositoryInterface
         'researchGuideDate' => 'research_guide_date',
         'researchGuideStatus' => 'research_guide_status',
         'phdCompleted' => 'phd_completed',
-        'mphilCompleted' => 'mphil_completed',
         'otherCompleted' => 'other_completed',
         'phdGuiding' => 'phd_guiding',
-        'mphilGuiding' => 'mphil_guiding',
         'otherGuiding' => 'other_guiding',
         'googleScholarId' => 'google_scholar_id',
         'googleScholarUrl' => 'google_scholar_url',
@@ -60,8 +58,8 @@ final class MysqlFacultyRepository implements FacultyRepositoryInterface
 
     /** Root fields stored as integers. */
     private const ROOT_INTS = [
-        'phdCompleted', 'mphilCompleted', 'otherCompleted',
-        'phdGuiding', 'mphilGuiding', 'otherGuiding', 'displayOrder',
+        'phdCompleted', 'otherCompleted',
+        'phdGuiding', 'otherGuiding', 'displayOrder',
     ];
 
     /** Root fields stored as booleans. */
@@ -222,7 +220,6 @@ final class MysqlFacultyRepository implements FacultyRepositoryInterface
                 'certificateNumber' => 'certificate_number',
                 'certificateUrl' => 'certificate_url',
                 'description' => 'description',
-                'certificate' => 'certificate_file_url',
             ],
         ],
         'certifications' => [
@@ -235,7 +232,6 @@ final class MysqlFacultyRepository implements FacultyRepositoryInterface
                 'certificateNumber' => 'certificate_number',
                 'certificateUrl' => 'certificate_url',
                 'description' => 'description',
-                'certificate' => 'certificate_file_url',
             ],
         ],
         'responsibilities' => [
